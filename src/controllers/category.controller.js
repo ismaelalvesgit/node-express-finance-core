@@ -26,7 +26,7 @@ export const create = catchAsync((req, res, next) =>{
     const data = req.body;
     categoryService.create(data).then((result)=>{
         if(result.length){
-            delCache(req)
+            delCache(req);
             res.status(StatusCodes.CREATED).json(req.__("Category.create"));
         }else{
             throw new InternalServer({code: "Category"});
@@ -41,7 +41,7 @@ export const update = catchAsync((req, res, next) =>{
         if(result != 1){
             throw new NotFound({code: "Category"});
         }
-        delCache(req)
+        delCache(req);
         res.status(StatusCodes.OK).json(req.__("Category.update"));
     }).catch(next);
 });
@@ -52,7 +52,7 @@ export const del = catchAsync(async (req, res, next) =>{
         if(result != 1){
             throw new NotFound({code: "Category"});
         }
-        delCache(req)
+        delCache(req);
         res.sendStatus(StatusCodes.NO_CONTENT);
     }).catch(next);
 });

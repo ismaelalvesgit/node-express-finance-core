@@ -1,4 +1,4 @@
-const prefix = "/system"
+const prefix = "/system";
 import express from "express";
 const router = express.Router();
 import { status } from "../controllers/system.controller";

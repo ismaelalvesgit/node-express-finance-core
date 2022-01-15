@@ -1,4 +1,4 @@
-const prefix = "/category"
+const prefix = "/category";
 import express from "express";
 const router = express.Router();
 import verify from "../middleware/verifiy.middleware";

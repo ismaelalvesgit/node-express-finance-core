@@ -21,17 +21,17 @@ const TABLE_NAME = "category";
  * @returns {import('knex').Knex.QueryBuilder}
  */
  export const findAll = (options, trx)=>{
-    const query = knex(TABLE_NAME)
+    const query = knex(TABLE_NAME);
     if(options?.where){
-        const tableName = Object.keys(JSON.parse(options?.where))[0]
-        const value = Object.values(JSON.parse(options?.where))[0]
-        query.where(tableName, 'like', `%${value}%`)
+        const tableName = Object.keys(JSON.parse(options?.where))[0];
+        const value = Object.values(JSON.parse(options?.where))[0];
+        query.where(tableName, "like", `%${value}%`);
     }
     if(options?.sortBy){
-        query.orderBy(options.sortBy, options.orderBy || 'asc')
+        query.orderBy(options.sortBy, options.orderBy || "asc");
     }
     if(options?.limit){
-        query.limit(options.limit)
+        query.limit(options.limit);
     }
     return transacting(query, trx);
 };

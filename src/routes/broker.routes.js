@@ -1,4 +1,4 @@
-const prefix = "/broker"
+const prefix = "/broker";
 import express from "express";
 const router = express.Router();
 import verify from "../middleware/verifiy.middleware";

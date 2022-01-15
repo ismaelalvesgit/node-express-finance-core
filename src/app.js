@@ -9,7 +9,7 @@ import xssFilter from "x-xss-protection";
 import morgan from "morgan";
 import swagger from "swagger-ui-express";
 import YAML from "yamljs";
-import { readdirSync, readFileSync } from "fs";
+import { readdirSync } from "fs";
 const swaggerDocument = YAML.load("./doc/swagger.yml");
 import uuidMiddleware from "./middleware/uuid.middleware";
 import changeLocaleMiddleware from "./middleware/changeLocale.middleware";
@@ -24,7 +24,7 @@ import ioRedis from "socket.io-redis";
 /** Instances */
 dotenv.config();
 const app = express();
-const httpServer =  http.createServer(app)
+const httpServer =  http.createServer(app);
 const io = new Server(httpServer, {
     cors:{
         origin: "*",
@@ -87,8 +87,8 @@ app.get("/", (req, res)=>{
 app.use("/api-doc", swagger.serve, swagger.setup(swaggerDocument));
 
 /** Routers Auto Import */
-readdirSync('./src/routes/').forEach((file)=>{
-    const { prefix, router } = require(path.join(__dirname, '..', 'src/routes', file ))
+readdirSync("./src/routes/").forEach((file)=>{
+    const { prefix, router } = require(path.join(__dirname, "..", "src/routes", file ));
     app.use(prefix, router);
 });
 

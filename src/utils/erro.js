@@ -29,18 +29,6 @@ export class InternalServer extends CustomError {
     }
 }
 
-export class EmailError extends CustomError {
-    constructor(message){
-        super(StatusCodes.BAD_REQUEST, message, "email");
-    }
-}
-
-export class AmqpError extends CustomError {
-    constructor({code, message}){
-        super(StatusCodes.BAD_REQUEST, message, code || "amqp");
-    }
-}
-
 export class ValidadeSchema extends CustomError{
     constructor(message){
         super(StatusCodes.BAD_REQUEST, JSON.stringify(message));

@@ -1,11 +1,8 @@
-import { 
-    AmqpError, 
+import {  
     ApiError, 
     BadRequest, 
-    EmailError, 
     InternalServer, 
     NotFound, 
-    UploadError, 
     ValidadeSchema 
 } from "../utils/erro";
 import { StatusCodes } from "http-status-codes";

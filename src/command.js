@@ -2,7 +2,6 @@ import commander from "commander";
 import { table } from "table";
 import { v4 } from "uuid";
 import commands from "./commands";
-import env from "./env";
 import Logger from "./logger";
 
 const program = new commander.Command();

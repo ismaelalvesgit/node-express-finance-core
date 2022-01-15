@@ -1,4 +1,3 @@
-import knex from "../db";
 import * as categoryModel from "../model/category.model";
 
 /**
