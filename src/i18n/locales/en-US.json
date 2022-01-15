@@ -1,19 +1,22 @@
 {
 	"ServiceUnavailable.router": "Route is yet to be configured",
 	"ServiceUnavailable.throttling": "Request limit reached 😅, wait a while and try again 😇",
-    "NotFound": "{{code}} not found",
-    "BadRequest.Contact":"Fail to create Contact",
-    "BadRequest.Duplicate":"Unique value already registered '{{duplicateValue}}'",
-    "ValidadeSchema.required":"{{name}} is required",
+	"NotFound": "{{code}} not found",
+	"BadRequest.Contact": "Fail to create Contact",
+	"BadRequest.Duplicate": "Unique value already registered '{{duplicateValue}}'",
+	"ValidadeSchema.required": "{{name}} is required",
 	"ValidadeSchema.min": "{{name}} length must be at least {{limit}} characters long",
 	"ValidadeSchema.email": "{{name}} must be a valid email",
 	"ValidadeSchema.only": "{{name}} must be one of {{valids}}",
 	"ValidadeSchema.async": "{{name}} not exist",
-	"InternalServer":"Contact the developer and give me your ID {{id}}, we're sorry this happened 😞",
+	"InternalServer": "Contact the developer and give me your ID {{id}}, we're sorry this happened 😞",
 	"Category.create": "Category Created",
 	"Category.update": "Category update sucess",
 	"InternalServer.Category": "Failed to Modify Category 😞",
 	"Broker.create": "Category Created",
 	"Broker.update": "Category update sucess",
-	"InternalServer.Broker": "Failed to Modify Broker 😞"
+	"InternalServer.Broker": "Failed to Modify Broker 😞",
+	"Transaction.create": "Transaction successful!! 😆",
+	"Transaction.update": "Transaction update sucess",
+	"InternalServer.Transaction": "Failed to Modify Transaction 😞"
 }

@@ -1,19 +1,24 @@
 import knex from "../db";
 import transacting from "../utils/transacting";
-const TABLE_NAME = "broker";
+const TABLE_NAME = "investment";
 
 /**
- * @typedef Broker
+ * @typedef Investment
  * @type {Object}
  * @property {Number} id
  * @property {String} name
+ * @property {Number} regularMarketPrice
+ * @property {Number} regularMarketDayHigh
+ * @property {Number} regularMarketDayLow
+ * @property {Number} categoryId
+ * @property {import("./category.model").Category} category
  * @property {String} createdAt
  * @property {String} updatedAt
  */
 
 /**
  * @param {Object} options 
- * @param {Broker} options.where 
+ * @param {Investment} options.where 
  * @param {string} options.sortBy 
  * @param {'desc'|'asc'} options.orderBy 
  * @param {number} options.limit 
@@ -21,7 +26,25 @@ const TABLE_NAME = "broker";
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findAll = (options, trx) => {
-    const query = knex(TABLE_NAME);
+    const query = knex(TABLE_NAME)
+        .select([
+            knex.raw(`
+                JSON_OBJECT(
+                    'id', category.id,
+                    'name', category.name, 
+                    'createdAt', category.createdAt, 
+                    'updatedAt', category.updatedAt
+                ) as category
+            `),
+            `${TABLE_NAME}.id`,
+            `${TABLE_NAME}.name`,
+            `${TABLE_NAME}.regularMarketPrice`,
+            `${TABLE_NAME}.regularMarketDayHigh`,
+            `${TABLE_NAME}.regularMarketDayLow`,
+            `${TABLE_NAME}.createdAt`,
+            `${TABLE_NAME}.updatedAt`,
+        ])
+        .innerJoin('category', 'category.id', '=', `${TABLE_NAME}.categoryId`);
     if (options?.where) {
         let tableName;
         let value;
@@ -44,7 +67,7 @@ export const findAll = (options, trx) => {
 };
 
 /**
- * @param {Broker} data 
+ * @param {Investment} data 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
@@ -69,7 +92,7 @@ export const findOrCreate = (data, trx) => {
 };
 
 /**
- * @param {Broker} data 
+ * @param {Investment} data 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
@@ -80,8 +103,8 @@ export const create = (data, trx) => {
 };
 
 /**
- * @param {Broker} where 
- * @param {Broker} data 
+ * @param {Investment} where 
+ * @param {Investment} data 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
@@ -94,7 +117,7 @@ export const update = (where, data, trx) => {
 };
 
 /**
- * @param {Broker} where 
+ * @param {Investment} where 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */

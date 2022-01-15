@@ -1,6 +1,6 @@
 import logger from "../../logger";
 
-export class ContatoConsume{
+export class MainConsume{
     
     /** @type {import('socket.io').Socket} */
     socket
@@ -18,7 +18,7 @@ export class ContatoConsume{
     }
 
     newClient(){
-        this.socket.on("/contato", (msg)=>{
+        this.socket.on("/investment", (msg)=>{
             logger.info(msg);
         });
     }

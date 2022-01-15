@@ -28,10 +28,12 @@ exports.up = async function(knex) {
       .notNullable()
       .references('id')
       .inTable('category')
-      .onUpdate('CASCADE') 
-      .onDelete('CASCADE');
+      .onUpdate('CASCADE');
       table.string('name').notNullable();
       table.unique('name');
+      table.bigInteger('regularMarketPrice').nullable();
+      table.bigInteger('regularMarketDayHigh').nullable();
+      table.bigInteger('regularMarketDayLow').nullable();
       createdAt(knex, table);
       updatedAt(knex, table);
     });
@@ -51,22 +53,13 @@ exports.up = async function(knex) {
       .notNullable()
       .references('id')
       .inTable('broker')
-      .onUpdate('CASCADE') 
-      .onDelete('CASCADE');
+      .onUpdate('CASCADE');
       table.bigInteger('investmentId')
       .unsigned()
       .notNullable()
       .references('id')
       .inTable('investment')
-      .onUpdate('CASCADE') 
-      .onDelete('CASCADE');
-      table.bigInteger('categoryId')
-      .unsigned()
-      .notNullable()
-      .references('id')
-      .inTable('category')
-      .onUpdate('CASCADE') 
-      .onDelete('CASCADE');
+      .onUpdate('CASCADE');
       table.enum('type', Object.keys(transactionType)).notNullable();
       table.date('negotiationDate').notNullable();
       table.date('dueDate').nullable();
@@ -83,8 +76,7 @@ exports.up = async function(knex) {
       .notNullable()
       .references('id')
       .inTable('investment')
-      .onUpdate('CASCADE') 
-      .onDelete('CASCADE');
+      .onUpdate('CASCADE');
       table.enum('type', Object.keys(dividendsType)).notNullable();
       table.integer('qnt').notNullable();
       table.date('dueDate').notNullable();

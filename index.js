@@ -9,6 +9,7 @@ setImmediate(() =>{
         httpServer.listen(env.server.port, ()=>{
             app.use(errorHandler)
             import('./src/socket')
+            import('./src/job')
             startCollection()
             logger.info(`Server on http://localhost:${env.server.port}`)
         })

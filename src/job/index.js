@@ -1,0 +1,14 @@
+import { CronJob } from "cron";
+import env from "../env";
+import logger from "../logger";
+import * as updateInvestment from './jobs/updateInvestment'
+
+logger.info("Registered service JOB batch is ON");
+
+const jobs = [
+    new CronJob(updateInvestment.schedule, async ()=>{
+        await updateInvestment.command()
+    }, null, true, env.timezone)
+]
+
+logger.info(`Running ${jobs.length} jobs`);

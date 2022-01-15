@@ -4,9 +4,9 @@ var animationTime = 20,
     days = 7;
 $(document).ready(function(){
     var socket = io()
-    socket.emit('/contato', 'new client connetion')
-    socket.on('/new-contato', (newContact)=>{
-        console.log(newContact)
+    socket.emit('/investment', 'new client connetion')
+    socket.on('/update-investment', (newInvestment)=>{
+        console.log(newInvestment)
     })
 
     // timer arguments: 
@@ -70,7 +70,7 @@ $(document).ready(function(){
         timer(animationTime, days);
         deadlineAnimation();
 
-        console.log('begin interval', animationTime * 1000);
+        // console.log('begin interval', animationTime * 1000);
 
     }, animationTime * 1000);
 

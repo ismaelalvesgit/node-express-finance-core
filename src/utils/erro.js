@@ -29,6 +29,12 @@ export class InternalServer extends CustomError {
     }
 }
 
+export class Brapi extends CustomError {
+    constructor({statusCode, message }){
+        super(statusCode, message, 'brapi');
+    }
+}
+
 export class ValidadeSchema extends CustomError{
     constructor(message){
         super(StatusCodes.BAD_REQUEST, JSON.stringify(message));

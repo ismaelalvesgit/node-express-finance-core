@@ -1,4 +1,4 @@
-import * as contatoService from "./contato.socket.service";
+import * as investService from "./invest.socket.service";
 export {
-    contatoService
+    investService
 }; 

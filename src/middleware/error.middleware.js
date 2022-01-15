@@ -1,6 +1,7 @@
 import {  
     ApiError, 
     BadRequest, 
+    Brapi, 
     InternalServer, 
     NotFound, 
     ValidadeSchema 
@@ -117,6 +118,10 @@ export default function errorHandler(error, req, res, next) {
         }
         case NotFound:{
             res.status(StatusCodes.NOT_FOUND).json([{message: error.message}]);
+            break;
+        }
+        case Brapi:{
+            res.status(error.statusCode || 400).json([{message: error.message}]);
             break;
         }
         case BadRequest:{
