@@ -1,0 +1,36 @@
+{{- range .Values.jobs }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "{{ .name }}-job"
+  {{- if .namespace }}
+  namespace: {{ .namespace }}
+  {{ else if or $.Values.namespace $.Release.Namespace }}
+  namespace: {{ or $.Values.namespace $.Release.Namespace }}
+  {{- end }}
+  labels:
+    {{- if .labels.jobgroup }}
+    jobgroup: {{ .labels.jobgroup }}
+    {{- end }}
+spec:
+  schedule: {{ .schedule | quote }}
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "{{ .name }}-job"
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - {{ .command }}
+---
+{{- end }}

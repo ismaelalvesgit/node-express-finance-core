@@ -1,0 +1,40 @@
+language: node_js
+
+node_js:
+  - '14'
+  
+cache: npm
+
+services:
+  - mysql
+  - docker
+
+branches:
+  only:
+    - master
+
+env:
+  global:
+    - DB_USERNAME=root
+    - DB_PASSWORD=
+    - DB_PORT=3306
+    - EMAIL_TYPE=gmail
+    - EMAIL_HOST=smtp.gmail.com
+    - EMAIL_PORT=465
+    - EMAIL_SECURE=true
+
+before_install:
+- mysql -e 'CREATE DATABASE IF NOT EXISTS test_example;'
+
+install:
+- npm i
+
+script:
+  - npm run lint
+  - npm test
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t express-example .
+  - docker tag express-example $DOCKER_USERNAME/express-example
+  - docker push $DOCKER_USERNAME/express-example
+
+after_success: npm run test:coverage:coveralls

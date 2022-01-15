@@ -1,0 +1,16 @@
+{{- if .Values.autoscaling.enabled }}
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ template "service.fullname" . }}
+  labels: {{ include "service.labels" . | nindent 5 }}
+  {{- if or .Values.namespace .Release.Namespace  }}
+  namespace: {{ or .Values.namespace .Release.Namespace }}
+  {{- end}}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "service.fullname" . }}
+{{ (unset .Values.autoscaling "enabled") | toYaml | indent 2 }}
+{{- end }}

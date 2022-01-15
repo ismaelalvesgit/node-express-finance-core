@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-api
+  labels:
+    app: example-api
+spec:
+  replicas: 1
+  minReadySeconds: 100
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: example-api
+  template:
+    metadata:
+      labels:
+        app: example-api
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      initContainers:
+      - name: migrations
+        env:
+          - name: DB_HOST
+            value: 'http://localhost:3306'
+          - name: DB_USERNAME
+            value: 'root'
+          - name: DB_DATABASE
+            value: 'example'
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-pass-secret
+                key: password
+        image: "ismaelalvesdoc/express-example"
+        imagePullPolicy: Always
+        command: ["/bin/sh"]
+        args: ["-c", "npm run migrate:up"]
+      containers:
+      - name: example-api
+        image: ismaelalvesdoc/express-example
+        imagePullPolicy: Always
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 35
+          timeoutSeconds: 30
+          failureThreshold: 5
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: 100m
+          limits:
+            memory: "500Mi"
+            cpu: 200m
+        env:
+          - name: SERVER_ACTIVE
+            value: 'true'
+          - name: APM_SERVER_URL
+            value: 'http://localhost:8200'
+          - name: REDIS_HOST
+            value: 'http://localhost:6379'
+          - name: DB_HOST
+            value: 'http://localhost:3306'
+          - name: DB_USERNAME
+            value: 'root'
+          - name: DB_DATABASE
+            value: 'example'
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: db-pass-secret
+                key: password
+        ports:
+        - containerPort: 3000
+          name: example-api-port

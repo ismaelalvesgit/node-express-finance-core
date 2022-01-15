@@ -1,0 +1,7 @@
+{
+    "verbose": true,
+    "ignore": ["*.test.js", ".vscode/*", "./test"],
+    "watch": ["src/*", "index.js"],
+    "ext": "js,ejs,json",
+    "exec": "babel-node index.js"
+}

@@ -1,0 +1,7 @@
+{{- if or .Values.namespace .Release.Namespace }}
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: {{ or .Values.namespace .Release.Namespace }}
+  labels: {{ include "service.labels" . | nindent 4 }}
+{{- end }}

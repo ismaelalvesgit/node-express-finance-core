@@ -1,0 +1,26 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "example-job"
+  labels:
+    jobgroup: "minute"
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "example-job"
+              image: "ismaelalvesdoc/express-example"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - example

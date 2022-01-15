@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "service.fullname" . }}
+  labels: {{ include "service.labels" . | nindent 4 }}
+  {{- if or .Values.namespace .Release.Namespace  }}
+  namespace: {{ or .Values.namespace .Release.Namespace }}
+  {{- end}}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  minReadySeconds: 100
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels: {{ include "service.labels" . | nindent 6 }}
+  template:
+    metadata:
+      labels: {{ include "service.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      initContainers:
+      - name: migrations
+        env:
+          {{- range $key, $value := .Values.env }}
+          {{- if $value }}
+          - name: {{ $key | upper }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+          {{- range $key, $value := .Values.secret }}
+          {{- if $value }}
+          - name: {{ $key | upper }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "service.fullname" $ }}
+                key: {{ $key | upper }}
+          {{- end }}
+          {{- end }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: Always
+        command: ["/bin/sh"]
+        args: ["-c", "npm run migrate:up"]
+      containers:
+      - name: {{ include "service.name" . }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+          {{- range $key, $value := .Values.env }}
+          {{- if $value }}
+          - name: {{ $key | upper }}
+            value: {{ $value | quote }}
+          {{- end }}
+          {{- end }}
+          {{- range $key, $value := .Values.secret }}
+          {{- if $value }}
+          - name: {{ $key | upper }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "service.fullname" $ }}
+                key: {{ $key | upper }}
+          {{- end }}
+          {{- end }}
+        ports:
+          - name: http
+            containerPort: {{ .Values.env.SERVER_PORT }}
+            protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.env.SERVER_PORT }}
+          initialDelaySeconds: 35
+          timeoutSeconds: 30
+          failureThreshold: 5
+        resources:
+          requests:
+            memory: "{{ .Values.resources.requests.memory }}"
+            cpu: {{ .Values.resources.requests.cpu }}
+          limits:
+            memory: "{{ .Values.resources.limits.memory }}"
+            cpu: {{ .Values.resources.limits.cpu }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: {}
+          privileged: false
+          procMount: Default
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false

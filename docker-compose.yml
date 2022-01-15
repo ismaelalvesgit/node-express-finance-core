@@ -1,0 +1,152 @@
+version: '3'
+
+services:
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    volumes: 
+      - //etc/localtime:/etc/localtime:ro # Windows WSL
+      - //etc/timezone:/etc/timezone:ro # Windows WSL
+    environment:
+      - PMA_ARBITRARY=1
+    ports:
+      - 3002:80
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql1
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: example
+    ports: 
+      - 3306:3306
+    volumes:
+      - mysqldrive:/var/lib/mysql
+      - //etc/localtime:/etc/localtime:ro # Windows WSL
+      - //etc/timezone:/etc/timezone:ro # Windows WSL
+    healthcheck:
+      test: "/etc/init.d/mysql status"
+      interval: 1s
+      retries: 120
+
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redisdrive:/data/redis
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: rabbitmq
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - 15672:15672
+      - 5672:5672
+    volumes:
+      - rabbitmqdrive:/var/lib/rabbitmq/mnesia
+      - //etc/localtime:/etc/localtime:ro # Windows WSL
+      - //etc/timezone:/etc/timezone:ro # Windows WSL
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 30s
+      retries: 3
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    container_name: elasticsearch
+    restart: always
+    environment:
+      discovery.type: "single-node"
+      ES_JAVA_OPTS: "-Xms2g -Xmx2g"
+      xpack.monitoring.enabled: "true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - elasticsearchdrive:/usr/share/elasticsearch/data
+      - //etc/localtime:/etc/localtime:ro # Windows WSL
+      - //etc/timezone:/etc/timezone:ro # Windows WSL
+    healthcheck:
+      interval: 20s
+      retries: 10
+      test: curl -s http://localhost:9200/_cluster/health | grep -vq '"status":"red"'
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+    container_name: kibana
+    restart: always
+    environment:
+      ELASTICSEARCH_URL: http://elasticsearch:9200
+    ports:
+      - 5601:5601
+    volumes: 
+      - //etc/localtime:/etc/localtime:ro # Windows WSL
+      - //etc/timezone:/etc/timezone:ro # Windows WSL  
+    healthcheck:
+      interval: 10s
+      retries: 20
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:5601/api/status
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+        
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:${ELASTIC_VERSION}
+    container_name: apm-server
+    restart: always
+    cap_add: ["CHOWN", "DAC_OVERRIDE", "SETGID", "SETUID"]
+    cap_drop: ["ALL"]
+    ports:
+      - 8200:8200
+    volumes: 
+      - //etc/localtime:/etc/localtime:ro # Windows WSL
+      - //etc/timezone:/etc/timezone:ro # Windows WSL
+    command: >
+        apm-server -e
+          -E apm-server.rum.enabled=true
+          -E setup.kibana.host=kibana:5601
+          -E setup.template.settings.index.number_of_replicas=0
+          -E apm-server.kibana.enabled=true
+          -E apm-server.kibana.host=kibana:5601
+          -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    healthcheck:
+      interval: 10s
+      retries: 12
+      test: curl --write-out 'HTTP %{http_code}' --fail --silent --output /dev/null http://localhost:8200/
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+      kibana:
+        condition: service_healthy
+
+networks:
+  default:
+
+volumes:
+  mysqldrive:
+  rabbitmqdrive:
+  elasticsearchdrive:
+  filebeatdrive:

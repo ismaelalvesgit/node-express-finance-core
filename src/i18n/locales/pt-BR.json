@@ -1,0 +1,19 @@
+{
+	"ServiceUnavailable.router": "A rota ainda não foi configurada",
+	"ServiceUnavailable.throttling": "Limite de solicitação atingido 😅, aguarde um pouco e tente novamente 😇",
+	"NotFound": "{{code}} não encontrado",
+	"BadRequest.Contact": "",
+	"BadRequest.Duplicate": "Valor único já cadastrado '{{duplicateValue}}'",
+	"ValidadeSchema.required": "{{name}} e obrigátorio",
+	"ValidadeSchema.min": "{{name}} deve ser pelo menos {{limit}} caracteres",
+	"ValidadeSchema.email": "{{name}} deve ser um email válido",
+	"ValidadeSchema.only": "{{name}} deve ser um de {{valids}}",
+	"ValidadeSchema.async": "{{name}} não existe em nossa base",
+	"InternalServer": "Entre em contato com o desenvolvedor passe eu seu ID {{id}}, lamentamos isso ter ocorrido 😞",
+	"Category.create": "Categoria criada com sucesso!!!",
+	"Category.update": "Categoria atualizada com sucesso!!!",
+	"InternalServer.Category": "Falha ao Modificar a Categoria 😞",
+	"Broker.create": "Broker criado com sucesso!!!",
+	"Broker.update": "Broker atualizado com sucesso!!!",
+	"InternalServer.Broker": "Falha ao Modificar o Broker 😞"
+}
