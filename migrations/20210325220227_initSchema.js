@@ -28,7 +28,8 @@ exports.up = async function (knex) {
       .notNullable()
       .references('id')
       .inTable('category')
-      .onUpdate('CASCADE');
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE');
     table.string('name').notNullable();
     table.unique('name');
     table.bigInteger('regularMarketPrice').nullable();
@@ -53,13 +54,15 @@ exports.up = async function (knex) {
       .notNullable()
       .references('id')
       .inTable('broker')
-      .onUpdate('CASCADE');
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE');
     table.bigInteger('investmentId')
       .unsigned()
       .notNullable()
       .references('id')
       .inTable('investment')
-      .onUpdate('CASCADE');
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE');
     table.enum('type', Object.keys(transactionType)).notNullable();
     table.date('negotiationDate').notNullable();
     table.date('dueDate').nullable();
@@ -77,7 +80,8 @@ exports.up = async function (knex) {
       .notNullable()
       .references('id')
       .inTable('investment')
-      .onUpdate('CASCADE');
+      .onUpdate('CASCADE')
+      .onDelete('CASCADE');
     table.enum('type', Object.keys(dividendsType)).notNullable();
     table.date('dueDate').notNullable();
     table.integer('qnt').notNullable();

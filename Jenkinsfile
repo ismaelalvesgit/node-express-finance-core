@@ -3,12 +3,12 @@ pipeline {
 
     environment {
         SONARQUBE_URL= "http://sonarqube:9000"
-        SONARQUBE_PROJECT_KEY = "example"
+        SONARQUBE_PROJECT_KEY = "finance"
         DB_HOST = "mysql"
         DB_USERNAME = "root"
         DB_PASSWORD = "admin"
-        DB_DATABASE = "test_example"
-        DOCKER_REPO = "ismaelalvesdoc/express-example"
+        DB_DATABASE = "finance"
+        DOCKER_REPO = "ismaelalvesdoc/express-finance"
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
             steps {
                 git branch: 'master',
                     credentialsId: 'gogs',
-                    url: 'http://gogs:3000/root/example'
+                    url: 'http://gogs:3000/root/finance'
                 sh "ls -lat"
             }
         }

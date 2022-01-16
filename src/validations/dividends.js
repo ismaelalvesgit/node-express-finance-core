@@ -1,7 +1,7 @@
 import joi from "@hapi/joi";
 import dividendsType from "../enum/dividendsType";
 
-export const findAllDividendsTypeSchema = joi.object({
+export const findAllDividendsSchema = joi.object({
     query: joi.object({
         search: joi.string().custom((value, helpers)=>{
             try {
@@ -20,7 +20,7 @@ export const findAllDividendsTypeSchema = joi.object({
     }),
 });
 
-export const createDividendsTypeSchema = joi.object({
+export const createDividendsSchema = joi.object({
     body: joi.object({
         investmentId: joi.number().positive().min(1).required(),
         type: joi.string().valid(...Object.keys(dividendsType)).required(),

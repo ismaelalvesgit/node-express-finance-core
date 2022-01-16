@@ -5,75 +5,70 @@ import { Chance } from "chance";
 import knex from "../../src/db";
 
 const chance = new  Chance();
-describe("Contato Router", () => {
+describe("Category Router", () => {
     
     beforeEach(async()=>{
         await Promise.all([
-            knex("contato").del()
+            knex("category").del(),
         ]);
     });
 
     describe("sucess", ()=>{
         it("findOne", async() => {
-            const contato = await knex("contato").insert({
-                nome: chance.name(),
-                telefone: chance.string({numeric: true, length: 11})
+            const category = await knex("category").insert({
+                name: chance.name()
             });
 
             const res = await request(app)
-            .get(`/contato/${contato[0]}`)
+            .get(`/category/${category[0]}`)
             .expect(StatusCodes.OK);
-            expect(res.body).toHaveProperty("nome");
-            expect(res.body).toHaveProperty("telefone");
+            expect(res.body).toHaveProperty("name");
+            expect(res.body).toHaveProperty("id");
         });
         
         it("find", async() => {
-            await knex("contato").insert({
-                nome: chance.name(),
-                telefone: chance.string({numeric: true, length: 11}),
+            await knex("category").insert({
+                name: chance.name(),
             });
 
             const res = await request(app)
-            .get("/contato")
+            .get("/category")
             .expect(StatusCodes.OK);
-            expect(res.body[0]).toHaveProperty("nome");
-            expect(res.body[0]).toHaveProperty("telefone");
+            expect(res.body[0]).toHaveProperty("name");
+            expect(res.body[0]).toHaveProperty("id");
         });
         
         it("create", async() => {
             const res = await request(app)
-            .post("/contato")
+            .post("/category")
             .send({
-                nome: chance.name(),
-                telefone: chance.string({numeric: true, length: 11})
+                name: chance.name()
             })
             .expect(StatusCodes.CREATED);
             expect(res.body).toBeDefined();
         });
        
         it("update", async() => {
-            const [ id ] = await knex("contato").insert({
-                nome: chance.name(),
-                telefone: chance.string({numeric: true, length: 11}),
+            const [ id ] = await knex("category").insert({
+                name: chance.name()
             });
             const res = await request(app)
-            .put(`/contato/${id}`)
+            .put(`/category/${id}`)
             .send({
-                nome: chance.name(),
+                name: chance.name(),
             })
             .expect(StatusCodes.OK);
             expect(res.body).toBeDefined();
         });
         
         it("delete", async() => {
-            const [ id ] = await knex("contato").insert({
-                nome: chance.name(),
-                telefone: chance.string({numeric: true, length: 11}),
+            const [ id ] = await knex("category").insert({
+                name: chance.name()
             });
             await request(app)
-            .del(`/contato/${id}`)
+            .del(`/category/${id}`)
             .send({
-                nome: chance.name(),
+                name: chance.name(),
             })
             .expect(StatusCodes.NO_CONTENT);
         });
@@ -82,37 +77,28 @@ describe("Contato Router", () => {
     describe("erro", ()=>{
         it("findOne", async() => {
             await request(app)
-            .get(`/contato/${chance.integer()}`)
+            .get(`/category/${chance.integer()}`)
             .expect(StatusCodes.NOT_FOUND);
         });
         
         it("create", async() => {
             const res = await request(app)
-            .post("/contato")
-            .send({
-                nome: chance.name()
-            })
+            .post("/category")
             .expect(StatusCodes.BAD_REQUEST);
             expect(res.body).toBeDefined();
         });
        
         it("update", async() => {
             await request(app)
-            .put(`/contato/${chance.integer()}`)
-            .send({
-                nome: chance.name(),
-            })
-            .expect(StatusCodes.NOT_FOUND);
+            .put(`/category/${chance.integer()}`)
+            .expect(StatusCodes.BAD_REQUEST);
         });
         
         it("delete", async() => {
             await request(app)
-            .del(`/contato/${chance.integer()}`)
-            .send({
-                nome: chance.name(),
-            })
+            .del(`/category/${chance.integer()}`)
             .expect(StatusCodes.NOT_FOUND);
         });
     });
-    
+
 });

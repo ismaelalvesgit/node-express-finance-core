@@ -7,8 +7,8 @@ import { executeSql } from './test/utils'
 beforeAll(async()=>{
     try {
         await executeSql(`CREATE DATABASE IF NOT EXISTS test_${env.db.database}`)
+        await conn.migrate.up()
     } catch (error) {console.log(error)}
-    await conn.migrate.up()
 })
 
 afterAll(async ()=>{

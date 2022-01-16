@@ -1,5 +1,6 @@
 import mysql from "mysql2";
 import env from "../../src/env";
+import { ValidadeSchema } from "../../src/utils/erro";
 
 /**
  * 
@@ -22,3 +23,20 @@ export const executeSql = (sql)=> {
         });
     });
 };
+
+/**
+ * @param {import('@hapi/joi').AnySchema} schema 
+ */
+export const validateSchema = (schema, data)=>{
+    const validation = schema.validate(data, {
+        abortEarly: false,
+        stripUnknown: true,
+        allowUnknown: true
+    });
+
+    if (validation.error) {
+        throw new ValidadeSchema(validation.error.details);
+    }
+
+    return validation.value
+}

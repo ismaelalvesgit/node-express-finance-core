@@ -2,7 +2,7 @@ const prefix = "/dividends";
 import express from "express";
 const router = express.Router();
 import verify from "../middleware/verifiy.middleware";
-import { findAllDividendsTypeSchema, createDividendsTypeSchema } from "../validations/dividends";
+import { findAllDividendsSchema, createDividendsSchema } from "../validations/dividends";
 import { findOne, find, create, update, del } from "../controllers/dividends.controller";
 import cachedMiddleware from "../middleware/cached.middleware";
 
@@ -13,7 +13,7 @@ import cachedMiddleware from "../middleware/cached.middleware";
  */
 router.route("/:id")
     .get(findOne)
-    .put(verify(createDividendsTypeSchema), update)
+    .put(verify(createDividendsSchema), update)
     .delete(del);
 
 /**
@@ -21,8 +21,8 @@ router.route("/:id")
  * POST - /dividends
  * */    
 router.route("/")
-    .get(verify(findAllDividendsTypeSchema), cachedMiddleware(), find)
-    .post(verify(createDividendsTypeSchema), create);
+    .get(verify(findAllDividendsSchema), cachedMiddleware(), find)
+    .post(verify(createDividendsSchema), create);
 
 export {
     prefix,
