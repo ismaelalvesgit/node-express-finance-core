@@ -18,13 +18,9 @@ env:
     - DB_USERNAME=root
     - DB_PASSWORD=
     - DB_PORT=3306
-    - EMAIL_TYPE=gmail
-    - EMAIL_HOST=smtp.gmail.com
-    - EMAIL_PORT=465
-    - EMAIL_SECURE=true
 
 before_install:
-- mysql -e 'CREATE DATABASE IF NOT EXISTS test_example;'
+- mysql -e 'CREATE DATABASE IF NOT EXISTS "test_$DB_DATABASE";'
 
 install:
 - npm i

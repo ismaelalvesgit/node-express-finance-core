@@ -6,7 +6,9 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
-- Job de atualizção de valores criado
+- Atualização docker-compose.prod e docker-compose
+- Job de atualização de dividendos
+- Job de atualização de valores criado
 - Socket configurado
 - Foi adicionado as rota /transaction
 - Foi adicionado as rota /broker

@@ -16,16 +16,8 @@ const logger = winston.createLogger({
     level: "info",
     format: combine(colorize(), timestamp({format: timezoned}), json()),
     transports: [
-        new winston.transports.DailyRotateFile({
-            filename: "./logs/%DATE%.log",
-            datePattern: "DD-MM-YYYY",
-            maxSize: "20m",
-            maxFiles: "14d",
-            handleExceptions: true
-        }),
         new winston.transports.Console(),
     ],
-
 });
 
 if(env.env === "production"){

@@ -14,41 +14,21 @@ service:
 env:
   NODE_ENV: development
   TIME_ZONE: America/Fortaleza
-  HTTP_ACTIVE: true
-  AMQP_ACTIVE: true
-  SERVER_SSL: false
+  SERVER_ACTIVE: true
   SERVER_PORT: 3000
   SERVER_BODY_LIMIT: 500kb
-  SSL_CERT:
-  SSL_KEY: 
-  AMQP_PROTOCOL: amqp
-  AMQP_HOSTNAME: kubernetes.docker.internal
-  AMQP_PORT: 5672
-  AMQP_USERNAME: admin
-  AMQP_PASSWORD: admin
-  AMQP_VHOST: /
   DB_HOST: kubernetes.docker.internal
   DB_PORT: 3306
   DB_USERNAME: root
-  DB_DATABASE: example
+  DB_DATABASE: finance
   DB_DEBUG: false
   REDIS_HOST: localhost
   REDIS_PORT: 6379
-  REDIS_PREFIX: example
+  REDIS_PREFIX: finance
   APM_SERVER_URL: http://kubernetes.docker.internal:8200
-  APM_SERVICE_NAME: example
+  APM_SERVICE_NAME: finance
   APM_API_KEY: 
   APM_SECRET_TOKEN: 
-  EMAIL_TYPE: gmail
-  EMAIL_HOST: smtp.gmail.com
-  EMAIL_PORT: 465
-  EMAIL_SECURE: true
-  EMAIL_USER: 
-  EMAIL_PASSWORD: 
-  EMAIL_OAUTH2_CLIENTID: 
-  EMAIL_OAUTH2_CLIENTSECRET: 
-  EMAIL_OAUTH2_REFRESHTOKEN: 
-  EMAIL_OAUTH2_REDIRECT_URI: 
 
 secret:
   DB_PASSWORD: admin
@@ -60,14 +40,6 @@ resources:
   limits:
     memory: "500Mi"
     cpu: 200m
-
-jobs:
-  - name: example
-    schedule: "*/1 * * * *"
-    namespace:
-    labels: 
-      jobgroup: "minute"  
-    command: example
 
 autoscaling:
   enabled: true

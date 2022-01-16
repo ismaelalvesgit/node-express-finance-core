@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: example-api
+  name: finance-api
 spec:
   selector:
-    app: example-api
+    app: finance-api
   ports:
   - port: 3000
     nodePort: 31000
-    targetPort: example-api-port
+    targetPort: finance-api-port
     protocol: TCP
   type: NodePort

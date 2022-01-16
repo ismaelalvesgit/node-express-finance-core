@@ -1,6 +1,5 @@
 import mysql from "mysql2";
 import env from "../../src/env";
-import { deleteFolder } from "../../src/utils";
 
 /**
  * 
@@ -23,14 +22,3 @@ export const executeSql = (sql)=> {
         });
     });
 };
-
-/**
- * 
- * @param {Array<string>} paths 
- */
-export const deleteFolders = (paths) =>{
-    paths.forEach((path)=>{
-        deleteFolder(path)
-    })
-}
-

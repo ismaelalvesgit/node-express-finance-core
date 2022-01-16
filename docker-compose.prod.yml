@@ -8,9 +8,14 @@ services:
     restart: always
     environment: 
       NODE_ENV: production
-      DB_HOST: mysql1
+      DB_HOST: mysql
       DB_PORT: 3306
-      JAEGER_ENDPOINT: http://zipkin:9411
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+      APM_SERVER_URL: http://apm-server:8200
+      APM_SERVICE_NAME: finance
+      REDIS_HOST: redis
+      BRAPI_URL: https://brapi.ga/api
     volumes:  
       - //etc/localtime:/etc/localtime:ro # Windows WSL
       - //etc/timezone:/etc/timezone:ro # Windows WSL
@@ -19,37 +24,13 @@ services:
     depends_on: 
       - 'mysql'
 
-  zipkin:
-    image: openzipkin/zipkin
-    container_name: zipkin
-    restart: always
-    ports:
-      - "9411:9411"
-      
-    depends_on: 
-      - 'backend'
-  phpmyadmin:
-    image: phpmyadmin
-    container_name: phpmyadmin
-    restart: always
-    volumes: 
-      - //etc/localtime:/etc/localtime:ro # Windows WSL
-      - //etc/timezone:/etc/timezone:ro # Windows WSL
-    environment:
-      - PMA_ARBITRARY=1
-    ports:
-      - 3002:80
-    depends_on:
-      mysql:
-        condition: service_healthy
-
   mysql:
     image: mysql:5.7
     container_name: mysql1
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: example
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
     ports: 
       - 3306:3306
     volumes:
@@ -74,27 +55,6 @@ services:
       interval: 1s
       timeout: 3s
       retries: 30
-
-  rabbitmq:
-    image: rabbitmq:3.8-management-alpine
-    container_name: rabbitmq
-    hostname: rabbitmq
-    restart: always
-    environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=admin
-    ports:
-      - 15672:15672
-      - 5672:5672
-    volumes:
-      - rabbitmqdrive:/var/lib/rabbitmq/mnesia
-      - //etc/localtime:/etc/localtime:ro # Windows WSL
-      - //etc/timezone:/etc/timezone:ro # Windows WSL
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 30s
-      timeout: 30s
-      retries: 3
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
@@ -173,6 +133,5 @@ networks:
 
 volumes:
   mysqldrive:
-  rabbitmqdrive:
   elasticsearchdrive:
   filebeatdrive:

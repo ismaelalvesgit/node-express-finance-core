@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: example-api
+  name: finance-api
   labels:
-    app: example-api
+    app: finance-api
 spec:
   replicas: 1
   minReadySeconds: 100
@@ -14,11 +14,11 @@ spec:
     type: RollingUpdate
   selector:
     matchLabels:
-      app: example-api
+      app: finance-api
   template:
     metadata:
       labels:
-        app: example-api
+        app: finance-api
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
@@ -30,19 +30,19 @@ spec:
           - name: DB_USERNAME
             value: 'root'
           - name: DB_DATABASE
-            value: 'example'
+            value: 'finance'
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: db-pass-secret
                 key: password
-        image: "ismaelalvesdoc/express-example"
+        image: "ismaelalvesdoc/express-finance"
         imagePullPolicy: Always
         command: ["/bin/sh"]
         args: ["-c", "npm run migrate:up"]
       containers:
-      - name: example-api
-        image: ismaelalvesdoc/express-example
+      - name: finance-api
+        image: ismaelalvesdoc/express-finance
         imagePullPolicy: Always
         livenessProbe:
           tcpSocket:
@@ -69,7 +69,7 @@ spec:
           - name: DB_USERNAME
             value: 'root'
           - name: DB_DATABASE
-            value: 'example'
+            value: 'finance'
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -77,4 +77,4 @@ spec:
                 key: password
         ports:
         - containerPort: 3000
-          name: example-api-port
+          name: finance-api-port
