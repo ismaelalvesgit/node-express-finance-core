@@ -69,15 +69,15 @@ export const findAll = (options, trx) => {
             `${TABLE_NAME}.createdAt`,
             `${TABLE_NAME}.updatedAt`,
         ])
-        .innerJoin('broker', 'broker.id', '=', `${TABLE_NAME}.brokerId`)
-        .innerJoin('investment', 'investment.id', '=', `${TABLE_NAME}.investmentId`)
-        .innerJoin('category', 'category.id', '=', `investment.id`);
+        .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
+        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
+        .innerJoin("category", "category.id", "=", "investment.id");
     if (options?.where) {
         let tableName;
         let value;
-        if(Object.keys(options?.where).length === 1){
-            tableName = Object.keys(options?.where)[0]
-            value = Object.values(options?.where)[0]
+        if(typeof options?.where === "object"){
+            tableName = Object.keys(options?.where)[0];
+            value = Object.values(options?.where)[0];
         }else{
             tableName = Object.keys(JSON.parse(options?.where))[0];
             value = Object.values(JSON.parse(options?.where))[0];
@@ -90,8 +90,6 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
-
-    console.log(query.toQuery().toString())
     return transacting(query, trx);
 };
 

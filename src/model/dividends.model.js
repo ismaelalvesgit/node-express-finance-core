@@ -1,19 +1,25 @@
 import knex from "../db";
 import transacting from "../utils/transacting";
-const TABLE_NAME = "category";
+const TABLE_NAME = "dividends";
 
 /**
- * @typedef Category
+ * @typedef Dividends
  * @type {Object}
  * @property {Number} id
- * @property {String} name
+ * @property {Number} investmentId
+ * @property {import("./investment.model").Investment} investment
+ * @property {import('../enum/dividendsType')} type
+ * @property {Date} dueDate
+ * @property {Number} qnt
+ * @property {Number} price
+ * @property {Number} total
  * @property {String} createdAt
  * @property {String} updatedAt
  */
 
 /**
  * @param {Object} options 
- * @param {Category} options.where 
+ * @param {Dividends} options.where 
  * @param {string} options.sortBy 
  * @param {'desc'|'asc'} options.orderBy 
  * @param {number} options.limit 
@@ -21,14 +27,36 @@ const TABLE_NAME = "category";
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findAll = (options, trx) => {
-    const query = knex(TABLE_NAME);
+    const query = knex(TABLE_NAME)
+        .select([
+            knex.raw(`
+                JSON_OBJECT(
+                    'id', investment.id,
+                    'name', investment.name, 
+                    'regularMarketPrice', investment.regularMarketPrice, 
+                    'regularMarketDayHigh', investment.regularMarketDayHigh, 
+                    'regularMarketDayLow', investment.regularMarketDayLow, 
+                    'createdAt', investment.createdAt, 
+                    'updatedAt', investment.updatedAt
+                ) as investment
+            `),
+            `${TABLE_NAME}.id`,
+            `${TABLE_NAME}.type`,
+            `${TABLE_NAME}.dueDate`,
+            `${TABLE_NAME}.qnt`,
+            `${TABLE_NAME}.price`,
+            `${TABLE_NAME}.total`,
+            `${TABLE_NAME}.createdAt`,
+            `${TABLE_NAME}.updatedAt`,
+        ])
+        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
     if (options?.where) {
         let tableName;
         let value;
         if(typeof options?.where === "object"){
             tableName = Object.keys(options?.where)[0];
             value = Object.values(options?.where)[0];
-        }else{
+        } else {
             tableName = Object.keys(JSON.parse(options?.where))[0];
             value = Object.values(JSON.parse(options?.where))[0];
         }
@@ -44,7 +72,8 @@ export const findAll = (options, trx) => {
 };
 
 /**
- * @param {Category} data 
+ * @param {Dividends} data 
+ * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findOrCreate = (data, trx) => {
@@ -68,7 +97,7 @@ export const findOrCreate = (data, trx) => {
 };
 
 /**
- * @param {Category} data 
+ * @param {Dividends} data 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
@@ -79,8 +108,8 @@ export const create = (data, trx) => {
 };
 
 /**
- * @param {Category} where 
- * @param {Category} data 
+ * @param {Dividends} where 
+ * @param {Dividends} data 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
@@ -93,7 +122,7 @@ export const update = (where, data, trx) => {
 };
 
 /**
- * @param {Category} where 
+ * @param {Dividends} where 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */

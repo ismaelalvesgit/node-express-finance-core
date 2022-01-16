@@ -9,6 +9,6 @@ const BASE = "investment";
  export const sendNotification = async (investment)=>{
     if(investment){
         io.emit(`/update-${BASE}`, investment);
-        logger.info(`Send updates to customers investment: ${investment.name}`)
+        logger.info(`Send updates to customers investment: ${investment.name}`);
     }
 };

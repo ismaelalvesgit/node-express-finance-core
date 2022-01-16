@@ -2,7 +2,7 @@ const prefix = "/transaction";
 import express from "express";
 const router = express.Router();
 import verify from "../middleware/verifiy.middleware";
-import { createTransactionSchema, findAllTransactionSchema, updateTransactionSchema } from "../validations/transaction";
+import { createTransactionSchema, findAllTransactionSchema } from "../validations/transaction";
 import { findOne, find, create, update, del } from "../controllers/transaction.controller";
 import cachedMiddleware from "../middleware/cached.middleware";
 

@@ -31,7 +31,7 @@ export class InternalServer extends CustomError {
 
 export class Brapi extends CustomError {
     constructor({statusCode, message }){
-        super(statusCode, message, 'brapi');
+        super(statusCode, message, "brapi");
     }
 }
 

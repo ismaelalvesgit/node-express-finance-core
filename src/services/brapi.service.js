@@ -1,5 +1,5 @@
 import send from "../utils/axios";
-import R from 'ramda';
+import R from "ramda";
 import { Brapi } from "../utils/erro";
 
 /**
@@ -44,16 +44,16 @@ export const findQoute = async (name)=>{
     try {
         const response = await send({
             url: `/quote/${name.toLocaleUpperCase()}`,
-            method: 'GET'
+            method: "GET"
         });
-        return response.data.results[0]
+        return response.data.results[0];
     } catch (error) {
-        const defaultMessage = 'Failed to get quote';
+        const defaultMessage = "Failed to get quote";
         const message = R.pathOr(
             defaultMessage,
-            ['response', 'data', 'error'],
+            ["response", "data", "error"],
             error,
         );
-        throw new Brapi({statusCode: error?.response?.status, message})
+        throw new Brapi({statusCode: error?.response?.status, message});
     }
-}
+};

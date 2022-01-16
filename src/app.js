@@ -94,7 +94,7 @@ readdirSync("./src/routes/").forEach((file)=>{
 
 //** Default Router */
 app.all("*", (req, res)=>{
-    res.status(404).json({message: "Rota Não Encontrada"});
+    res.status(404).json([{message: "Rota Não Encontrada"}]);
 });
 
 export { io, app, httpServer };

@@ -1,24 +1,20 @@
-import axios, {
-    AxiosRequestConfig,
-    AxiosResponse,
-    AxiosInstance,
-} from 'axios';
-import env from '../env';
-import logger from '../logger';
+import axios from "axios";
+import env from "../env";
+import logger from "../logger";
 
 const instance = axios.create({
     baseURL: env.brapi
 });
 
 instance.interceptors.request.use(resquest =>{
-    logger.info(resquest)
-    return resquest
-})
+    logger.info(resquest);
+    return resquest;
+});
 
 instance.interceptors.response.use(response =>{
-    logger.info(response)
-    return response
-})
+    logger.info(response);
+    return response;
+});
 
 /**
  * 
@@ -26,5 +22,5 @@ instance.interceptors.response.use(response =>{
  * @returns { Promise<AxiosResponse<any>> }
  */
 export default (config)=>{
-    return instance.request(config)
-}
+    return instance.request(config);
+};

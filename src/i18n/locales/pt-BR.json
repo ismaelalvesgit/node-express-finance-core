@@ -18,5 +18,8 @@
 	"InternalServer.Broker": "Falha ao Modificar o Broker 😞",
 	"Transaction.create": "Transação realizada com sucesso!! 😆",
 	"Transaction.update": "Atualização realizada com sucesso!!",
-	"InternalServer.Transaction": "Falha ao Modificar o Transação 😞"
+	"InternalServer.Transaction": "Falha ao Modificar o Transação 😞",
+	"Dividends.create": "Dividendo cadastrado com sucesso!! 😆",
+	"Dividends.update": "Dividendo atualizado com sucesso!!",
+	"InternalServer.Dividends": "Falha ao Modificar o Dividendo 😞"
 }

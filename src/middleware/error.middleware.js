@@ -1,10 +1,9 @@
-import {  
-    ApiError, 
-    BadRequest, 
-    Brapi, 
-    InternalServer, 
-    NotFound, 
-    ValidadeSchema 
+import {
+    BadRequest,
+    Brapi,
+    InternalServer,
+    NotFound,
+    ValidadeSchema
 } from "../utils/erro";
 import { StatusCodes } from "http-status-codes";
 import logger from "../logger";
@@ -21,13 +20,13 @@ import elasticAgent from "../apm";
 /**
  * @type {ErrorConfig[]}
  */
- const errorsConfigs = [
+const errorsConfigs = [
     { class: NotFound, code: null, i18n: "NotFound" },
 
     { class: InternalServer, code: "Category", i18n: "InternalServer.Category" },
     { class: InternalServer, code: "Broker", i18n: "InternalServer.Broker" },
 
-    { class: Error, code: "ER_DUP_ENTRY", i18n: "BadRequest.Duplicate"},
+    { class: Error, code: "ER_DUP_ENTRY", i18n: "BadRequest.Duplicate" },
     { class: ValidadeSchema, code: "any.required", i18n: "ValidadeSchema.required" },
     { class: ValidadeSchema, code: "any.only", i18n: "ValidadeSchema.only" },
     { class: ValidadeSchema, code: "string.min", i18n: "ValidadeSchema.min" },
@@ -38,11 +37,11 @@ import elasticAgent from "../apm";
 /**
  * @param {Error} error
  */
-const _getErrorConfig = error => errorsConfigs.find((errorConfig)=>{
-    if(error instanceof NotFound && error instanceof errorConfig.class){
+const _getErrorConfig = error => errorsConfigs.find((errorConfig) => {
+    if (error instanceof NotFound && error instanceof errorConfig.class) {
         return errorConfig;
-    }else{
-        if(error instanceof errorConfig.class && (error._code === errorConfig.code || error.code === errorConfig.code)){
+    } else {
+        if (error instanceof errorConfig.class && (error._code === errorConfig.code || error.code === errorConfig.code)) {
             return errorConfig;
         }
     }
@@ -54,13 +53,13 @@ const _getErrorConfig = error => errorsConfigs.find((errorConfig)=>{
  */
 /* eslint-disable no-unused-vars*/
 const _loadErrorMessage = (req, error) => {
-    if(error instanceof ValidadeSchema){
+    if (error instanceof ValidadeSchema) {
         error.message = JSON.stringify(
             JSON.parse(error.message).map(element => {
                 let e = error;
                 e._code = element.type;
                 const errorConfig = _getErrorConfig(e);
-                if(errorConfig){
+                if (errorConfig) {
                     element.message = req.__(errorConfig.i18n, {
                         name: element.context.key,
                         limit: element.context.limit,
@@ -73,7 +72,7 @@ const _loadErrorMessage = (req, error) => {
                 return element;
             })
         );
-      }else{
+    } else {
         const errorConfig = _getErrorConfig(error);
         if (errorConfig) {
             const errorWithMessage = error;
@@ -102,12 +101,8 @@ export default function errorHandler(error, req, res, next) {
     logger.warn(`${req.id} ${error.message}`);
     _loadErrorMessage(req, error);
     switch (error.constructor) {
-        case ApiError: {
-            res.status(error.statusCode).json([{message: error.message}]);
-            break;
-        }
         case ValidadeSchema: {
-            let response = JSON.parse(error.message).map((i)=>{
+            let response = JSON.parse(error.message).map((i) => {
                 return {
                     name: i.context.key,
                     message: i.message
@@ -116,27 +111,27 @@ export default function errorHandler(error, req, res, next) {
             res.status(error.statusCode).json(response);
             break;
         }
-        case NotFound:{
-            res.status(StatusCodes.NOT_FOUND).json([{message: error.message}]);
+        case NotFound: {
+            res.status(StatusCodes.NOT_FOUND).json([{ message: error.message }]);
             break;
         }
-        case Brapi:{
-            res.status(error.statusCode || 400).json([{message: error.message}]);
+        case Brapi: {
+            res.status(error.statusCode || 400).json([{ message: error.message }]);
             break;
         }
-        case BadRequest:{
-            res.status(StatusCodes.BAD_REQUEST).json([{message: error.message}]);
+        case BadRequest: {
+            res.status(StatusCodes.BAD_REQUEST).json([{ message: error.message }]);
             break;
         }
         default: {
-            if(error.code){
-                res.status(StatusCodes.BAD_REQUEST).json([{message: error.message || error.sqlMessage}]);
-            }else{
-                if(elasticAgent){
-                    elasticAgent.captureError(error, () =>{
+            if (error.code) {
+                res.status(StatusCodes.BAD_REQUEST).json([{ message: error.message || error.sqlMessage }]);
+            } else {
+                if (elasticAgent) {
+                    elasticAgent.captureError(error, () => {
                         logger.error(`ID - ${req.id}, Send APM: ${error.message}`);
-                    }); 
-                }else{
+                    });
+                } else {
                     logger.error(`ID - ${req.id}, Error: ${error.message}`);
                 }
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json([{

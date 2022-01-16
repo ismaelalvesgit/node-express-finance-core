@@ -44,13 +44,13 @@ export const findAll = (options, trx) => {
             `${TABLE_NAME}.createdAt`,
             `${TABLE_NAME}.updatedAt`,
         ])
-        .innerJoin('category', 'category.id', '=', `${TABLE_NAME}.categoryId`);
+        .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`);
     if (options?.where) {
         let tableName;
         let value;
-        if(Object.keys(options?.where).length === 1){
-            tableName = Object.keys(options?.where)[0]
-            value = Object.values(options?.where)[0]
+        if(typeof options?.where === "object"){
+            tableName = Object.keys(options?.where)[0];
+            value = Object.values(options?.where)[0];
         }else{
             tableName = Object.keys(JSON.parse(options?.where))[0];
             value = Object.values(JSON.parse(options?.where))[0];
@@ -73,7 +73,7 @@ export const findAll = (options, trx) => {
  */
 export const findOrCreate = (data, trx) => {
     if (!trx) {
-        trx = knex.transaction()
+        trx = knex.transaction();
     }
     return knex(TABLE_NAME).where(data)
         .first()

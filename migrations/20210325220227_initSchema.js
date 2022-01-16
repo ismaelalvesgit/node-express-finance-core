@@ -12,86 +12,87 @@ const updatedAt = (knex, table) => table.timestamp('updatedAt', { precision: 3 }
 /**
 * @param {import('knex').Knex} knex
 */
-exports.up = async function(knex) {
-    await knex.schema.createTable('category', (table)=>{
-      table.bigIncrements('id').unsigned();
-      table.string('name').notNullable();
-      table.unique('name');
-      createdAt(knex, table);
-      updatedAt(knex, table);
-    });
+exports.up = async function (knex) {
+  await knex.schema.createTable('category', (table) => {
+    table.bigIncrements('id').unsigned();
+    table.string('name').notNullable();
+    table.unique('name');
+    createdAt(knex, table);
+    updatedAt(knex, table);
+  });
 
-    await knex.schema.createTable('investment', (table)=>{
-      table.bigIncrements('id').unsigned();
-      table.bigInteger('categoryId')
+  await knex.schema.createTable('investment', (table) => {
+    table.bigIncrements('id').unsigned();
+    table.bigInteger('categoryId')
       .unsigned()
       .notNullable()
       .references('id')
       .inTable('category')
       .onUpdate('CASCADE');
-      table.string('name').notNullable();
-      table.unique('name');
-      table.bigInteger('regularMarketPrice').nullable();
-      table.bigInteger('regularMarketDayHigh').nullable();
-      table.bigInteger('regularMarketDayLow').nullable();
-      createdAt(knex, table);
-      updatedAt(knex, table);
-    });
+    table.string('name').notNullable();
+    table.unique('name');
+    table.bigInteger('regularMarketPrice').nullable();
+    table.bigInteger('regularMarketDayHigh').nullable();
+    table.bigInteger('regularMarketDayLow').nullable();
+    createdAt(knex, table);
+    updatedAt(knex, table);
+  });
 
-    await knex.schema.createTable('broker', (table)=>{
-      table.bigIncrements('id').unsigned();
-      table.string('name').notNullable();
-      table.unique('name');
-      createdAt(knex, table);
-      updatedAt(knex, table);
-    });
+  await knex.schema.createTable('broker', (table) => {
+    table.bigIncrements('id').unsigned();
+    table.string('name').notNullable();
+    table.unique('name');
+    createdAt(knex, table);
+    updatedAt(knex, table);
+  });
 
-    await knex.schema.createTable('transaction', (table)=>{
-      table.bigIncrements('id').unsigned();
-      table.bigInteger('brokerId')
+  await knex.schema.createTable('transaction', (table) => {
+    table.bigIncrements('id').unsigned();
+    table.bigInteger('brokerId')
       .unsigned()
       .notNullable()
       .references('id')
       .inTable('broker')
       .onUpdate('CASCADE');
-      table.bigInteger('investmentId')
+    table.bigInteger('investmentId')
       .unsigned()
       .notNullable()
       .references('id')
       .inTable('investment')
       .onUpdate('CASCADE');
-      table.enum('type', Object.keys(transactionType)).notNullable();
-      table.date('negotiationDate').notNullable();
-      table.date('dueDate').nullable();
-      table.integer('qnt').notNullable();
-      table.bigInteger('price').notNullable();
-      table.bigInteger('total').notNullable();
-      createdAt(knex, table);
-      updatedAt(knex, table);
-    });
+    table.enum('type', Object.keys(transactionType)).notNullable();
+    table.date('negotiationDate').notNullable();
+    table.date('dueDate').nullable();
+    table.integer('qnt').notNullable();
+    table.bigInteger('price').notNullable();
+    table.bigInteger('total').notNullable();
+    createdAt(knex, table);
+    updatedAt(knex, table);
+  });
 
-    await knex.schema.createTable('dividends', (table)=>{
-      table.bigInteger('investmentId')
+  await knex.schema.createTable('dividends', (table) => {
+    table.bigIncrements('id').unsigned();
+    table.bigInteger('investmentId')
       .unsigned()
       .notNullable()
       .references('id')
       .inTable('investment')
       .onUpdate('CASCADE');
-      table.enum('type', Object.keys(dividendsType)).notNullable();
-      table.integer('qnt').notNullable();
-      table.date('dueDate').notNullable();
-      table.bigInteger('price').notNullable();
-      table.bigInteger('total').notNullable();
-      createdAt(knex, table);
-      updatedAt(knex, table);
-    });
+    table.enum('type', Object.keys(dividendsType)).notNullable();
+    table.date('dueDate').notNullable();
+    table.integer('qnt').notNullable();
+    table.bigInteger('price').notNullable();
+    table.bigInteger('total').notNullable();
+    createdAt(knex, table);
+    updatedAt(knex, table);
+  });
 
 };
 
 /**
 * @param {import('knex').Knex} knex
 */
-exports.down = async function(knex) {
+exports.down = async function (knex) {
   await knex.schema.dropTable('dividends');
   await knex.schema.dropTable('transaction');
   await knex.schema.dropTable('broker');

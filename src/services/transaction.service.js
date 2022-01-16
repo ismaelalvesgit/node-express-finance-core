@@ -10,8 +10,8 @@ import { Brapi } from "../utils/erro";
  * @param {import("../model/transaction.model").Transaction} where 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findAll = (where) => {
-    return transactionModel.findAll({ where });
+export const findAll = (where, sortBy, orderBy, limit) => {
+    return transactionModel.findAll({where, sortBy, orderBy, limit});
 };
 
 /**
@@ -22,11 +22,11 @@ export const create = async (data) => {
     return knex.transaction(async (trx) => {
         const qoute = await brapiService.findQoute(data.investment);
         if (!qoute) {
-            throw new Brapi({ statusCode: 404, message: 'Investment not Found' })
+            throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }
-        const category = await categoryModel.findOrCreate({ name: data.category }, trx)
-        const broker = await brokerModel.findOrCreate({ name: data.broker }, trx)
-        const investment = await investmentModel.findOrCreate({ name: data.investment, categoryId: category.id }, trx)
+        const category = await categoryModel.findOrCreate({ name: data.category }, trx);
+        const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
+        const investment = await investmentModel.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
         return transactionModel.create({
             brokerId: broker.id,
             investmentId: investment.id,
@@ -36,8 +36,8 @@ export const create = async (data) => {
             qnt: data.qnt,
             price: data.price,
             total: data.qnt * data.price,
-        }, trx)
-    })
+        }, trx);
+    });
 };
 
 /**
@@ -49,11 +49,11 @@ export const update = (where, data) => {
     return knex.transaction(async (trx) => {
         const qoute = await brapiService.findQoute(data.investment);
         if (!qoute) {
-            throw new Brapi({ statusCode: 404, message: 'Investment not Found' })
+            throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }
-        const category = await categoryModel.findOrCreate({ name: data.category }, trx)
-        const broker = await brokerModel.findOrCreate({ name: data.broker }, trx)
-        const investment = await investmentModel.findOrCreate({ name: data.investment, categoryId: category.id }, trx)
+        const category = await categoryModel.findOrCreate({ name: data.category }, trx);
+        const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
+        const investment = await investmentModel.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
         return transactionModel.update(where, {
             brokerId: broker.id,
             investmentId: investment.id,

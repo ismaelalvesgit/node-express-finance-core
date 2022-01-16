@@ -1,7 +1,7 @@
 import joi from "@hapi/joi";
-import transactionType from "../enum/transactionType";
+import dividendsType from "../enum/dividendsType";
 
-export const findAllTransactionSchema = joi.object({
+export const findAllDividendsTypeSchema = joi.object({
     query: joi.object({
         search: joi.string().custom((value, helpers)=>{
             try {
@@ -20,18 +20,11 @@ export const findAllTransactionSchema = joi.object({
     }),
 });
 
-export const createTransactionSchema = joi.object({
+export const createDividendsTypeSchema = joi.object({
     body: joi.object({
-        investment: joi.string().required(),
-        broker: joi.string().required(),
-        category: joi.string().required(),
-        type: joi.string().valid(...Object.keys(transactionType)).required(),
-        negotiationDate: joi.date().required(),
-        dueDate: joi.when("type", {
-            is: transactionType.RENT, then: joi.date().required()
-        }).when("type", {
-            not: transactionType.RENT, then: joi.date().optional()
-        }),
+        investmentId: joi.number().positive().min(1).required(),
+        type: joi.string().valid(...Object.keys(dividendsType)).required(),
+        dueDate: joi.date().required(),
         qnt: joi.number().integer().positive().min(1).required(),
         price: joi.number().integer().positive().min(1).required(),
     }).required(),
