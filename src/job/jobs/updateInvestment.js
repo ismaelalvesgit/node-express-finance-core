@@ -3,6 +3,7 @@ import { investService } from "../../socket/services";
 import { isAfter, parseISO } from "date-fns";
 import knex from "../../db";
 import logger from "../../logger";
+import { parseDecimalValues } from "../../utils";
 
 const name = "update-investment";
 const group = "minute";
@@ -17,15 +18,19 @@ const command = async () => {
                 const qoute = await brapiService.findQoute(invest.name);
                 if (isAfter(parseISO(qoute.regularMarketTime), parseISO(invest.updatedAt))) {
                     logger.info(`Updating values investment: ${invest.name}`);
+                    const regularMarketPrice = parseDecimalValues(qoute.regularMarketPrice)
+                    const regularMarketDayHigh = parseDecimalValues(qoute.regularMarketDayHigh)
+                    const regularMarketDayLow = parseDecimalValues(qoute.regularMarketDayLow)
+
                     await investmentService.update({ id: invest.id }, {
-                        regularMarketPrice: qoute.regularMarketPrice,
-                        regularMarketDayHigh: qoute.regularMarketDayHigh,
-                        regularMarketDayLow: qoute.regularMarketDayLow,
+                        regularMarketPrice,
+                        regularMarketDayHigh,
+                        regularMarketDayLow
                     }, trx);
                     await investService.sendNotification(Object.assign(invest, {
-                        regularMarketPrice: qoute.regularMarketPrice,
-                        regularMarketDayHigh: qoute.regularMarketDayHigh,
-                        regularMarketDayLow: qoute.regularMarketDayLow,
+                        regularMarketPrice,
+                        regularMarketDayHigh,
+                        regularMarketDayLow,
                         updatedAt: new Date()
                     }));
                 }

@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Atualizado documentação
 - Atualização docker-compose.prod e docker-compose
 - Job de atualização de dividendos
 - Job de atualização de valores criado
