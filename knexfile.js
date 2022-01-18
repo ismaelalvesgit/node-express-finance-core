@@ -17,6 +17,11 @@ module.exports = {
         },
         migrations: {
             tableName: 'migrations',
+            directory: `${__dirname}/db/migrations`
+        },
+        seeds: {
+            tableName: 'seeds',
+            directory: `${__dirname}/db/seeds`
         },
         debug: env.default.db.debug
     },
@@ -35,6 +40,11 @@ module.exports = {
         },
         migrations: {
             tableName: 'migrations',
-        }
+            directory: `${__dirname}/db/migrations`
+        },
+        seeds: {
+            tableName: 'seeds',
+            directory: `${__dirname}/db/seeds`
+        },
     }
 };

@@ -1,5 +1,6 @@
-import dividendsType from '../src/enum/dividendsType';
-import transactionType from '../src/enum/transactionType';
+import dividendsType from '../../src/enum/dividendsType';
+import dividendsStatus from '../../src/enum/dividendsStatus';
+import transactionType from '../../src/enum/transactionType';
 
 const createdAt = (knex, table) => table.timestamp('createdAt', { precision: 3 })
   .notNullable()
@@ -82,7 +83,8 @@ exports.up = async function (knex) {
       .inTable('investment')
       .onUpdate('CASCADE')
       .onDelete('CASCADE');
-    table.enum('type', Object.keys(dividendsType)).defaultTo(dividendsType.PROVISIONED).notNullable();
+    table.enum('status', Object.keys(dividendsStatus)).defaultTo(dividendsStatus.PROVISIONED).notNullable();
+    table.enum('type', Object.keys(dividendsType)).notNullable();
     table.date('dueDate').notNullable();
     table.integer('qnt').notNullable();
     table.bigInteger('price').notNullable();

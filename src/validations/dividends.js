@@ -1,4 +1,5 @@
 import joi from "@hapi/joi";
+import dividendsStatus from "../enum/dividendsStatus";
 import dividendsType from "../enum/dividendsType";
 
 export const findAllDividendsSchema = joi.object({
@@ -23,7 +24,8 @@ export const findAllDividendsSchema = joi.object({
 export const createDividendsSchema = joi.object({
     body: joi.object({
         investmentId: joi.number().positive().min(1).required(),
-        type: joi.string().valid(...Object.keys(dividendsType)),
+        status: joi.string().valid(...Object.keys(dividendsStatus)),
+        type: joi.string().valid(...Object.keys(dividendsType)).required(),
         dueDate: joi.date().required(),
         qnt: joi.number().integer().positive().min(1).required(),
         price: joi.number().integer().positive().min(1).required(),

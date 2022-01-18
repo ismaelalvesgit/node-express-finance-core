@@ -3,7 +3,8 @@ import env from "../env";
 import logger from "../logger";
 import * as updateInvestment from "./jobs/updateInvestment";
 import * as updateDividends from "./jobs/updateDividends";
-import * as asyncDividends from "./jobs/asyncDividends";
+import * as asyncDividendsFiis from "./jobs/asyncDividendsFiis";
+import * as asyncDividendsAcao from "./jobs/asyncDividendsAcao";
 
 logger.info("Registered service JOB batch is ON");
 
@@ -14,8 +15,11 @@ const jobs = [
     new CronJob(updateDividends.schedule, async ()=>{
         await updateDividends.command();
     }, null, true, env.timezone),
-    new CronJob(asyncDividends.schedule, async ()=>{
-        await asyncDividends.command();
+    new CronJob(asyncDividendsFiis.schedule, async ()=>{
+        await asyncDividendsFiis.command();
+    }, null, true, env.timezone),
+    new CronJob(asyncDividendsAcao.schedule, async ()=>{
+        await asyncDividendsAcao.command();
     }, null, true, env.timezone),
 ];
 

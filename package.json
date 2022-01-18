@@ -21,7 +21,10 @@
         "test:coverage:coveralls": "cross-env NODE_ENV=test jest --coverage --forceExit --detectOpenHandles --maxWorkers=1 --testTimeout=50000 && cat ./coverage/lcov.info | coveralls",
         "migrate:create": "knex migrate:make --env local %NAME%",
         "migrate:up": "knex migrate:latest --env local",
-        "migrate:down": "knex migrate:down --env local"
+        "migrate:down": "knex migrate:down --env local",
+        "seed:create": "knex seed:make --env local %NAME%",
+        "seed:run": "knex seed:run --env local",
+        "setup:up": "npm run migrate:up && npm run seed:run"
     },
     "dependencies": {
         "@hapi/joi": "^17.1.1",

@@ -1,3 +1,4 @@
+import dividendsType from "../enum/dividendsType";
 
 /**
  * 
@@ -12,18 +13,24 @@ export const parseDecimalValues = (value, mutiple = 100) =>{
     return value;
 };
 
-
 /**
  * 
- * @param {string} value 
+ * @param {string} date 
+ * @param {string} format 
+ * @param {string} delimiter 
  * @returns 
  */
-export const parseDateFiis = (value) =>{
-    if(typeof value === "string" && value.length === 8){
-        let temp = value.split("/");
-        return `20${temp[2]}-${temp[1]}-${temp[0]}`;
-    }
-    return value;
+export const stringToDate = (date, format, delimiter) =>{
+    var formatLowerCase = format.toLowerCase();
+    var formatItems = formatLowerCase.split(delimiter);
+    var dateItems = date.split(delimiter);
+    var monthIndex = formatItems.indexOf("mm");
+    var dayIndex = formatItems.indexOf("dd");
+    var yearIndex = formatItems.indexOf("yyyy");
+    var month = parseInt(dateItems[monthIndex]);
+    month -= 1;
+    var formatedDate = new Date(dateItems[yearIndex], month, dateItems[dayIndex]);
+    return formatedDate;
 };
 
 /**
@@ -32,5 +39,26 @@ export const parseDateFiis = (value) =>{
  * @returns 
  */
 export const formatAmount = (value) =>{
-    return value.replace(",", "").replace(" ", "").substr(2);
+    return value
+        .replace(",", "")
+        .replace(" ", "")
+        .substring(0, value.length - 7);
+};
+
+/**
+ * 
+ * @param {string} value 
+ * @returns { import('../enum/dividendsType') }
+ */
+export const parseStringToDividendType = (value)=>{
+    switch (value) {
+        case "RENDIMENTO":
+            return dividendsType.DIVIDEND;
+        case "DIVIDENDO":
+            return dividendsType.YIELD;
+        case "JCP":
+            return dividendsType.JCP;
+        default:
+            return dividendsType.YIELD;
+    }
 };

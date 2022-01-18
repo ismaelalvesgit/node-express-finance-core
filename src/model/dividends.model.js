@@ -42,6 +42,7 @@ export const findAll = (options, trx) => {
                 ) as investment
             `),
             `${TABLE_NAME}.id`,
+            `${TABLE_NAME}.status`,
             `${TABLE_NAME}.type`,
             `${TABLE_NAME}.dueDate`,
             `${TABLE_NAME}.qnt`,
@@ -93,6 +94,7 @@ export const findUpdateDivideds = (date, trx) => {
                 ) as investment
             `),
             `${TABLE_NAME}.id`,
+            `${TABLE_NAME}.status`,
             `${TABLE_NAME}.type`,
             `${TABLE_NAME}.dueDate`,
             `${TABLE_NAME}.qnt`,

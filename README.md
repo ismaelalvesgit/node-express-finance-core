@@ -52,9 +52,9 @@ docker-compose up -d
 Obs: Deixei uma aquivo de [DockerCompose](https://docs.docker.com/compose/) para que a utilização deste 
 projeto seja mais simples
 
-#### 3) Migrate Knex
+#### 3) Setup Data base
 ``` sh
-npm run migrate:up
+npm run setup:up
 ```
 
 #### 4) Iniciar Projeto

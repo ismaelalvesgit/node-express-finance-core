@@ -5,12 +5,12 @@ import { BadRequest } from "../utils/erro";
 
 /**
  * @param {import("../model/investment.model").Investment} where 
+ * @param {Object} joinWhere 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findAll = (where) =>{
-    return investmentModel.findAll({where});
+export const findAll = (where, joinWhere) =>{
+    return investmentModel.findAll({where, joinWhere});
 };
-
 /**
  * @param {import("../model/investment.model").Investment} data 
  * @returns {import('knex').Knex.QueryBuilder}

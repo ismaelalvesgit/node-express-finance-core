@@ -1,4 +1,5 @@
 export default {
-    PROVISIONED: "PROVISIONED",
-    PAID: "PAID",
+    DIVIDEND: "DIVIDEND",
+    JCP: "JCP",
+    YIELD: "YIELD",
 };

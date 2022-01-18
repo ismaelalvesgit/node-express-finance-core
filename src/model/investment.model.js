@@ -19,6 +19,7 @@ const TABLE_NAME = "investment";
 /**
  * @param {Object} options 
  * @param {Investment} options.where 
+ * @param {Object} options.joinWhere 
  * @param {string} options.sortBy 
  * @param {'desc'|'asc'} options.orderBy 
  * @param {number} options.limit 
@@ -56,6 +57,9 @@ export const findAll = (options, trx) => {
             value = Object.values(JSON.parse(options?.where))[0];
         }
         query.where(`${TABLE_NAME}.${tableName}`, "like", `%${value}%`);
+    }
+    if(options.joinWhere){
+        query.where(options.joinWhere);
     }
     if (options?.sortBy) {
         query.orderBy(options.sortBy, options.orderBy || "asc");

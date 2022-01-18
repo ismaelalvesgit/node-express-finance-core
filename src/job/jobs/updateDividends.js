@@ -14,7 +14,7 @@ const command = async () => {
     await knex.transaction(async (trx) => {
         await Promise.all(dividends.map(async (dy) => {
             try {
-                await dividendsService.update({id: dy.id}, {type: dividendsType.PAID}, trx);
+                await dividendsService.update({id: dy.id}, {status: dividendsType.PAID}, trx);
                 logger.info(`Auto PAID dividend, investment: ${dy.investment.name}`);
             } catch (error) {
                 logger.error(`Faill to update dividend - error: ${error}`);
