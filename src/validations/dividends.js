@@ -23,7 +23,7 @@ export const findAllDividendsSchema = joi.object({
 export const createDividendsSchema = joi.object({
     body: joi.object({
         investmentId: joi.number().positive().min(1).required(),
-        type: joi.string().valid(...Object.keys(dividendsType)).required(),
+        type: joi.string().valid(...Object.keys(dividendsType)),
         dueDate: joi.date().required(),
         qnt: joi.number().integer().positive().min(1).required(),
         price: joi.number().integer().positive().min(1).required(),

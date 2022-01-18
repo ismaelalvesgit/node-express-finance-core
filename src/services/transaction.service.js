@@ -15,6 +15,16 @@ export const findAll = (where, sortBy, orderBy, limit) => {
 };
 
 /**
+ * @param {import("../model/transaction.model").Transaction} where 
+ * @param {string} date
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findAllDividensByMonth = (where, date, trx) => {
+    return transactionModel.findAllDividensByMonth({where, date}, trx);
+};
+
+/**
  * @param {import("../model/transaction.model").Transaction} data 
  * @returns {import('knex').Knex.QueryBuilder}
  */

@@ -18,19 +18,19 @@ const command = async () => {
                 const qoute = await brapiService.findQoute(invest.name);
                 if (isAfter(parseISO(qoute.regularMarketTime), parseISO(invest.updatedAt))) {
                     logger.info(`Updating values investment: ${invest.name}`);
-                    const regularMarketPrice = parseDecimalValues(qoute.regularMarketPrice)
-                    const regularMarketDayHigh = parseDecimalValues(qoute.regularMarketDayHigh)
-                    const regularMarketDayLow = parseDecimalValues(qoute.regularMarketDayLow)
+                    const price = parseDecimalValues(qoute.price);
+                    const priceDayHigh = parseDecimalValues(qoute.priceDayHigh);
+                    const priceDayLow = parseDecimalValues(qoute.priceDayLow);
 
                     await investmentService.update({ id: invest.id }, {
-                        regularMarketPrice,
-                        regularMarketDayHigh,
-                        regularMarketDayLow
+                        price,
+                        priceDayHigh,
+                        priceDayLow
                     }, trx);
                     await investService.sendNotification(Object.assign(invest, {
-                        regularMarketPrice,
-                        regularMarketDayHigh,
-                        regularMarketDayLow,
+                        price,
+                        priceDayHigh,
+                        priceDayLow,
                         updatedAt: new Date()
                     }));
                 }

@@ -7,9 +7,9 @@ const TABLE_NAME = "investment";
  * @type {Object}
  * @property {Number} id
  * @property {String} name
- * @property {Number} regularMarketPrice
- * @property {Number} regularMarketDayHigh
- * @property {Number} regularMarketDayLow
+ * @property {Number} price
+ * @property {Number} priceDayHigh
+ * @property {Number} priceDayLow
  * @property {Number} categoryId
  * @property {import("./category.model").Category} category
  * @property {String} createdAt
@@ -38,9 +38,9 @@ export const findAll = (options, trx) => {
             `),
             `${TABLE_NAME}.id`,
             `${TABLE_NAME}.name`,
-            `${TABLE_NAME}.regularMarketPrice`,
-            `${TABLE_NAME}.regularMarketDayHigh`,
-            `${TABLE_NAME}.regularMarketDayLow`,
+            `${TABLE_NAME}.price`,
+            `${TABLE_NAME}.priceDayHigh`,
+            `${TABLE_NAME}.priceDayLow`,
             `${TABLE_NAME}.createdAt`,
             `${TABLE_NAME}.updatedAt`,
         ])

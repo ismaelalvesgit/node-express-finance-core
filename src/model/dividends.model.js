@@ -1,4 +1,5 @@
 import knex from "../db";
+import dividendsType from "../enum/dividendsType";
 import transacting from "../utils/transacting";
 const TABLE_NAME = "dividends";
 
@@ -33,9 +34,9 @@ export const findAll = (options, trx) => {
                 JSON_OBJECT(
                     'id', investment.id,
                     'name', investment.name, 
-                    'regularMarketPrice', investment.regularMarketPrice, 
-                    'regularMarketDayHigh', investment.regularMarketDayHigh, 
-                    'regularMarketDayLow', investment.regularMarketDayLow, 
+                    'price', investment.price, 
+                    'priceDayHigh', investment.priceDayHigh, 
+                    'priceDayLow', investment.priceDayLow, 
                     'createdAt', investment.createdAt, 
                     'updatedAt', investment.updatedAt
                 ) as investment
@@ -71,6 +72,44 @@ export const findAll = (options, trx) => {
     return transacting(query, trx);
 };
 
+
+/**
+ * @param {string} date 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findUpdateDivideds = (date, trx) => {
+    const query = knex(TABLE_NAME)
+        .select([
+            knex.raw(`
+                JSON_OBJECT(
+                    'id', investment.id,
+                    'name', investment.name, 
+                    'price', investment.price, 
+                    'priceDayHigh', investment.priceDayHigh, 
+                    'priceDayLow', investment.priceDayLow, 
+                    'createdAt', investment.createdAt, 
+                    'updatedAt', investment.updatedAt
+                ) as investment
+            `),
+            `${TABLE_NAME}.id`,
+            `${TABLE_NAME}.type`,
+            `${TABLE_NAME}.dueDate`,
+            `${TABLE_NAME}.qnt`,
+            `${TABLE_NAME}.price`,
+            `${TABLE_NAME}.total`,
+            `${TABLE_NAME}.createdAt`,
+            `${TABLE_NAME}.updatedAt`,
+        ])
+        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
+    if (date) {
+        query.where(`${TABLE_NAME}.dueDate`, "<=", date)
+        .where("type", "=", dividendsType.PROVISIONED);
+    }
+
+    return transacting(query, trx);
+};
+
 /**
  * @param {Dividends} data 
  * @param {import('knex').Knex.Transaction} trx 
@@ -80,6 +119,7 @@ export const findOrCreate = (data, trx) => {
     if (!trx) {
         trx = knex.transaction();
     }
+    
     return knex(TABLE_NAME).where(data)
         .first()
         .transacting(trx)

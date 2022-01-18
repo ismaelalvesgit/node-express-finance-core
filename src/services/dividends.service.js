@@ -12,11 +12,19 @@ export const findAll = (where, sortBy, orderBy, limit) => {
 };
 
 /**
+ * @param {import("../model/dividends.model").Dividends} where 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findUpdateDivideds = (date) => {
+    return dividendsModel.findUpdateDivideds(date);
+};
+
+/**
  * @param {import("../model/dividends.model").Dividends} data 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const create = (data) => {
-    return knex.transaction(async (trx) => {
+export const create = async (data) => {
+    return knex.transaction(async(trx)=>{
         const [ investment ] = await investmentModel.findAll({ where: { id: data.investmentId } }, trx);
         if (!investment) {
             throw new NotFound({ code: "Dividends" });
@@ -27,6 +35,15 @@ export const create = (data) => {
         }, trx);
     });
 };
+
+/**
+ * @param {import("../model/dividends.model").Dividends} data
+ * @param {import('knex').Knex.Transaction} trx  
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+ export const findOrCreate = async (data, trx) => {
+    return dividendsModel.findOrCreate(data, trx);
+ };
 
 /**
  * @param {import("../model/dividends.model").Dividends} where 

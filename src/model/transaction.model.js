@@ -52,9 +52,9 @@ export const findAll = (options, trx) => {
                 JSON_OBJECT(
                     'id', investment.id,
                     'name', investment.name, 
-                    'regularMarketPrice', investment.regularMarketPrice, 
-                    'regularMarketDayHigh', investment.regularMarketDayHigh, 
-                    'regularMarketDayLow', investment.regularMarketDayLow, 
+                    'price', investment.price, 
+                    'priceDayHigh', investment.priceDayHigh, 
+                    'priceDayLow', investment.priceDayLow, 
                     'createdAt', investment.createdAt, 
                     'updatedAt', investment.updatedAt
                 ) as investment
@@ -90,6 +90,28 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
+    return transacting(query, trx);
+};
+
+/**
+ * @param {Object} options 
+ * @param {Transaction} options.where 
+ * @param {Transaction} options.date 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findAllDividensByMonth = (options, trx) => {
+    const query = knex(TABLE_NAME)
+        .first()
+        .sum({ qnt: "qnt" });
+    if (options?.where) {
+        query.where(options?.where);
+    }
+
+    if (options?.date) {
+        query.where("negotiationDate", "<=", options?.date);
+    }
+
     return transacting(query, trx);
 };
 
