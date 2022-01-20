@@ -35,8 +35,8 @@ export const validateSchema = (schema, data)=>{
     });
 
     if (validation.error) {
-        throw new ValidadeSchema(validation.error.details);
+        throw new ValidadeSchema(validation.error.details[0].message.replace(/"/g, ""));
     }
 
-    return validation.value
-}
+    return validation.value;
+};

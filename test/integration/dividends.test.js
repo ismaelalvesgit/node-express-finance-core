@@ -10,7 +10,6 @@ describe("Dividends Router", () => {
     
     beforeEach(async()=>{
         await Promise.all([
-            knex("dividends").del(),
             knex("investment").del()
         ]);
     });
@@ -58,7 +57,7 @@ describe("Dividends Router", () => {
             });
 
             const res = await request(app)
-            .get("/dividends")
+            .get(`/dividends?sortBy=id&orderBy=asc&limit=1&search={"investmentId":"${investmentId}"}`)
             .expect(StatusCodes.OK);
             expect(res.body[0]).toHaveProperty("type");
             expect(res.body[0]).toHaveProperty("id");

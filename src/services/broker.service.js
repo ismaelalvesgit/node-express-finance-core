@@ -34,7 +34,7 @@ export const update = (where, data) =>{
  */
 export const del = (where) =>{
     return knex.transaction(async(trx)=>{
-        const [ transaction ] = await transactionModel.findAll({where: { brokerId: where.id }}, trx);
+        const transaction = await transactionModel.findOne({brokerId: where.id}, null, trx);
         if(transaction){
             throw new BadRequest({message: "Unable to remove because broker has transactions"});
         }

@@ -10,9 +10,7 @@ describe("Broker Router", () => {
     
     beforeEach(async()=>{
         await Promise.all([
-            knex("transaction").del(),
-            knex("investment").del(),
-            knex("broker").del(),
+            knex("broker").del()
         ]);
     });
 
@@ -30,12 +28,13 @@ describe("Broker Router", () => {
         });
         
         it("find", async() => {
+            const name = chance.name();
             await knex("broker").insert({
-                name: chance.name(),
+                name,
             });
 
             const res = await request(app)
-            .get("/broker")
+            .get(`/broker?sortBy=id&orderBy=asc&limit=1&search={"name":"${name}"}`)
             .expect(StatusCodes.OK);
             expect(res.body[0]).toHaveProperty("name");
             expect(res.body[0]).toHaveProperty("id");

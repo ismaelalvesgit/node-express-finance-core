@@ -46,4 +46,4 @@ export const broker = [
     "VOTORANTIM CTVM LTDA",
     "XP INVESTIMENTOS CCTVM S/A",
     "RICO INVESTIMENTOS CCTVM S/A",
-]
+];

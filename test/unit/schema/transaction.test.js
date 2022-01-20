@@ -1,28 +1,28 @@
-import { Chance } from 'chance';
-import transactionType from '../../../src/enum/TransactionType';
-import { createTransactionSchema, findAllTransactionSchema } from '../../../src/validations/Transaction';
-import { validateSchema } from '../../utils';
+import { Chance } from "chance";
+import transactionType from "../../../src/enum/TransactionType";
+import { createTransactionSchema, findAllTransactionSchema } from "../../../src/validations/Transaction";
+import { validateSchema } from "../../utils";
 
 const chance = new Chance();
 describe("Transaction Schemas", () => {
 
-    describe('sucess', ()=>{
+    describe("sucess", ()=>{
 
-        it('findAllTransactionSchema', ()=>{
+        it("findAllTransactionSchema", ()=>{
             const params = {
                 query:{
                     search: JSON.stringify({name: chance.name()}),
                     sortBy: chance.name(),
-                    orderBy: chance.pickone(['asc', 'desc']),
+                    orderBy: chance.pickone(["asc", "desc"]),
                     limit: 10
                 }
-            }
-            const res = validateSchema(findAllTransactionSchema, params)
-            expect(res).toBeDefined()
-            expect(res).toHaveProperty('query')
-        })
+            };
+            const res = validateSchema(findAllTransactionSchema, params);
+            expect(res).toBeDefined();
+            expect(res).toHaveProperty("query");
+        });
         
-        it('createTransactionSchema', ()=>{
+        it("createTransactionSchema", ()=>{
             const params = {
                 body:{
                     broker: "RICO INVESTIMENTOS",
@@ -34,34 +34,30 @@ describe("Transaction Schemas", () => {
                     price: 1000,
                     total: 1 * 1000,
                 }
-            }
-            const res = validateSchema(createTransactionSchema, params)
-            expect(res).toBeDefined()
-            expect(res).toHaveProperty('body')
-        })
+            };
+            const res = validateSchema(createTransactionSchema, params);
+            expect(res).toBeDefined();
+            expect(res).toHaveProperty("body");
+        });
 
-    })
+    });
 
-    describe('error', ()=>{
+    describe("error", ()=>{
 
-        it('findAllTransactionSchema - Only object type', ()=>{
+        it("findAllTransactionSchema - Only object type", ()=>{
             const params = {
                 query:{
                     search: chance.name(),
                     sortBy: chance.name(),
-                    orderBy: chance.pickone(['asc', 'desc']),
+                    orderBy: chance.pickone(["asc", "desc"]),
                     limit: 10
                 }
-            }
-            try {
-                validateSchema(findAllTransactionSchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('Only object type')
-            }
-        })
+            };
 
-        it('findAllTransactionSchema - Must have one attribute', ()=>{
+            expect(() => validateSchema(findAllTransactionSchema, params)).toThrowError("Only object type");
+        });
+
+        it("findAllTransactionSchema - Must have one attribute", ()=>{
             const params = {
                 query:{
                     search: JSON.stringify({
@@ -69,30 +65,22 @@ describe("Transaction Schemas", () => {
                         price: chance.integer(),
                     }),
                     sortBy: chance.name(),
-                    orderBy: chance.pickone(['asc', 'desc']),
+                    orderBy: chance.pickone(["asc", "desc"]),
                     limit: 10
                 }
-            }
-            try {
-                validateSchema(findAllTransactionSchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('Must have one attribute')
-            }
-        })
+            };
+
+            expect(() => validateSchema(findAllTransactionSchema, params)).toThrowError("Must have one attribute");
+        });
         
-        it('createTransactionSchema - required', ()=>{
+        it("createTransactionSchema - required", ()=>{
             const params = {
                 body:{}
-            }
-            try {
-                validateSchema(createTransactionSchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('"body.investment" is required')
-            }
-        })
+            };
 
-    })
+            expect(() => validateSchema(createTransactionSchema, params)).toThrowError("\"body.investment is required\"");
+        });
 
-})
+    });
+
+});

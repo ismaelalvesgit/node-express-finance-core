@@ -1,70 +1,65 @@
-import { Chance } from 'chance';
-import { ValidadeSchema } from '../../../src/utils/erro';
-import { createBrokerSchema, findAllBrokerSchema, updateBrokerSchema } from '../../../src/validations/broker';
-import { validateSchema } from '../../utils';
+import { Chance } from "chance";
+import { createBrokerSchema, findAllBrokerSchema, updateBrokerSchema } from "../../../src/validations/broker";
+import { validateSchema } from "../../utils";
 
 const chance = new Chance();
 describe("Broker Schemas", () => {
 
-    describe('sucess', ()=>{
+    describe("sucess", ()=>{
 
-        it('findAllBrokerSchema', ()=>{
+        it("findAllBrokerSchema", ()=>{
             const params = {
                 query:{
                     search: JSON.stringify({name: chance.name()}),
                     sortBy: chance.name(),
-                    orderBy: chance.pickone(['asc', 'desc']),
+                    orderBy: chance.pickone(["asc", "desc"]),
                     limit: 10
                 }
-            }
-            const res = validateSchema(findAllBrokerSchema, params)
-            expect(res).toBeDefined()
-            expect(res).toHaveProperty('query')
-        })
+            };
+            const res = validateSchema(findAllBrokerSchema, params);
+            expect(res).toBeDefined();
+            expect(res).toHaveProperty("query");
+        });
         
-        it('createBrokerSchema', ()=>{
+        it("createBrokerSchema", ()=>{
             const params = {
                 body:{
                     name: chance.name()
                 }
-            }
-            const res = validateSchema(createBrokerSchema, params)
-            expect(res).toBeDefined()
-            expect(res).toHaveProperty('body')
-        })
+            };
+            const res = validateSchema(createBrokerSchema, params);
+            expect(res).toBeDefined();
+            expect(res).toHaveProperty("body");
+        });
 
-        it('updateBrokerSchema', ()=>{
+        it("updateBrokerSchema", ()=>{
             const params = {
                 body:{
                     name: chance.name()
                 }
-            }
-            const res = validateSchema(updateBrokerSchema, params)
-            expect(res).toBeDefined()
-            expect(res).toHaveProperty('body')
-        })
-    })
+            };
+            const res = validateSchema(updateBrokerSchema, params);
+            expect(res).toBeDefined();
+            expect(res).toHaveProperty("body");
+        });
+    });
     
-    describe('error', ()=>{
+    describe("error", ()=>{
 
-        it('findAllBrokerSchema - Only object type', ()=>{
+        it("findAllBrokerSchema - Only object type", ()=>{
             const params = {
                 query:{
                     search: chance.name(),
                     sortBy: chance.name(),
-                    orderBy: chance.pickone(['asc', 'desc']),
+                    orderBy: chance.pickone(["asc", "desc"]),
                     limit: 10
                 }
-            }
-            try {
-                validateSchema(findAllBrokerSchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('Only object type')
-            }
-        })
+            };
 
-        it('findAllBrokerSchema - Must have one attribute', ()=>{
+            expect(() => validateSchema(findAllBrokerSchema, params)).toThrowError("Only object type");
+        });
+
+        it("findAllBrokerSchema - Must have one attribute", ()=>{
             const params = {
                 query:{
                     search: JSON.stringify({
@@ -72,40 +67,28 @@ describe("Broker Schemas", () => {
                         price: chance.integer(),
                     }),
                     sortBy: chance.name(),
-                    orderBy: chance.pickone(['asc', 'desc']),
+                    orderBy: chance.pickone(["asc", "desc"]),
                     limit: 10
                 }
-            }
-            try {
-                validateSchema(findAllBrokerSchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('Must have one attribute')
-            }
-        })
-        
-        it('createBrokerSchema - required', ()=>{
-            const params = {
-                body:{}
-            }
-            try {
-                validateSchema(createBrokerSchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('"body.name" is required')
-            }
-        })
+            };
 
-        it('updateBrokerSchema - required', ()=>{
+            expect(() => validateSchema(findAllBrokerSchema, params)).toThrowError("Must have one attribute");
+        });
+        
+        it("createBrokerSchema - required", ()=>{
             const params = {
                 body:{}
-            }
-            try {
-                validateSchema(updateBrokerSchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('"body.name" is required')
-            }
-        })
-    })
-})
+            };
+
+            expect(() => validateSchema(createBrokerSchema, params)).toThrowError("\"body.name is required\"");
+        });
+
+        it("updateBrokerSchema - required", ()=>{
+            const params = {
+                body:{}
+            };
+
+            expect(() => validateSchema(updateBrokerSchema, params)).toThrowError("\"body.name is required\"");
+        });
+    });
+});

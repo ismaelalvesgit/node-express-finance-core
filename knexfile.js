@@ -1,9 +1,9 @@
 require("@babel/register");
-const env = require('./src/env');
+const env = require("./src/env");
 
 module.exports = {
     local:{
-        client: 'mysql2',
+        client: "mysql2",
         connection: {
             host: env.default.db.host,
             port: env.default.db.port,
@@ -15,18 +15,27 @@ module.exports = {
             multipleStatements: true,
             dateStrings: true
         },
+        pool:{
+            afterCreate: function(connection, callback) {
+                connection.query(`SET time_zone = "${env.default.timezone}";`, function(err) {
+                    callback(err, connection);
+                });
+            },
+            min: 1,
+            max: 10
+        },
         migrations: {
-            tableName: 'migrations',
+            tableName: "migrations",
             directory: `${__dirname}/db/migrations`
         },
         seeds: {
-            tableName: 'seeds',
+            tableName: "seeds",
             directory: `${__dirname}/db/seeds`
         },
         debug: env.default.db.debug
     },
     test:{
-        client: 'mysql2',
+        client: "mysql2",
         connection: {
             host: env.default.db.host,
             port: env.default.db.port,
@@ -36,14 +45,18 @@ module.exports = {
             supportBigNumbers: true,
             bigNumberStrings: true,
             multipleStatements: true,
-            dateStrings: true
+            dateStrings: true,
+        },
+        pool:{
+            min: 1,
+            max: 10
         },
         migrations: {
-            tableName: 'migrations',
+            tableName: "migrations",
             directory: `${__dirname}/db/migrations`
         },
         seeds: {
-            tableName: 'seeds',
+            tableName: "seeds",
             directory: `${__dirname}/db/seeds`
         },
     }

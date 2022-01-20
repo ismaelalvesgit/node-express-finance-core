@@ -1,69 +1,66 @@
-import { Chance } from 'chance';
-import { createCategorySchema, findAllCategorySchema, updateCategorySchema } from '../../../src/validations/category';
-import { validateSchema } from '../../utils';
+import { Chance } from "chance";
+import { createCategorySchema, findAllCategorySchema, updateCategorySchema } from "../../../src/validations/category";
+import { validateSchema } from "../../utils";
 
 const chance = new Chance();
 describe("Category Schemas", () => {
 
-    describe('sucess', ()=>{
+    describe("sucess", ()=>{
 
-        it('findAllCategorySchema', ()=>{
+        it("findAllCategorySchema", ()=>{
             const params = {
                 query:{
                     search: JSON.stringify({name: chance.name()}),
                     sortBy: chance.name(),
-                    orderBy: chance.pickone(['asc', 'desc']),
+                    orderBy: chance.pickone(["asc", "desc"]),
                     limit: 10
                 }
-            }
-            const res = validateSchema(findAllCategorySchema, params)
-            expect(res).toBeDefined()
-            expect(res).toHaveProperty('query')
-        })
+            };
+            
+            const res = validateSchema(findAllCategorySchema, params);
+            expect(res).toBeDefined();
+            expect(res).toHaveProperty("query");
+        });
         
-        it('createCategorySchema', ()=>{
+        it("createCategorySchema", ()=>{
             const params = {
                 body:{
                     name: chance.name()
                 }
-            }
-            const res = validateSchema(createCategorySchema, params)
-            expect(res).toBeDefined()
-            expect(res).toHaveProperty('body')
-        })
+            };
+            const res = validateSchema(createCategorySchema, params);
+            expect(res).toBeDefined();
+            expect(res).toHaveProperty("body");
+        });
 
-        it('updateCategorySchema', ()=>{
+        it("updateCategorySchema", ()=>{
             const params = {
                 body:{
                     name: chance.name()
                 }
-            }
-            const res = validateSchema(updateCategorySchema, params)
-            expect(res).toBeDefined()
-            expect(res).toHaveProperty('body')
-        })
-    })
+            };
+            const res = validateSchema(updateCategorySchema, params);
+            expect(res).toBeDefined();
+            expect(res).toHaveProperty("body");
+        });
+    });
 
-    describe('error', ()=>{
+    describe("error", ()=>{
 
-        it('findAllCategorySchema - Only object type', ()=>{
+        it("findAllCategorySchema - Only object type", ()=>{
             const params = {
                 query:{
                     search: chance.name(),
                     sortBy: chance.name(),
-                    orderBy: chance.pickone(['asc', 'desc']),
+                    orderBy: chance.pickone(["asc", "desc"]),
                     limit: 10
                 }
-            }
-            try {
-                validateSchema(findAllCategorySchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('Only object type')
-            }
-        })
+            };
 
-        it('findAllCategorySchema - Must have one attribute', ()=>{
+            expect(() => validateSchema(findAllCategorySchema, params)).toThrowError("Only object type");
+        });
+
+        it("findAllCategorySchema - Must have one attribute", ()=>{
             const params = {
                 query:{
                     search: JSON.stringify({
@@ -71,41 +68,29 @@ describe("Category Schemas", () => {
                         price: chance.integer(),
                     }),
                     sortBy: chance.name(),
-                    orderBy: chance.pickone(['asc', 'desc']),
+                    orderBy: chance.pickone(["asc", "desc"]),
                     limit: 10
                 }
-            }
-            try {
-                validateSchema(findAllCategorySchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('Must have one attribute')
-            }
-        })
+            };
+
+            expect(() => validateSchema(findAllCategorySchema, params)).toThrowError("Must have one attribute");
+        });
         
-        it('createCategorySchema - required', ()=>{
+        it("createCategorySchema - required", ()=>{
             const params = {
                 body:{}
-            }
-            try {
-                validateSchema(createCategorySchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('"body.name" is required')
-            }
-        })
+            };
 
-        it('updateCategorySchema - required', ()=>{
+            expect(() => validateSchema(createCategorySchema, params)).toThrowError("\"body.name is required\"");
+        });
+
+        it("updateCategorySchema - required", ()=>{
             const params = {
                 body:{}
-            }
-            try {
-                validateSchema(updateCategorySchema, params)
-            } catch (error) {
-                const res = JSON.parse(error.message)
-                expect(res[0].message).toBe('"body.name" is required')
-            }
-        })
-    })
+            };
 
-})
+            expect(() => validateSchema(updateCategorySchema, params)).toThrowError("\"body.name is required\"");
+        });
+    });
+
+});

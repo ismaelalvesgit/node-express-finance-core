@@ -7,7 +7,12 @@ const TABLE_NAME = "investment";
  * @type {Object}
  * @property {Number} id
  * @property {String} name
- * @property {Number} price
+ * @property {String} longName
+ * @property {Number} balance
+ * @property {String} sector
+ * @property {Number} volumeDay
+ * @property {Number} previousClosePrice
+ * @property {Number} priceDay
  * @property {Number} priceDayHigh
  * @property {Number} priceDayLow
  * @property {Number} categoryId
@@ -39,7 +44,13 @@ export const findAll = (options, trx) => {
             `),
             `${TABLE_NAME}.id`,
             `${TABLE_NAME}.name`,
-            `${TABLE_NAME}.price`,
+            `${TABLE_NAME}.longName`,
+            `${TABLE_NAME}.balance`,
+            `${TABLE_NAME}.sector`,
+            `${TABLE_NAME}.changePercentDay`,
+            `${TABLE_NAME}.volumeDay`,
+            `${TABLE_NAME}.previousClosePrice`,
+            `${TABLE_NAME}.priceDay`,
             `${TABLE_NAME}.priceDayHigh`,
             `${TABLE_NAME}.priceDayLow`,
             `${TABLE_NAME}.createdAt`,
@@ -67,6 +78,19 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
+    return transacting(query, trx);
+};
+
+/**
+ * @param {Investment} where 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const getBalance = (where, trx) => {
+    const query = knex(TABLE_NAME)
+        .select("balance")
+        .first()
+        .where(where);
     return transacting(query, trx);
 };
 

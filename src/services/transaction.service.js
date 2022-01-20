@@ -1,8 +1,8 @@
 import * as transactionModel from "../model/transaction.model";
-import * as investmentModel from "../model/investment.model";
 import * as categoryModel from "../model/category.model";
 import * as brokerModel from "../model/broker.model";
 import * as brapiService from "./brapi.service";
+import * as investmentService from "./investment.service";
 import knex from "../db";
 import { Brapi } from "../utils/erro";
 
@@ -34,9 +34,16 @@ export const create = async (data) => {
         if (!qoute) {
             throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }
+
+        const total = data.qnt * data.price;
         const category = await categoryModel.findOrCreate({ name: data.category }, trx);
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
-        const investment = await investmentModel.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
+        const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
+        await investmentService.updateBalance(investment, {
+            amount: total,
+            operationType: data.type,
+        }, trx);
+
         return transactionModel.create({
             brokerId: broker.id,
             investmentId: investment.id,
@@ -45,7 +52,7 @@ export const create = async (data) => {
             dueDate: data.dueDate,
             qnt: data.qnt,
             price: data.price,
-            total: data.qnt * data.price,
+            total,
         }, trx);
     });
 };
@@ -63,7 +70,7 @@ export const update = (where, data) => {
         }
         const category = await categoryModel.findOrCreate({ name: data.category }, trx);
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
-        const investment = await investmentModel.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
+        const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
         return transactionModel.update(where, {
             brokerId: broker.id,
             investmentId: investment.id,

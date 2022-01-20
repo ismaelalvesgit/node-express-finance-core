@@ -37,7 +37,7 @@ export const del = (where) =>{
     return knex.transaction(async(trx)=>{
         const [ investment ] = await investmentModel.findAll({where: {categoryId: where.id}}, trx);
         if(investment){
-            const [ transaction ] = await transactionModel.findAll({where: { investmentId: investment.id }}, trx);
+            const transaction  = await transactionModel.findOne({ investmentId: investment.id }, null, trx);
             if(transaction){
                 throw new BadRequest({message: "Unable to remove because category has transactions"});
             }

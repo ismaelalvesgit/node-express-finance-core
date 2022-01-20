@@ -10,7 +10,6 @@ describe("Transaction Router", () => {
     
     beforeEach(async()=>{
         await Promise.all([
-            knex("transaction").del(),
             knex("investment").del()
         ]);
     });
@@ -67,7 +66,7 @@ describe("Transaction Router", () => {
                 total: 1 * 1000,
             });
             const res = await request(app)
-            .get("/transaction")
+            .get(`/transaction?sortBy=id&orderBy=asc&limit=1&search={"investmentId":"${investmentId}"}`)
             .expect(StatusCodes.OK);
             expect(res.body[0]).toHaveProperty("type");
             expect(res.body[0]).toHaveProperty("id");

@@ -27,12 +27,13 @@ describe("Category Router", () => {
         });
         
         it("find", async() => {
+            const name = chance.name();
             await knex("category").insert({
-                name: chance.name(),
+                name,
             });
 
             const res = await request(app)
-            .get("/category")
+            .get(`/category?sortBy=id&orderBy=asc&limit=1&search={"name":"${name}"}`)
             .expect(StatusCodes.OK);
             expect(res.body[0]).toHaveProperty("name");
             expect(res.body[0]).toHaveProperty("id");

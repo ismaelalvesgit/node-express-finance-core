@@ -18,19 +18,31 @@ const command = async () => {
                 const qoute = await brapiService.findQoute(invest.name);
                 if (isAfter(parseISO(qoute.regularMarketTime), parseISO(invest.updatedAt))) {
                     logger.info(`Updating values investment: ${invest.name}`);
-                    const price = parseDecimalValues(qoute.price);
-                    const priceDayHigh = parseDecimalValues(qoute.priceDayHigh);
-                    const priceDayLow = parseDecimalValues(qoute.priceDayLow);
+                    const longName = qoute.longName;
+                    const priceDay = parseDecimalValues(qoute.regularMarketPrice);
+                    const priceDayHigh = parseDecimalValues(qoute.regularMarketDayHigh);
+                    const priceDayLow = parseDecimalValues(qoute.regularMarketDayLow);
+                    const changePercentDay = qoute.regularMarketChangePercent;
+                    const volumeDay = parseDecimalValues(qoute.regularMarketVolume);
+                    const previousClosePrice = parseDecimalValues(qoute.regularMarketDayLow);
 
                     await investmentService.update({ id: invest.id }, {
-                        price,
-                        priceDayHigh,
-                        priceDayLow
-                    }, trx);
-                    await investService.sendNotification(Object.assign(invest, {
-                        price,
+                        longName,
+                        priceDay,
                         priceDayHigh,
                         priceDayLow,
+                        changePercentDay,
+                        volumeDay,
+                        previousClosePrice,
+                    }, trx);
+                    await investService.sendNotification(Object.assign(invest, {
+                        longName,
+                        priceDay,
+                        priceDayHigh,
+                        priceDayLow,
+                        changePercentDay,
+                        volumeDay,
+                        previousClosePrice,
                         updatedAt: new Date()
                     }));
                 }
