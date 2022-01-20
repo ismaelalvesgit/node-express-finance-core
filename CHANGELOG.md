@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado lint no test
 - Atualizado Colunas da tabela de investment
 - Adicionado job de sincronização de proventos FIIS e AÇÕES
 - Atualizado documentação
