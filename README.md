@@ -87,7 +87,12 @@ Rode o comando
 set NAME=teste && npm run migrate:create
 ```
 
-#### 4) Collection Postman
+#### 4) Email Config
+Estarei deixando o link do [appMenosSeguro](https://myaccount.google.com/u/2/lesssecureapps) que necessita estar 
+habilitado para utilização do serviço de envio de email padrão. Para utilizar os serviços de email com OAuth2 siga 
+os proximos passo [link](https://alexb72.medium.com/how-to-send-emails-using-a-nodemailer-gmail-and-oauth2-fe19d66451f9).
+
+#### 5) Collection Postman
 Estarei deixando uma collection da ferramenta [Postman](https://www.postman.com/) para facilitação de testes manuais. 😁😁😁
 
 ## Contato

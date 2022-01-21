@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado cronjob de backup de dados
 - Adicionado nova rota /investment
 - Adicionado lint no test
 - Atualizado Colunas da tabela de investment
