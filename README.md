@@ -68,7 +68,6 @@ npm run dev
 Faça 2 request na rota http://localhost:3000 ou http://localhost:${customPort} e verifique o seu 
 console de execução
 
-
 ## EXTRA
 #### 1) Base de dados
 Antes de iniciar qual ambiente sejá ele `LOCAL | DOCKERIZADO` deve ser criado uma base de dados no [mysql](https://www.mysql.com/) uma para o 
@@ -88,8 +87,11 @@ Rode o comando
 set NAME=teste && npm run migrate:create
 ```
 
+#### 4) Collection Postman
+Estarei deixando uma collection da ferramenta [Postman](https://www.postman.com/) para facilitação de testes manuais. 😁😁😁
+
 ## Contato
-Desenvolvido por: [Ismael Alves](https://github.com/ismaelalvesgit)
+Desenvolvido por: [Ismael Alves](https://github.com/ismaelalvesgit) 🤓🤓🤓
 
 * Email: [cearaismael1997@gmail.com](mailto:cearaismael1997@gmail.com) 
 * Github: [github.com/ismaelalvesgit](https://github.com/ismaelalvesgit)

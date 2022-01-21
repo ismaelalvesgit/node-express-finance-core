@@ -1,0 +1,1008 @@
+{
+	"info": {
+		"_postman_id": "2526cfa6-896e-4f51-8c40-70c467fd9a47",
+		"name": "Finance",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "Category - FindAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "{\"name\":\"ad\"}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Category - Find",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/category/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Category - Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"oi ds sw mundo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Category - Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Dona barra\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/category/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Category - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/category/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Investment",
+			"item": [
+				{
+					"name": "Investment - FindAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/investment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investment"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "{\"name\":\"o\"}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Investment - Find",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/investment/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Investment - Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"VISC11\",\r\n    \"categoryId\":\"1\",\r\n    \"sector\":\"SHOPPING\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/investment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Investment - Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"categoryId\":\"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/investment/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Investment - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/investment/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investment",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Broker",
+			"item": [
+				{
+					"name": "Broker - FindAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/broker",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"broker"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "{\"name\":\"o\"}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Broker - Find",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/broker/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"broker",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Broker - Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"olá mundo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/broker",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"broker"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Broker - Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Dona barra\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/broker/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"broker",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Broker - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/broker/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"broker",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transaction",
+			"item": [
+				{
+					"name": "Transaction - FindAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/transaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transaction"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "createdAt",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "{\"type\":\"SELL\"}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaction  - Find",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/transaction/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transaction",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaction - Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"investment\":\"VINO11\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"FUNDOS IMOBILIÁRIOS\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2021-12-10T18:33:31.550Z\",\r\n    \"qnt\": 1,\r\n    \"price\": 5438\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/transaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transaction"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaction - Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"investment\":\"VGHF11\",\r\n    \"broker\": \"RICO INVESTIMENTOS\",\r\n    \"category\": \"FIIS\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2022-01-15T18:33:31.550Z\",\r\n    \"qnt\": 2,\r\n    \"price\": 20000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/transaction/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transaction",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transaction - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/transaction/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"transaction",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dividends",
+			"item": [
+				{
+					"name": "Dividends - FindAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dividends",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dividends"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "{\"investmentId\":\"2\"}",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dividends - Find",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dividends/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dividends",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dividends - Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"investmentId\":\"1\",\r\n    \"type\": \"PROVISIONED\",\r\n    \"dueDate\": \"2022-01-15T18:33:31.550Z\",\r\n    \"qnt\": 2,\r\n    \"price\": 2000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/dividends",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dividends"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dividends - Update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"investment\":\"VGHF11\",\r\n    \"broker\": \"RICO INVESTIMENTOS\",\r\n    \"category\": \"FIIS\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2022-01-15T18:33:31.550Z\",\r\n    \"qnt\": 2,\r\n    \"price\": 20000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/dividends/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dividends",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dividends - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dividends/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dividends",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
