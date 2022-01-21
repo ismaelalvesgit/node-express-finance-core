@@ -25,6 +25,8 @@ tags:
     description: Transaction namespace
   - name: Dividends
     description: Dividends namespace
+  - name: Investment
+    description: Investment namespace
   - name: System
     description: System namespace
 
@@ -755,6 +757,196 @@ paths:
         500: # status code
           $ref: "#/components/responses/internal"
 
+  # Investment
+  /investment:
+    get:
+      tags:
+        - Investment
+      summary: Retorna a lista de investmentos.
+      parameters:
+        - in: query
+          name: sortBy
+          description: Atributo de ordenação
+          schema:
+            type: string
+            example: "name"
+        - in: query
+          name: orderBy
+          description: Tipo de ordenação (asc | desc)
+          schema:
+            type: string
+            example: "asc"
+        - in: query
+          name: limit
+          description: Limite de itens retornados
+          schema:
+            type: string
+            example: "10"
+        - in: query
+          name: search
+          description: Filtro de pesquisa
+          schema:
+            type: string
+            example: {"name":"ismael"}
+      responses:
+        200: # status code
+          $ref: "#/components/responses/investment"
+
+    post:
+      tags:
+        - Dividends
+      summary: Criação de investmentos.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/investment"
+      responses:
+        200: # status code
+          description: Cadastro de investmentos.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Dividendo criado com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /investment/{id}:
+    get:
+      tags:
+        - Investment
+      summary: Retorna um investmento por ID.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do investmento
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          description: Dividendos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  investment:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                  type:
+                    $ref: '#/components/schemas/DividendsTypeEnum'
+                  dueDate:
+                    type: string
+                    example: "2022-01-15T18:33:31.550Z"
+                  qnt:
+                    type: number
+                    example: 1
+                  price:
+                    type: number
+                    description: "Formatação de valores Ex: R$ 10,00 === 1000"
+                    example: 1000
+                  total:
+                    type: number
+                    description: "Formatação de valores Ex: R$ 20,00 === 2000"
+                    example: 2000
+                  createdAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  updatedAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    put:
+      tags:
+        - Investment
+      summary: Atualiza um investmento.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do investmento
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        description: Obrigatátorio possui pelo menos um dos atributos do objeto na request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categoryId:
+                  type: number
+                  example: 10
+                longName:
+                  type: string
+                  example: "Ismael Alves"
+                sector:
+                  type: string
+                  example: "Ismael Alves"
+      responses:
+        200: # status code
+          description: Retorna status.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Dividendo atualizado com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    delete:
+      tags:
+        - Investment
+      summary: Deleta um investmento.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do investmento
+          schema:
+            type: string
+            example: "1"
+      responses:
+        204: # status code
+          description: Investmento deletado com sucesso.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
 components:
   responses:
     badRequest:
@@ -976,6 +1168,76 @@ components:
                 updatedAt:
                   type: string
                   example: "2021-03-31 22:34:36.476"
+    
+    investment:
+      description: lista de investmentos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 1
+                category:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: "Ismael Alves"
+                    createdAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                    updatedAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                name:
+                  type: string
+                  example: "Ismael Alves"
+                longName:
+                  type: string
+                  example: "Ismael Alves"
+                balance:
+                  type: number
+                  example: 1
+                sector:
+                  type: string
+                  example: "Ismael Alves"
+                changePercentDay:
+                  type: number
+                  description: "Variação do preço da ação hoje em porcentage"
+                  example: -0.70
+                volumeDay:
+                  type: number
+                  description: "Volume das trocas dessa ação hoje"
+                  example: 2863500
+                previousClosePrice:
+                  type: number
+                  description: "Preço da ação na hora do fechamento do dia anterior"
+                  example: 5351
+                priceDay:
+                  type: number
+                  description: "Preço por ação atual"
+                  example: 5371
+                priceDayHigh:
+                  type: number
+                  description: "Maior preço por ação hoje"
+                  example: 5409
+                priceDayLow:
+                  type: number
+                  description: "Menor preço por ação hoje"
+                  example: 5351
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
 
   schemas:
     category:
@@ -1073,3 +1335,23 @@ components:
           type: number
           description: "Formatação de valores Ex: R$ 10,00 === 1000"
           example: 1000
+    
+    investment:
+      type: object
+      required:
+        - categoryId
+        - name
+        - sector
+      properties:
+        categoryId:
+          type: number
+          example: 10
+        name:
+            type: string
+            example: "Ismael Alves"
+        longName:
+          type: string
+          example: "Ismael Alves"
+        sector:
+          type: string
+          example: "Ismael Alves"

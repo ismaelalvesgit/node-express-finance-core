@@ -16,6 +16,7 @@ services:
       APM_SERVICE_NAME: finance
       REDIS_HOST: redis
       BRAPI_URL: https://brapi.ga/api
+      YIELD_URL: https://statusinvest.com.br
     volumes:  
       - //etc/localtime:/etc/localtime:ro # Windows WSL
       - //etc/timezone:/etc/timezone:ro # Windows WSL

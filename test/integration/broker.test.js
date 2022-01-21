@@ -69,9 +69,6 @@ describe("Broker Router", () => {
             });
             await request(app)
             .del(`/broker/${id}`)
-            .send({
-                name: chance.name(),
-            })
             .expect(StatusCodes.NO_CONTENT);
         });
     });

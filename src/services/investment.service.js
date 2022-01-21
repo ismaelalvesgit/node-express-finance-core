@@ -1,7 +1,9 @@
 import * as investmentModel from "../model/investment.model";
+import * as categoryModel from "../model/category.model";
 import * as transactionModel from "../model/transaction.model";
+import * as brapiService from "./brapi.service";
 import knex from "../db";
-import { BadRequest, NotFound } from "../utils/erro";
+import { BadRequest, Brapi, NotFound } from "../utils/erro";
 import transactionType from "../enum/transactionType";
 
 /**
@@ -9,16 +11,30 @@ import transactionType from "../enum/transactionType";
  * @param {Object} joinWhere 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findAll = (where, joinWhere) =>{
-    return investmentModel.findAll({where, joinWhere});
+export const findAll = (where, joinWhere, sortBy, orderBy, limit) =>{
+    return investmentModel.findAll({where, sortBy, orderBy, limit, joinWhere});
 };
 
 /**
  * @param {import("../model/investment.model").Investment} data 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const create = (data) =>{
-    return investmentModel.create(data);
+export const create = async(data) =>{
+    return knex.transaction(async(trx)=>{
+        const qoute = await brapiService.findQoute(data.name);
+
+        if (!qoute) {
+            throw new Brapi({ statusCode: 404, message: "Investment not Found" });
+        }
+
+        const category = await categoryModel.findAll({where: {id: data.categoryId}}, trx);
+        
+        if(!category.length > 0){
+            throw new NotFound({code: "Category"});
+        }
+
+        return investmentModel.create(data, trx);
+    });
 };
 
 /**
@@ -46,7 +62,7 @@ export const updateBalance = async(where, data, trx) =>{
     const investment = await investmentModel.getBalance({id: where.id}, trx);
 
     if(!investment){
-        throw new NotFound({message: "Invenstment not found"});
+        throw new NotFound({code: "Invenstment"});
     } 
 
     if(data.operationType === transactionType.BUY){
@@ -66,7 +82,17 @@ export const updateBalance = async(where, data, trx) =>{
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const update = (where, data) =>{
-    return investmentModel.update(where, data);
+    return knex.transaction(async(trx)=>{
+
+        if(data.categoryId){
+            const category = await categoryModel.findAll({where: {id: data.categoryId}}, trx);
+            if(category.length > 0){
+                throw new NotFound({code: "Category"});
+            }
+        }
+
+        return investmentModel.update(where, data, trx);
+    });
 };
 
 /**

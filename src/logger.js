@@ -20,6 +20,16 @@ const logger = winston.createLogger({
     ],
 });
 
+logger.axiosLogger = {
+    /**
+     * 
+     * @param {import('axios').AxiosResponse} req 
+     */
+    write: (req)=>{
+        logger.info(`${req.config.headers.id} - [${new Date().toLocaleString("pt-BR")}] "${req.config.method.toUpperCase()} ${req.config.url}" ${req.status} ${JSON.stringify(req.data)}`);
+    }
+};
+
 if(env.env === "production"){
     logger.add(new winston.transports.Console({
         format: winston.format.simple()

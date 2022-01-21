@@ -68,9 +68,6 @@ describe("Category Router", () => {
             });
             await request(app)
             .del(`/category/${id}`)
-            .send({
-                name: chance.name(),
-            })
             .expect(StatusCodes.NO_CONTENT);
         });
     });

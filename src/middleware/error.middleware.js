@@ -135,7 +135,7 @@ export default function errorHandler(error, req, res, next) {
                     logger.error(`ID - ${req.id}, Error: ${error.message}`);
                 }
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json([{
-                    message: `Entre em contato com o desenvolvedor passe eu seu ID ${req.id}, lamentamos isso ter ocorrido 😞`
+                    message: `Contact the developer and give me your ID ${req.id}, we're sorry this happened 😞`
                 }]);
             }
         }

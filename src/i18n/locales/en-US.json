@@ -21,5 +21,8 @@
 	"InternalServer.Transaction": "Failed to Modify Transaction 😞",
 	"Dividends.create": "Dividends successful!! 😆",
 	"Dividends.update": "Dividends update sucess",
-	"InternalServer.Dividends": "Failed to Modify Dividends 😞"
+	"InternalServer.Dividends": "Failed to Modify Investment 😞",
+	"Investment.create": "Investment successful!! 😆",
+	"Investment.update": "Investment update sucess",
+	"InternalServer.Investment": "Failed to Modify Investment 😞"
 }
