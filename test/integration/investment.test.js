@@ -157,6 +157,7 @@ describe("Investment Router", () => {
         });
 
         it("not update category not found", async() => {
+            categoryModel.findAll = jest.fn().mockResolvedValue([]);
             await request(app)
             .put(`/investment/${chance.string({numeric: true})}`)
             .send({

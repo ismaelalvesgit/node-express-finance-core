@@ -1,6 +1,20 @@
 import knex from "../db";
 import transacting from "../utils/transacting";
 const TABLE_NAME = "transaction";
+export const selectDefault = [
+    "id",
+    "type",
+    "negotiationDate",
+    "dueDate",
+    "brokerage",
+    "fees",
+    "taxes",
+    "qnt",
+    "price",
+    "total",
+    "createdAt",
+    "updatedAt",
+];
 
 /**
  * @typedef Transaction
@@ -9,6 +23,9 @@ const TABLE_NAME = "transaction";
  * @property {import('../enum/transactionType')} type
  * @property {Date} negotiationDate
  * @property {Date} dueDate
+ * @property {Number} brokerage
+ * @property {Number} fees
+ * @property {Number} taxes
  * @property {Number} qnt
  * @property {Number} price
  * @property {Number} total
@@ -65,15 +82,9 @@ export const findAll = (options, trx) => {
                     'updatedAt', investment.updatedAt
                 ) as investment
             `),
-            `${TABLE_NAME}.id`,
-            `${TABLE_NAME}.type`,
-            `${TABLE_NAME}.negotiationDate`,
-            `${TABLE_NAME}.dueDate`,
-            `${TABLE_NAME}.qnt`,
-            `${TABLE_NAME}.price`,
-            `${TABLE_NAME}.total`,
-            `${TABLE_NAME}.createdAt`,
-            `${TABLE_NAME}.updatedAt`,
+            ...selectDefault.map((select) => {
+                return `${TABLE_NAME}.${select}`;
+            })
         ])
         .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
         .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
@@ -81,10 +92,10 @@ export const findAll = (options, trx) => {
     if (options?.where) {
         let tableName;
         let value;
-        if(typeof options?.where === "object"){
+        if (typeof options?.where === "object") {
             tableName = Object.keys(options?.where)[0];
             value = Object.values(options?.where)[0];
-        }else{
+        } else {
             tableName = Object.keys(JSON.parse(options?.where))[0];
             value = Object.values(JSON.parse(options?.where))[0];
         }
@@ -108,18 +119,10 @@ export const findAll = (options, trx) => {
 export const findOne = (where, join = [], trx) => {
     const query = knex(TABLE_NAME)
         .first()
-        .select([
-            `${TABLE_NAME}.id`,
-            `${TABLE_NAME}.type`,
-            `${TABLE_NAME}.negotiationDate`,
-            `${TABLE_NAME}.dueDate`,
-            `${TABLE_NAME}.qnt`,
-            `${TABLE_NAME}.price`,
-            `${TABLE_NAME}.total`,
-            `${TABLE_NAME}.createdAt`,
-            `${TABLE_NAME}.updatedAt`,
-        ]);
-    
+        .select(selectDefault.map((select) => {
+            return `${TABLE_NAME}.${select}`;
+        }));
+
     switch (join) {
         case "broker":
             query.innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`);
@@ -169,11 +172,11 @@ export const findOne = (where, join = [], trx) => {
                 `)
             ]);
             break;
-    
+
         default:
             break;
     }
-       
+
     if (where) {
         const tableName = Object.keys(where)[0];
         const value = Object.values(where)[0];

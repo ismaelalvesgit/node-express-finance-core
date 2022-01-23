@@ -1,6 +1,21 @@
 import knex from "../db";
 import transacting from "../utils/transacting";
 const TABLE_NAME = "investment";
+export const selectDefault = [
+    "id",
+    "name",
+    "longName",
+    "balance",
+    "sector",
+    "volumeDay",
+    "previousClosePrice",
+    "changePercentDay",
+    "priceDay",
+    "priceDayHigh",
+    "priceDayLow",
+    "createdAt",
+    "updatedAt",
+];
 
 /**
  * @typedef Investment
@@ -12,6 +27,7 @@ const TABLE_NAME = "investment";
  * @property {String} sector
  * @property {Number} volumeDay
  * @property {Number} previousClosePrice
+ * @property {Number} changePercentDay
  * @property {Number} priceDay
  * @property {Number} priceDayHigh
  * @property {Number} priceDayLow
@@ -42,19 +58,9 @@ export const findAll = (options, trx) => {
                     'updatedAt', category.updatedAt
                 ) as category
             `),
-            `${TABLE_NAME}.id`,
-            `${TABLE_NAME}.name`,
-            `${TABLE_NAME}.longName`,
-            `${TABLE_NAME}.balance`,
-            `${TABLE_NAME}.sector`,
-            `${TABLE_NAME}.changePercentDay`,
-            `${TABLE_NAME}.volumeDay`,
-            `${TABLE_NAME}.previousClosePrice`,
-            `${TABLE_NAME}.priceDay`,
-            `${TABLE_NAME}.priceDayHigh`,
-            `${TABLE_NAME}.priceDayLow`,
-            `${TABLE_NAME}.createdAt`,
-            `${TABLE_NAME}.updatedAt`,
+            ...selectDefault.map((select) => {
+                return `${TABLE_NAME}.${select}`;
+            })
         ])
         .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`);
     if (options?.where) {

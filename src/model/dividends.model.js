@@ -2,6 +2,17 @@ import knex from "../db";
 import dividendsType from "../enum/dividendsType";
 import transacting from "../utils/transacting";
 const TABLE_NAME = "dividends";
+export const selectDefault = [
+    "id",
+    "status",
+    "type",
+    "dueDate",
+    "qnt",
+    "price",
+    "total",
+    "createdAt",
+    "updatedAt",
+];
 
 /**
  * @typedef Dividends
@@ -9,6 +20,7 @@ const TABLE_NAME = "dividends";
  * @property {Number} id
  * @property {Number} investmentId
  * @property {import("./investment.model").Investment} investment
+ * @property {import('../enum/dividendsStatus')} status
  * @property {import('../enum/dividendsType')} type
  * @property {Date} dueDate
  * @property {Number} qnt
@@ -47,15 +59,9 @@ export const findAll = (options, trx) => {
                     'updatedAt', investment.updatedAt
                 ) as investment
             `),
-            `${TABLE_NAME}.id`,
-            `${TABLE_NAME}.status`,
-            `${TABLE_NAME}.type`,
-            `${TABLE_NAME}.dueDate`,
-            `${TABLE_NAME}.qnt`,
-            `${TABLE_NAME}.price`,
-            `${TABLE_NAME}.total`,
-            `${TABLE_NAME}.createdAt`,
-            `${TABLE_NAME}.updatedAt`,
+            ...selectDefault.map((select) => {
+                return `${TABLE_NAME}.${select}`;
+            })
         ])
         .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
     if (options?.where) {
@@ -105,15 +111,9 @@ export const findUpdateDivideds = (date, trx) => {
                     'updatedAt', investment.updatedAt
                 ) as investment
             `),
-            `${TABLE_NAME}.id`,
-            `${TABLE_NAME}.status`,
-            `${TABLE_NAME}.type`,
-            `${TABLE_NAME}.dueDate`,
-            `${TABLE_NAME}.qnt`,
-            `${TABLE_NAME}.price`,
-            `${TABLE_NAME}.total`,
-            `${TABLE_NAME}.createdAt`,
-            `${TABLE_NAME}.updatedAt`,
+            ...selectDefault.map((select) => {
+                return `${TABLE_NAME}.${select}`;
+            })
         ])
         .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
     if (date) {

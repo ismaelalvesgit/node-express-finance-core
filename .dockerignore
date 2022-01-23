@@ -1,5 +1,6 @@
 # Folders
 /scripts
+/db/backup
 /test
 
 # compiled output

@@ -21,7 +21,7 @@ export const findAllInvestmentSchema = joi.object({
 
 export const createInvestmentSchema = joi.object({
     body: joi.object({
-        categoryId: joi.number().required(),
+        categoryId: joi.number().integer().unsafe().required(),
         name: joi.string().required(),
         longName: joi.string(),
         sector: joi.string().required(),
@@ -30,7 +30,7 @@ export const createInvestmentSchema = joi.object({
 
 export const updateInvestmentSchema = joi.object({
     body: joi.object({
-        categoryId: joi.number(),
+        categoryId: joi.number().integer().unsafe(),
         longName: joi.string(),
         sector: joi.string(),
     }).min(1),

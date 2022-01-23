@@ -32,7 +32,10 @@ export const createTransactionSchema = joi.object({
         }).when("type", {
             not: transactionType.RENT, then: joi.date().optional()
         }),
-        qnt: joi.number().integer().positive().min(1).required(),
-        price: joi.number().integer().positive().min(1).required(),
+        brokerage: joi.number().integer().unsafe().positive().min(1),
+        fees: joi.number().integer().unsafe().positive().min(1),
+        taxes: joi.number().integer().unsafe().positive().min(1),
+        qnt: joi.number().integer().unsafe().positive().min(1).required(),
+        price: joi.number().integer().unsafe().positive().min(1).required(),
     }).required(),
 });

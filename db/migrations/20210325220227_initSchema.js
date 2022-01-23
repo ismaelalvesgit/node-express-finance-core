@@ -73,6 +73,9 @@ exports.up = async function (knex) {
     table.enum("type", Object.keys(transactionType)).notNullable();
     table.date("negotiationDate").notNullable();
     table.date("dueDate").nullable();
+    table.bigInteger("brokerage").nullable();
+    table.bigInteger("fees").nullable();
+    table.bigInteger("taxes").nullable();
     table.integer("qnt").notNullable();
     table.bigInteger("price").notNullable();
     table.bigInteger("total").notNullable();

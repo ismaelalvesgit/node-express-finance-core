@@ -83,10 +83,9 @@ export const updateBalance = async(where, data, trx) =>{
  */
 export const update = (where, data) =>{
     return knex.transaction(async(trx)=>{
-
         if(data.categoryId){
             const category = await categoryModel.findAll({where: {id: data.categoryId}}, trx);
-            if(category.length > 0){
+            if(category.length === 0){
                 throw new NotFound({code: "Category"});
             }
         }
