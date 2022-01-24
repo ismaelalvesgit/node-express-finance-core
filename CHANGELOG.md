@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado função `jsonObjectQuerySelect` em utils
 - Adicionado campos para imposto em transações
 - Adicionado cronjob de backup de dados
 - Adicionado nova rota /investment

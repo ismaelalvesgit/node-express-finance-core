@@ -1,6 +1,12 @@
 import knex from "../db";
 import transacting from "../utils/transacting";
 const TABLE_NAME = "broker";
+export const selectDefault = [
+    "id",
+    "name",
+    "createdAt",
+    "updatedAt",
+];
 
 /**
  * @typedef Broker

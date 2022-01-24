@@ -1,5 +1,8 @@
 import knex from "../db";
+import { jsonObjectQuerySelect } from "../utils";
 import transacting from "../utils/transacting";
+import * as categoryModel from "./category.model";
+
 const TABLE_NAME = "investment";
 export const selectDefault = [
     "id",
@@ -50,14 +53,7 @@ export const selectDefault = [
 export const findAll = (options, trx) => {
     const query = knex(TABLE_NAME)
         .select([
-            knex.raw(`
-                JSON_OBJECT(
-                    'id', category.id,
-                    'name', category.name, 
-                    'createdAt', category.createdAt, 
-                    'updatedAt', category.updatedAt
-                ) as category
-            `),
+            knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
             ...selectDefault.map((select) => {
                 return `${TABLE_NAME}.${select}`;
             })

@@ -1,5 +1,10 @@
 import knex from "../db";
+import { jsonObjectQuerySelect } from "../utils";
 import transacting from "../utils/transacting";
+import * as brokerModel from "./broker.model";
+import * as categoryModel from "./category.model";
+import * as investmentModel from "./investment.model";
+
 const TABLE_NAME = "transaction";
 export const selectDefault = [
     "id",
@@ -49,39 +54,9 @@ export const selectDefault = [
 export const findAll = (options, trx) => {
     const query = knex(TABLE_NAME)
         .select([
-            knex.raw(`
-                JSON_OBJECT(
-                    'id', broker.id,
-                    'name', broker.name, 
-                    'createdAt', broker.createdAt, 
-                    'updatedAt', broker.updatedAt
-                ) as broker
-            `),
-            knex.raw(`
-                JSON_OBJECT(
-                    'id', category.id,
-                    'name', category.name, 
-                    'createdAt', category.createdAt, 
-                    'updatedAt', category.updatedAt
-                ) as category
-            `),
-            knex.raw(`
-                JSON_OBJECT(
-                    'id', investment.id,
-                    'name', investment.name, 
-                    'longName', investment.longName, 
-                    'balance', investment.balance, 
-                    'sector', investment.sector, 
-                    'previousClosePrice', investment.previousClosePrice, 
-                    'volumeDay', investment.volumeDay, 
-                    'changePercentDay', investment.changePercentDay, 
-                    'priceDay', investment.priceDay, 
-                    'priceDayHigh', investment.priceDayHigh, 
-                    'priceDayLow', investment.priceDayLow, 
-                    'createdAt', investment.createdAt, 
-                    'updatedAt', investment.updatedAt
-                ) as investment
-            `),
+            knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
+            knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
+            knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
             ...selectDefault.map((select) => {
                 return `${TABLE_NAME}.${select}`;
             })
@@ -107,6 +82,7 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
+
     return transacting(query, trx);
 };
 
@@ -127,49 +103,19 @@ export const findOne = (where, join = [], trx) => {
         case "broker":
             query.innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`);
             query.select([
-                knex.raw(`
-                    JSON_OBJECT(
-                        'id', broker.id,
-                        'name', broker.name, 
-                        'createdAt', broker.createdAt, 
-                        'updatedAt', broker.updatedAt
-                    ) as broker
-                `),
+                knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
             ]);
             break;
         case "investment":
             query.innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
             query.select([
-                knex.raw(`
-                    JSON_OBJECT(
-                        'id', investment.id,
-                        'name', investment.name, 
-                        'longName', investment.longName, 
-                        'balance', investment.balance, 
-                        'sector', investment.sector, 
-                        'previousClosePrice', investment.previousClosePrice, 
-                        'volumeDay', investment.volumeDay, 
-                        'changePercentDay', investment.changePercentDay, 
-                        'priceDay', investment.priceDay, 
-                        'priceDayHigh', investment.priceDayHigh, 
-                        'priceDayLow', investment.priceDayLow, 
-                        'createdAt', investment.createdAt, 
-                        'updatedAt', investment.updatedAt
-                    ) as investment
-                `),
+                knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
             ]);
             break;
         case "category":
             query.innerJoin("category", "category.id", "=", "investment.id");
             query.select([
-                knex.raw(`
-                    JSON_OBJECT(
-                        'id', category.id,
-                        'name', category.name, 
-                        'createdAt', category.createdAt, 
-                        'updatedAt', category.updatedAt
-                    ) as category
-                `)
+                knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
             ]);
             break;
 
