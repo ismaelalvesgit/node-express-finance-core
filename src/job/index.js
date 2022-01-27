@@ -6,6 +6,7 @@ import * as updateDividends from "./jobs/updateDividends";
 import * as asyncDividendsFiis from "./jobs/asyncDividendsFiis";
 import * as asyncDividendsAcao from "./jobs/asyncDividendsAcao";
 import * as backupData from "./jobs/backupData";
+import * as notifyPriceDay from "./jobs/notifyPriceDay";
 
 logger.info("Registered service JOB batch is ON");
 
@@ -24,6 +25,9 @@ const jobs = [
     }, null, true, env.timezone),
     new CronJob(backupData.schedule, async ()=>{
         await backupData.command();
+    }, null, true, env.timezone),
+    new CronJob(notifyPriceDay.schedule, async ()=>{
+        await notifyPriceDay.command();
     }, null, true, env.timezone),
 ];
 

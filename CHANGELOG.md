@@ -6,6 +6,8 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado novo job para envio de altas / baixas dos investimentos cadastrados
+- Adicionado função `jsonObjectArrayQuerySelect` em utils
 - Adicionado função `jsonObjectQuerySelect` em utils
 - Adicionado campos para imposto em transações
 - Adicionado cronjob de backup de dados

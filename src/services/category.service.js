@@ -1,5 +1,4 @@
 import * as categoryModel from "../model/category.model";
-import * as transactionModel from "../model/transaction.model";
 import * as investmentModel from "../model/investment.model";
 import knex from "../db";
 import { BadRequest } from "../utils/erro";
@@ -35,12 +34,9 @@ export const update = (where, data) =>{
  */
 export const del = (where) =>{
     return knex.transaction(async(trx)=>{
-        const [ investment ] = await investmentModel.findAll({where: {categoryId: where.id}}, trx);
+        const [ investment ] = await investmentModel.findTransaction({where: {categoryId: where.id}, limit: 1}, trx);
         if(investment){
-            const transaction  = await transactionModel.findOne({ investmentId: investment.id }, null, trx);
-            if(transaction){
-                throw new BadRequest({message: "Unable to remove because category has transactions"});
-            }
+            throw new BadRequest({message: "Unable to remove because category has transactions"});
         }
         return categoryModel.del(where, trx);
     });

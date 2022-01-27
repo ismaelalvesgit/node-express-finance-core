@@ -78,3 +78,19 @@ export const jsonObjectQuerySelect = (join, selects)=>{
 
     return "JSON_OBJECT("+ data + `) as ${join}`;
 };
+
+/**
+ * 
+ * @param {string} join 
+ * @param {Array<string>} selects
+ * @returns {string} 
+ */
+export const jsonObjectArrayQuerySelect = (join, selects)=>{
+    const data = [];
+
+    selects.forEach((select)=>{
+        data.push(`'${select}', ${join}.${select}`);
+    });
+
+    return "JSON_ARRAYAGG(JSON_OBJECT("+ data + `)) as ${join}`;
+};
