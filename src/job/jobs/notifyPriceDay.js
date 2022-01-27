@@ -19,7 +19,7 @@ const command = async () => {
             template: "price-day", 
             data: {
                 url: env.server.url,
-                priceHigh: priceHigh.filter((e) => e.changePercentDay > 0),
+                priceHigh: priceHigh.filter((e) => priceLow.include((t) => t.id = e.id)),
                 priceLow
             },
         });
