@@ -6,7 +6,7 @@ import env from "../../env";
 
 const name = "notify-price-day";
 const group = "day";
-const schedule = "10 19 * * *";
+const schedule = "10 18 * * *";
 const deadline = 180;
 
 const command = async () => { 
