@@ -46,6 +46,9 @@ export default {
           redirectUri: process.env.EMAIL_OAUTH2_REDIRECT_URI || "https://developers.google.com/oauthplayground"
         },
     },
+    jobs:{
+        autoBackup: process.env.BACKUP_DB === "true"
+    },
     system:{
         files:{
             default: url+"/static/uploads/system/default.png",

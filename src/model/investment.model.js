@@ -171,6 +171,19 @@ export const update = (where, data, trx) => {
 
 /**
  * @param {Investment} where 
+ * @param {Investment} data 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const updateBalance = (where, data, trx) => {
+    const query = knex(TABLE_NAME)
+        .where(where)
+        .increment('balance', data.balance);
+    return transacting(query, trx);
+};
+
+/**
+ * @param {Investment} where 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */

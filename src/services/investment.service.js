@@ -65,14 +65,8 @@ export const updateBalance = async(where, data, trx) =>{
         throw new NotFound({code: "Invenstment"});
     } 
 
-    if(data.operationType === transactionType.BUY){
-        investment.balance = parseInt(investment.balance) + data.amount;
-    }else{
-        investment.balance = parseInt(investment.balance) - data.amount;
-    }
-
-    return investmentModel.update({id: where.id}, {
-        balance: investment.balance
+    return investmentModel.updateBalance({id: where.id}, {
+        balance: data.operationType === transactionType.BUY ? Number(data.amount) : Number(data.amount) * -1
     }, trx);
 };
 

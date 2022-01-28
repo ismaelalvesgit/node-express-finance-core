@@ -11,39 +11,41 @@ const schedule = "0 20 * * *";
 const deadline = 180;
 
 const command = async () => {
-    const dir = "./db/backup/";
-    const date = format(new Date(), "dd-MM-yyyy");
+    if (env.jobs.autoBackup) {
+        const dir = "./db/backup/";
+        const date = format(new Date(), "dd-MM-yyyy");
 
-    if (!existsSync(dir)) {
-        mkdirSync(dir, "0744");
-    }
+        if (!existsSync(dir)) {
+            mkdirSync(dir, "0744");
+        }
 
-    const pathFile = `${dir}${date}.sql.gz`;
+        const pathFile = `${dir}${date}.sql.gz`;
 
-    if(env.email.notificator){
-        mysqldump({
-            connection: {
-                host: env.db.host,
-                user: env.db.user,
-                password: env.db.password,
-                database: env.db.database,
-            },
-            dumpToFile: pathFile,
-            compressFile: true,
-        }).then(async () =>{
-            await send({
-                to: env.email.notificator, 
-                subject: `Backup Data ${date}`,
-                template: "bem-vindo", 
-                attachments: [
-                    {
-                        fileName: `${date}.sql.gz`,
-                        path: pathFile
-                    }
-                ]
-            });
-            logger.info(`Backup sucess ${date}`);
-        }).catch((e) => logger.error(e));
+        if (env.email.notificator) {
+            mysqldump({
+                connection: {
+                    host: env.db.host,
+                    user: env.db.user,
+                    password: env.db.password,
+                    database: env.db.database,
+                },
+                dumpToFile: pathFile,
+                compressFile: true,
+            }).then(async () => {
+                await send({
+                    to: env.email.notificator,
+                    subject: `Backup Data ${date}`,
+                    template: "bem-vindo",
+                    attachments: [
+                        {
+                            fileName: `${date}.sql.gz`,
+                            path: pathFile
+                        }
+                    ]
+                });
+                logger.info(`Backup sucess ${date}`);
+            }).catch((e) => logger.error(e));
+        }
     }
 
     return `Execute ${name} done`;
