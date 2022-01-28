@@ -28,7 +28,7 @@ const command = async () => {
     return `Execute ${name} done`;
 };
 
-command()
+command();
 
 export {
     command,

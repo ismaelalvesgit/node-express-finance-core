@@ -178,7 +178,7 @@ export const update = (where, data, trx) => {
 export const updateBalance = (where, data, trx) => {
     const query = knex(TABLE_NAME)
         .where(where)
-        .increment('balance', data.balance);
+        .increment("balance", data.balance);
     return transacting(query, trx);
 };
 
