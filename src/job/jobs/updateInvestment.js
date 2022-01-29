@@ -7,7 +7,7 @@ import { parseDecimalValues } from "../../utils";
 
 const name = "update-investment";
 const group = "minute";
-const schedule = "*/5 * * * *";
+const schedule = "*/5 9-20 * * *";
 const deadline = 180;
 
 const command = async () => {
