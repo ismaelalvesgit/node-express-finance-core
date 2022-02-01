@@ -59,14 +59,12 @@ export const updateBalance = async(where, data, trx) =>{
         trx = knex.transaction();
     }
 
-    const investment = await investmentModel.getBalance({id: where.id}, trx);
-
-    if(!investment){
-        throw new NotFound({code: "Invenstment"});
-    } 
+    if(data.operationType === transactionType.SELL && Number(data.amount) > 0){
+        data.amount = Number(data.amount) * -1;
+    }
 
     return investmentModel.updateBalance({id: where.id}, {
-        balance: data.operationType === transactionType.BUY ? Number(data.amount) : Number(data.amount) * -1
+        balance: Number(data.amount)
     }, trx);
 };
 

@@ -5,6 +5,7 @@ import * as brapiService from "./brapi.service";
 import * as investmentService from "./investment.service";
 import knex from "../db";
 import { Brapi } from "../utils/erro";
+import transactionType from "../enum/transactionType";
 
 /**
  * @param {import("../model/transaction.model").Transaction} where 
@@ -35,10 +36,18 @@ export const create = async (data) => {
             throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }
 
-        const total = data.qnt * data.price;
+        let total = 0;
+
+        if(data.type === transactionType.BUY){
+            total = Number(data.qnt) * (data.price);
+        }else{
+            total = (Number(data.qnt) * (data.price)) * -1;
+        }
+
         const category = await categoryModel.findOrCreate({ name: data.category }, trx);
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
         const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
+        
         await investmentService.updateBalance(investment, {
             amount: total,
             operationType: data.type,
@@ -71,6 +80,15 @@ export const update = (where, data) => {
         const category = await categoryModel.findOrCreate({ name: data.category }, trx);
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
         const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
+
+        let total = 0;
+
+        if(data.type === transactionType.BUY){
+            total = Number(data.qnt) * (data.price);
+        }else{
+            total = (Number(data.qnt) * (data.price)) * -1;
+        }
+
         return transactionModel.update(where, {
             brokerId: broker.id,
             investmentId: investment.id,
@@ -79,7 +97,7 @@ export const update = (where, data) => {
             dueDate: data.dueDate,
             qnt: data.qnt,
             price: data.price,
-            total: data.qnt * data.price,
+            total
         }, trx);
     });
 };

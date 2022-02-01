@@ -10,7 +10,7 @@ export const parseDecimalValues = (value, mutiple = 100) =>{
         return parseInt((value * mutiple).toFixed(), 10);
     }
 
-    return value;
+    return Number(value);
 };
 
 /**
