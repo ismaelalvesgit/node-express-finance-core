@@ -8,6 +8,7 @@ import {
 import { StatusCodes } from "http-status-codes";
 import logger from "../logger";
 import elasticAgent from "../apm";
+import env from "../env";
 
 /**
  * @typedef ErrorConfig
@@ -125,7 +126,16 @@ export default function errorHandler(error, req, res, next) {
         }
         default: {
             if (error.code) {
-                res.status(StatusCodes.BAD_REQUEST).json([{ message: error.message || error.sqlMessage }]);
+                /**
+                 * Aqui são tratados erros de banco de dados caso queria deixar mais dinamico a sua resposta
+                 * verifique o link abaixo para consultar a lista de erros do mariadb/mysql 😇.
+                 * https://mariadb.com/kb/en/mariadb-error-codes/
+                 */
+                let message = error.message || error.sqlMessage;
+                if(env.env !== "development"){
+                    message = `Contact the developer and give me your ID ${req.id}, we're sorry this happened 😞`;
+                }
+                res.status(StatusCodes.NOT_ACCEPTABLE).json([{ message }]);
             } else {
                 if (elasticAgent) {
                     elasticAgent.captureError(error, () => {
