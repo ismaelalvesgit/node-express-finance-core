@@ -37,11 +37,14 @@ export const create = async (data) => {
         }
 
         let total = 0;
+        let qnt = 0;
 
         if(data.type === transactionType.BUY){
             total = Number(data.qnt) * (data.price);
+            qnt = Number(data.qnt);
         }else{
             total = (Number(data.qnt) * (data.price)) * -1;
+            qnt = Number(data.qnt) * -1;
         }
 
         const category = await categoryModel.findOrCreate({ name: data.category }, trx);
@@ -59,7 +62,7 @@ export const create = async (data) => {
             type: data.type,
             negotiationDate: data.negotiationDate,
             dueDate: data.dueDate,
-            qnt: data.qnt,
+            qnt,
             price: data.price,
             total,
         }, trx);

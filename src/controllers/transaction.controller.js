@@ -26,7 +26,7 @@ export const create = catchAsync((req, res, next) =>{
     const data = req.body;
     transactionService.create(data).then((result)=>{
         if(result.length){
-            delCache(req);
+            delCache(req, ["finance/investment"]);
             res.status(StatusCodes.CREATED).json(req.__("Transaction.create"));
         }else{
             throw new InternalServer({code: "Transaction"});
@@ -41,7 +41,7 @@ export const update = catchAsync((req, res, next) =>{
         if(result != 1){
             throw new NotFound({code: "Transaction"});
         }
-        delCache(req);
+        delCache(req, ["finance/investment"]);
         res.status(StatusCodes.OK).json(req.__("Transaction.update"));
     }).catch(next);
 });
@@ -52,7 +52,7 @@ export const del = catchAsync(async (req, res, next) =>{
         if(result != 1){
             throw new NotFound({code: "Transaction"});
         }
-        delCache(req);
+        delCache(req, ["finance/investment"]);
         res.sendStatus(StatusCodes.NO_CONTENT);
     }).catch(next);
 });

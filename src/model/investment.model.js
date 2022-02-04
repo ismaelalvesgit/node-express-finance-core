@@ -54,11 +54,9 @@ export const findTransaction = (options, trx) => {
             knex.raw(jsonObjectArrayQuerySelect("transaction", transactionModel.selectDefault)),
             ...selectDefault.map((select) => {
                 return `${TABLE_NAME}.${select}`;
-            }),
-            knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(qnt), 0) as pm")
+            })
         ])
         .innerJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
-        .whereNotNull("transaction.id")
         .where(options.where)
         .limit(options.limit || 10)
         .groupBy(`${TABLE_NAME}.id`);
@@ -81,7 +79,8 @@ export const findAll = (options, trx) => {
             ...selectDefault.map((select) => {
                 return `${TABLE_NAME}.${select}`;
             }),
-            knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(qnt), 0) as pm")
+            knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as pm"),
+            knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt")
         ])
         .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
         .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`)

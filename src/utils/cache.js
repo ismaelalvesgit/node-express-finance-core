@@ -29,15 +29,23 @@ export const getCache = async (key) => {
 /**
  * 
  * @param {import('express').Request} req 
- * @param {import('ioredis').KeyType} key 
- * @returns {Promise<number>}
+ * @param {Array<import('ioredis').KeyType>} key 
+ * @returns {Promise<Array<number>>}
  */
 export const delCache = (req, key) => {
     if (env.redis.host) {
+        const prossed = [];
         if (req) {
-            return redisClient.del(req.originalUrl || req.url);
+            prossed.push(redisClient.del(req.originalUrl || req.url));
         }
-        return redisClient.del(key);
+
+        if(key){
+            key.forEach((prefix)=>{
+                prossed.push(redisClient.del(prefix));
+            });
+        }
+
+        return Promise.all(prossed);
     }
 };
 
