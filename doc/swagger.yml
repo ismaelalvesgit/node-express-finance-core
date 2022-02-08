@@ -890,6 +890,9 @@ paths:
                   qnt:
                     type: number
                     example: 4
+                  percent:
+                    type: number
+                    example: 10.00
                   createdAt:
                     type: string
                     example: "2021-03-31 22:34:36.476"
@@ -1232,6 +1235,9 @@ components:
                 qnt:
                   type: number
                   example: 1
+                percent:
+                  type: number
+                  example: 10.00
                 sector:
                   type: string
                   example: "Ismael Alves"

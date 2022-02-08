@@ -80,7 +80,8 @@ export const findAll = (options, trx) => {
                 return `${TABLE_NAME}.${select}`;
             }),
             knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as pm"),
-            knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt")
+            knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt"),
+            knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME}) * 100 ), 2) as 'percent'`)
         ])
         .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
         .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`)
