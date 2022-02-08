@@ -897,6 +897,14 @@ paths:
                   percent:
                     type: number
                     example: 10.00
+                  changePercentTotal:
+                    type: number
+                    description: "Variação do preço da ação total em porcentage"
+                    example: -0.70
+                  variationTotal:
+                    type: number
+                    description: "Variação do preço da ação total em real"
+                    example: -1170
                   createdAt:
                     type: string
                     example: "2021-03-31 22:34:36.476"
@@ -1273,6 +1281,14 @@ components:
                   type: number
                   description: "Menor preço por ação hoje"
                   example: 5351
+                changePercentTotal:
+                  type: number
+                  description: "Variação do preço da ação total em porcentage"
+                  example: -0.70
+                variationTotal:
+                  type: number
+                  description: "Variação do preço da ação total em real"
+                  example: -1170
                 createdAt:
                   type: string
                   example: "2021-03-31 22:34:36.476"
