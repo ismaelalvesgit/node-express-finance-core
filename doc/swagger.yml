@@ -875,6 +875,10 @@ paths:
                   changePercentDay:
                     type: number
                     example: -0.48
+                  variationDay:
+                    type: number
+                    description: "Variação do preço da ação hoje em real"
+                    example: -1170
                   priceDay:
                     type: number
                     example: 4965
@@ -1245,6 +1249,10 @@ components:
                   type: number
                   description: "Variação do preço da ação hoje em porcentage"
                   example: -0.70
+                variationDay:
+                  type: number
+                  description: "Variação do preço da ação hoje em real"
+                  example: -1170
                 volumeDay:
                   type: number
                   description: "Volume das trocas dessa ação hoje"

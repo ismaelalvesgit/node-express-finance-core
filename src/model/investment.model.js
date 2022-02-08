@@ -14,6 +14,7 @@ export const selectDefault = [
     "volumeDay",
     "previousClosePrice",
     "changePercentDay",
+    "variationDay",
     "priceDay",
     "priceDayHigh",
     "priceDayLow",
@@ -32,6 +33,7 @@ export const selectDefault = [
  * @property {Number} volumeDay
  * @property {Number} previousClosePrice
  * @property {Number} changePercentDay
+ * @property {Number} variationDay
  * @property {Number} priceDay
  * @property {Number} priceDayHigh
  * @property {Number} priceDayLow
