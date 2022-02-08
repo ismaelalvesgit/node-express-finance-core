@@ -3,7 +3,7 @@ import { investService } from "../../socket/services";
 import { isAfter, parseISO } from "date-fns";
 import knex from "../../db";
 import logger from "../../logger";
-import { parseDecimalValues } from "../../utils";
+import { parseDecimalValues, parseFloatValues } from "../../utils";
 
 const name = "update-investment";
 const group = "minute";
@@ -25,7 +25,7 @@ const command = async () => {
                     const changePercentDay = qoute.regularMarketChangePercent;
                     const volumeDay = parseDecimalValues(qoute.regularMarketVolume);
                     const previousClosePrice = parseDecimalValues(qoute.regularMarketDayLow);
-                    const variationDay = parseDecimalValues((Number(changePercentDay) / 100) * priceDay);
+                    const variationDay = parseDecimalValues((changePercentDay / 100) * parseFloatValues(priceDay));
 
                     await investmentService.update({ id: invest.id }, {
                         longName,

@@ -5,6 +5,19 @@ import dividendsType from "../enum/dividendsType";
  * @param {number} value 
  * @param {number} mutiple 
  */
+export const parseFloatValues = (value) =>{
+    if (Number(value) === value) {
+        return parseFloat(value / 100).toFixed(2);
+    }
+    
+    return parseFloat(value);
+};
+
+/**
+ * 
+ * @param {number} value 
+ * @param {number} mutiple 
+ */
 export const parseDecimalValues = (value, mutiple = 100) =>{
     if (Number(value) === value) {
         return parseInt((value * mutiple).toFixed(), 10);
