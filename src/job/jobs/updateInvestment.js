@@ -26,7 +26,8 @@ const command = async () => {
                     const volumeDay = parseDecimalValues(qoute.regularMarketVolume);
                     const previousClosePrice = parseDecimalValues(qoute.regularMarketDayLow);
                     const variationDay = parseDecimalValues((changePercentDay / 100) * parseFloatValues(priceDay));
-
+                    const changePercentTotal = ((parseFloatValues(priceDay) - parseFloatValues(invest.priceAverage)) / parseFloatValues(invest.priceAverage)) * 100; 
+                    const variationTotal = parseDecimalValues(((changePercentTotal / 100) * parseFloatValues(invest.priceAverage)) * Number(invest.qnt ?? 0));
                     await investmentService.update({ id: invest.id }, {
                         longName,
                         priceDay,
@@ -35,7 +36,9 @@ const command = async () => {
                         changePercentDay,
                         volumeDay,
                         previousClosePrice,
-                        variationDay
+                        variationDay,
+                        changePercentTotal,
+                        variationTotal
                     }, trx);
                     await investService.sendNotification(Object.assign(invest, {
                         longName,
@@ -46,6 +49,8 @@ const command = async () => {
                         volumeDay,
                         previousClosePrice,
                         variationDay,
+                        changePercentTotal,
+                        variationTotal,
                         updatedAt: new Date()
                     }));
                 }

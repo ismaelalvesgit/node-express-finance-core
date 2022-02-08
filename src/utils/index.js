@@ -6,11 +6,7 @@ import dividendsType from "../enum/dividendsType";
  * @param {number} mutiple 
  */
 export const parseFloatValues = (value) =>{
-    if (Number(value) === value) {
-        return parseFloat(value / 100).toFixed(2);
-    }
-    
-    return parseFloat(value);
+    return parseFloat(value / 100).toFixed(2);
 };
 
 /**

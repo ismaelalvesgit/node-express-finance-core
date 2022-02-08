@@ -888,7 +888,7 @@ paths:
                   priceDayLow:
                     type: number
                     example: 4930
-                  pm:
+                  priceAverage:
                     type: number
                     example: 6000
                   qnt:
@@ -1233,7 +1233,7 @@ components:
                 balance:
                   type: number
                   example: 1
-                pm:
+                priceAverage:
                   type: number
                   example: 1
                 qnt:

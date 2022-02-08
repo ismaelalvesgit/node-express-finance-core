@@ -41,6 +41,8 @@ exports.up = async function (knex) {
     table.bigInteger("priceDayLow").defaultTo(0).nullable();
     table.decimal("changePercentDay").defaultTo(0).nullable();
     table.bigInteger("variationDay").defaultTo(0).nullable();
+    table.decimal("changePercentTotal").defaultTo(0).nullable();
+    table.bigInteger("variationTotal").defaultTo(0).nullable();
     table.bigInteger("volumeDay").defaultTo(0).nullable();
     table.bigInteger("previousClosePrice").defaultTo(0).nullable();
     createdAt(knex, table);
