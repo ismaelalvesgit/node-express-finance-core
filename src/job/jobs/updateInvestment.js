@@ -3,7 +3,7 @@ import { investService } from "../../socket/services";
 import { isAfter, parseISO } from "date-fns";
 import knex from "../../db";
 import logger from "../../logger";
-import { parseDecimalValues, parseFloatValues } from "../../utils";
+import { diffPercent, parseDecimalValue, parseFloatValue, parsePercent } from "../../utils";
 
 const name = "update-investment";
 const group = "minute";
@@ -18,16 +18,17 @@ const command = async () => {
                 const qoute = await brapiService.findQoute(invest.name);
                 if (isAfter(parseISO(qoute.regularMarketTime), parseISO(invest.updatedAt))) {
                     logger.info(`Updating values investment: ${invest.name}`);
+                    const priceAverage = parseFloatValue(invest.priceAverage ?? 0);
                     const longName = qoute.longName;
-                    const priceDay = parseDecimalValues(qoute.regularMarketPrice);
-                    const priceDayHigh = parseDecimalValues(qoute.regularMarketDayHigh);
-                    const priceDayLow = parseDecimalValues(qoute.regularMarketDayLow);
+                    const priceDay = parseDecimalValue(qoute.regularMarketPrice);
+                    const priceDayHigh = parseDecimalValue(qoute.regularMarketDayHigh);
+                    const priceDayLow = parseDecimalValue(qoute.regularMarketDayLow);
                     const changePercentDay = qoute.regularMarketChangePercent;
-                    const volumeDay = parseDecimalValues(qoute.regularMarketVolume);
-                    const previousClosePrice = parseDecimalValues(qoute.regularMarketDayLow);
-                    const variationDay = parseDecimalValues((changePercentDay / 100) * parseFloatValues(priceDay));
-                    const changePercentTotal = ((parseFloatValues(priceDay) - parseFloatValues(invest.priceAverage)) / parseFloatValues(invest.priceAverage)) * 100; 
-                    const variationTotal = parseDecimalValues(((changePercentTotal / 100) * parseFloatValues(invest.priceAverage)) * Number(invest.qnt ?? 0));
+                    const volumeDay = parseDecimalValue(qoute.regularMarketVolume);
+                    const previousClosePrice = parseDecimalValue(qoute.regularMarketDayLow);
+                    const variationDay = parseDecimalValue(parsePercent(changePercentDay, parseFloatValue(priceDay)));
+                    const changePercentTotal = diffPercent(parseFloatValue(priceDay), priceAverage); 
+                    const variationTotal = parseDecimalValue(parsePercent(changePercentTotal, priceAverage) * Number(invest.qnt ?? 0));
                     await investmentService.update({ id: invest.id }, {
                         longName,
                         priceDay,

@@ -2,11 +2,28 @@ import dividendsType from "../enum/dividendsType";
 
 /**
  * 
+ * @param {number} percent 
  * @param {number} value 
- * @param {number} mutiple 
  */
-export const parseFloatValues = (value) =>{
-    return parseFloat(value / 100).toFixed(2);
+ export const parsePercent = (percent, value) =>{
+    const val = (percent / 100) * value;
+    if(isNaN(val) || val === Infinity){
+        return 0;
+    }
+    return val;
+};
+
+/**
+ * 
+ * @param {number} value1 
+ * @param {number} value2 
+ */
+ export const diffPercent = (value1, value2) =>{
+    const val = ((value1 - value2) / value2) * 100;
+    if(isNaN(val) || val === Infinity){
+        return 0;
+    }
+    return val;
 };
 
 /**
@@ -14,12 +31,25 @@ export const parseFloatValues = (value) =>{
  * @param {number} value 
  * @param {number} mutiple 
  */
-export const parseDecimalValues = (value, mutiple = 100) =>{
-    if (Number(value) === value) {
-        return parseInt((value * mutiple).toFixed(), 10);
+export const parseFloatValue = (value) =>{
+    const val = parseFloat(value / 100).toFixed(2);
+    if(isNaN(val) || val === Infinity){
+        return 0;
     }
+    return val;
+};
 
-    return Number(value);
+/**
+ * 
+ * @param {number} value 
+ * @param {number} mutiple 
+ */
+export const parseDecimalValue = (value, mutiple = 100) =>{
+    const val = parseInt((value * mutiple).toFixed(), 10);
+    if(isNaN(val) || val === Infinity){
+        return 0;
+    }
+    return val;
 };
 
 /**
