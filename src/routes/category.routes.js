@@ -8,21 +8,21 @@ import cachedMiddleware from "../middleware/cached.middleware";
 
 /**
  * GET - /category/:id
- * PUT - /category/:id
- * DELETE - /category/:id
+ * PUT - /category/:id @deprecated
+ * DELETE - /category/:id @deprecated
  */
 router.route("/:id")
     .get(findOne)
-    .put(verify(updateCategorySchema), update)
-    .delete(del);
+    .put(verify(updateCategorySchema), update) /** @deprecated */
+    .delete(del); /** @deprecated */
 
 /**
  * GET - /category
- * POST - /category
+ * POST - /category @deprecated
  * */    
 router.route("/")
     .get(verify(findAllCategorySchema), cachedMiddleware(), find)
-    .post(verify(createCategorySchema), create);
+    .post(verify(createCategorySchema), create); /** @deprecated */
 
 export {
     prefix,

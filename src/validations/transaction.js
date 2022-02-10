@@ -1,5 +1,6 @@
 import joi from "@hapi/joi";
 import transactionType from "../enum/transactionType";
+import categoryType from "../enum/categoryType";
 
 export const findAllTransactionSchema = joi.object({
     query: joi.object({
@@ -24,7 +25,7 @@ export const createTransactionSchema = joi.object({
     body: joi.object({
         investment: joi.string().required(),
         broker: joi.string().required(),
-        category: joi.string().required(),
+        category: joi.string().valid(...Object.keys(categoryType)).required(),
         type: joi.string().valid(...Object.keys(transactionType)).required(),
         negotiationDate: joi.date().required(),
         dueDate: joi.when("type", {

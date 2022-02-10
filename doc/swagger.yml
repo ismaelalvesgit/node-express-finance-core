@@ -97,28 +97,29 @@ paths:
       responses:
         200: # status code
           $ref: "#/components/responses/category"
-
-    post:
-      tags:
-        - Category
-      summary: Criação de categoria.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/category"
-      responses:
-        200: # status code
-          description: Cadastro de categoria.
-          content:
-            application/json:
-              schema:
-                type: string
-                example: "Categoria criada com sucesso!!!"
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-        500: # status code
-          $ref: "#/components/responses/internal"
+          
+   
+    # post:
+    #   tags:
+    #     - Category
+    #   summary: Criação de categoria.
+    #   requestBody:
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: "#/components/schemas/category"
+    #   responses:
+    #     200: # status code
+    #       description: Cadastro de categoria.
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: string
+    #             example: "Categoria criada com sucesso!!!"
+    #     400: # status code
+    #       $ref: "#/components/responses/badRequest"
+    #     500: # status code
+    #       $ref: "#/components/responses/internal"
 
   /category/{id}:
     get:
@@ -160,59 +161,59 @@ paths:
         500: # status code
           $ref: "#/components/responses/internal"
 
-    put:
-      tags:
-        - Category
-      summary: Atualiza uma categoria.
-      parameters:
-        - in: path
-          required: true
-          name: id
-          description: ID da categoria
-          schema:
-            type: string
-            example: "1"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/category"
-      responses:
-        200: # status code
-          description: Retorna status.
-          content:
-            application/json:
-              schema:
-                type: string
-                example: "Categoria atualizada com sucesso!!!"
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-        404: # status code
-          $ref: "#/components/responses/notFound"
-        500: # status code
-          $ref: "#/components/responses/internal"
+    # put:
+    #   tags:
+    #     - Category
+    #   summary: Atualiza uma categoria.
+    #   parameters:
+    #     - in: path
+    #       required: true
+    #       name: id
+    #       description: ID da categoria
+    #       schema:
+    #         type: string
+    #         example: "1"
+    #   requestBody:
+    #     content:
+    #       application/json:
+    #         schema:
+    #           $ref: "#/components/schemas/category"
+    #   responses:
+    #     200: # status code
+    #       description: Retorna status.
+    #       content:
+    #         application/json:
+    #           schema:
+    #             type: string
+    #             example: "Categoria atualizada com sucesso!!!"
+    #     400: # status code
+    #       $ref: "#/components/responses/badRequest"
+    #     404: # status code
+    #       $ref: "#/components/responses/notFound"
+    #     500: # status code
+    #       $ref: "#/components/responses/internal"
 
-    delete:
-      tags:
-        - Category
-      summary: Deleta uma categoria.
-      parameters:
-        - in: path
-          required: true
-          name: id
-          description: ID da categoria
-          schema:
-            type: string
-            example: "1"
-      responses:
-        204: # status code
-          description: Categoria deletada com sucesso.
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-        404: # status code
-          $ref: "#/components/responses/notFound"
-        500: # status code
-          $ref: "#/components/responses/internal"
+    # delete:
+    #   tags:
+    #     - Category
+    #   summary: Deleta uma categoria.
+    #   parameters:
+    #     - in: path
+    #       required: true
+    #       name: id
+    #       description: ID da categoria
+    #       schema:
+    #         type: string
+    #         example: "1"
+    #   responses:
+    #     204: # status code
+    #       description: Categoria deletada com sucesso.
+    #     400: # status code
+    #       $ref: "#/components/responses/badRequest"
+    #     404: # status code
+    #       $ref: "#/components/responses/notFound"
+    #     500: # status code
+    #       $ref: "#/components/responses/internal"
   
   # Broker
   /broker:

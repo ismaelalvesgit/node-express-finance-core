@@ -22,6 +22,7 @@ export const find = catchAsync(async (req, res) =>{
     res.json(data);
 });
 
+/** @deprecated */
 export const create = catchAsync((req, res, next) =>{
     const data = req.body;
     categoryService.create(data).then((result)=>{
@@ -34,6 +35,7 @@ export const create = catchAsync((req, res, next) =>{
     }).catch(next);
 });
 
+/** @deprecated */
 export const update = catchAsync((req, res, next) =>{
     const data = req.body;
     const id = req.params.id;
@@ -46,6 +48,7 @@ export const update = catchAsync((req, res, next) =>{
     }).catch(next);
 });
 
+/** @deprecated */
 export const del = catchAsync(async (req, res, next) =>{
     const id = req.params.id;
     categoryService.del({id}).then((result)=>{

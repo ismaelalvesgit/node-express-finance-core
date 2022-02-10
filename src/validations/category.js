@@ -19,12 +19,15 @@ export const findAllCategorySchema = joi.object({
     }),
 });
 
+/** @deprecated */
 export const createCategorySchema = joi.object({
     body: joi.object({
         name: joi.string().required(),
     }).required(),
 });
 
+
+/** @deprecated */
 export const updateCategorySchema = joi.object({
     body: joi.object({
         name: joi.string().required(),
