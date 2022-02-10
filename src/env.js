@@ -6,6 +6,8 @@ export default {
     env: process.env.NODE_ENV || "development",
     timezone: process.env.TIME_ZONE || "America/Fortaleza",
     brapi: process.env.BRAPI_URL,
+    yahoo: process.env.YAHOO_FINANCE_URL,
+    yahooKey: process.env.YAHOO_FINANCE_KEY,
     yieldapi: process.env.YIELD_URL,
     server:{
         url,

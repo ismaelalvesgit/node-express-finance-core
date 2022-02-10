@@ -1,4 +1,21 @@
+import categoryType from "../enum/categoryType";
 import dividendsType from "../enum/dividendsType";
+
+/**
+ * 
+ * @param {import('../enum/categoryType')} type 
+ * @returns {boolean}
+ */
+ export const categoryIsBR = (type) =>{
+    switch (type) {
+        case categoryType.ACAO:
+        case categoryType.ETF:
+        case categoryType.FIIS:
+            return true;
+        default:
+            return false;
+    }
+};
 
 /**
  * 

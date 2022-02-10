@@ -4,6 +4,7 @@ import { app } from "../../src/app";
 import { Chance } from "chance";
 import knex from "../../src/db";
 import transactionType from "../../src/enum/transactionType";
+import categoryType from "../../src/enum/categoryType";
 
 const chance = new  Chance();
 describe("Transaction Router", () => {
@@ -78,7 +79,7 @@ describe("Transaction Router", () => {
             .send({
                 broker: "RICO INVESTIMENTOS",
                 investment: "VINO11",
-                category: "FIIS",
+                category: categoryType.FIIS,
                 type: transactionType.BUY,
                 negotiationDate: chance.date(),
                 qnt: 1,
@@ -116,7 +117,7 @@ describe("Transaction Router", () => {
             .send({
                 broker: "RICO INVESTIMENTOS",
                 investment: "VISC11",
-                category: "FIIS",
+                category: categoryType.FIIS,
                 type: transactionType.BUY,
                 negotiationDate: chance.date(),
                 qnt: 1,
@@ -175,7 +176,7 @@ describe("Transaction Router", () => {
             .send({
                 broker: "RICO INVESTIMENTOS",
                 investment: chance.name(),
-                category: "FIIS",
+                category: categoryType.FIIS,
                 type: transactionType.BUY,
                 negotiationDate: chance.date(),
                 qnt: 1,
@@ -219,7 +220,7 @@ describe("Transaction Router", () => {
             .send({
                 broker: "RICO INVESTIMENTOS",
                 investment: chance.name(),
-                category: "FIIS",
+                category: categoryType.FIIS,
                 type: transactionType.BUY,
                 negotiationDate: chance.date(),
                 qnt: 1,

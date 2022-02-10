@@ -1,6 +1,6 @@
-import R from "ramda";
-import { Brapi } from "../utils/erro";
 import HttpAdapter from "../utils/axios";
+import R from "ramda";
+import { YahooApi } from "../utils/erro";
 import env from "../env";
 
 /**
@@ -8,6 +8,7 @@ import env from "../env";
  * @type {Object}
  * @property {Number} symbol
  * @property {String} shortName
+ * @property {String} quoteType
  * @property {String} longName
  * @property {String} currency
  * @property {Number} regularMarketPrice
@@ -35,7 +36,10 @@ import env from "../env";
  * @property {String} twoHundredDayAverageChangePercent
  */
 
-const http = new HttpAdapter(env.brapi);
+
+const http = new HttpAdapter(env.yahoo, {
+    "X-API-KEY": env.yahooKey
+});
 
 /**
  * 
@@ -44,11 +48,19 @@ const http = new HttpAdapter(env.brapi);
  */
 export const findQoute = async (name)=>{
     try {
-        const response = await http.send({
-            url: `/quote/${name.toLocaleUpperCase()}`,
+        const { data } = await http.send({
+            url: "/v6/finance/quote",
+            params: {
+                region: "US",
+                lang: "en",
+                symbols: name,
+            },
             method: "GET"
         });
-        return response.data.results[0];
+        const regularMarketTime = new Date(Number(data.quoteResponse.result[0].regularMarketTime) * 1000).toISOString();
+        return Object.assign(data.quoteResponse.result[0], {
+            regularMarketTime
+        });
     } catch (error) {
         const defaultMessage = "Failed to get quote";
         const message = R.pathOr(
@@ -56,6 +68,6 @@ export const findQoute = async (name)=>{
             ["response", "data", "error"],
             error,
         );
-        throw new Brapi({statusCode: error?.response?.status, message});
+        throw new YahooApi({statusCode: error?.response?.status, message});
     }
 };

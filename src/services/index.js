@@ -1,6 +1,7 @@
 import * as categoryService from "./category.service";
 import * as brokerService from "./broker.service";
 import * as brapiService from "./brapi.service";
+import * as yahooService from "./yahoo.service";
 import * as transactionService from "./transaction.service";
 import * as investmentService from "./investment.service";
 import * as dividendsService from "./dividends.service";
@@ -10,6 +11,7 @@ export {
     brokerService,
     transactionService,
     brapiService,
+    yahooService,
     investmentService,
     dividendsService
 }; 
