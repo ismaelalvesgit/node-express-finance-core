@@ -10,7 +10,7 @@ import env from "../../env";
 
 const name = "async-divideds-fiis";
 const group = "day";
-const schedule = "0 10 * * *";
+const schedule = "0 10 * * 1-5";
 const deadline = 180;
 
 const command = async () => {
