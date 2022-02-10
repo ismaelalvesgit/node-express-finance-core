@@ -8,6 +8,7 @@ import env from "../env";
  * @type {Object}
  * @property {Number} symbol
  * @property {String} shortName
+ * @property {String} logourl
  * @property {String} longName
  * @property {String} currency
  * @property {Number} regularMarketPrice
@@ -47,7 +48,7 @@ const http = new HttpAdapter({
 export const findQoute = async (name)=>{
     try {
         const response = await http.send({
-            url: `/quote/${name.toLocaleUpperCase()}`,
+            url: `/quote/${name.toLocaleUpperCase()}?fundamental=true`,
             method: "GET"
         });
         return response.data.results[0];

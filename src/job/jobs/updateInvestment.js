@@ -22,6 +22,7 @@ const command = async () => {
                     logger.info(`Updating values investment: ${invest.name}`);
                     const priceAverage = parseFloatValue(invest.priceAverage ?? 0);
                     const longName = qoute.longName;
+                    const logoUrl = qoute.logourl;
                     const priceDay = parseDecimalValue(qoute.regularMarketPrice);
                     const priceDayHigh = parseDecimalValue(qoute.regularMarketDayHigh);
                     const priceDayLow = parseDecimalValue(qoute.regularMarketDayLow);
@@ -32,6 +33,7 @@ const command = async () => {
                     const changePercentTotal = diffPercent(parseFloatValue(priceDay), priceAverage); 
                     const variationTotal = parseDecimalValue(parsePercent(changePercentTotal, priceAverage) * Number(invest.qnt ?? 0));
                     await investmentService.update({ id: invest.id }, {
+                        logoUrl,
                         longName,
                         priceDay,
                         priceDayHigh,

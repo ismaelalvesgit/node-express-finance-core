@@ -55,6 +55,7 @@ const http = new HttpAdapter({
 const _formatDataQoute = (data)=>{
     return {
         symbol: data.symbol,
+        logourl: `https://storage.googleapis.com/iex/api/logos/${data.symbol}.png`,
         shortName: data.companyName,
         regularMarketPrice: data.latestPrice,
         regularMarketDayHigh: data.high,

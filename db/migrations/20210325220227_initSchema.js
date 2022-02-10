@@ -34,6 +34,7 @@ exports.up = async function (knex) {
     table.unique("name");
     table.string("name").notNullable();
     table.string("longName").nullable();
+    table.text("logoUrl").nullable();
     table.string("sector").notNullable().defaultTo("ChangeMe");
     table.bigInteger("balance").defaultTo(0).notNullable();
     table.bigInteger("priceDay").defaultTo(0).nullable();
