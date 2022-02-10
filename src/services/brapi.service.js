@@ -35,7 +35,9 @@ import env from "../env";
  * @property {String} twoHundredDayAverageChangePercent
  */
 
-const http = new HttpAdapter(env.brapi);
+const http = new HttpAdapter({
+    baseUrl: env.brapi
+});
 
 /**
  * 

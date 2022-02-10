@@ -37,8 +37,11 @@ import env from "../env";
  */
 
 
-const http = new HttpAdapter(env.yahoo, {
-    "X-API-KEY": env.yahooKey
+const http = new HttpAdapter({
+    baseUrl: env.yahoo,
+    headers: {
+        "X-API-KEY": env.yahooKey
+    }
 });
 
 /**
@@ -62,7 +65,7 @@ export const findQoute = async (name)=>{
             regularMarketTime
         });
     } catch (error) {
-        const defaultMessage = "Failed to get quote";
+        const defaultMessage = "Failed to get quote YahooApi";
         const message = R.pathOr(
             defaultMessage,
             ["response", "data", "error"],

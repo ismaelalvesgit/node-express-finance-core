@@ -8,6 +8,10 @@ export default {
     brapi: process.env.BRAPI_URL,
     yahoo: process.env.YAHOO_FINANCE_URL,
     yahooKey: process.env.YAHOO_FINANCE_KEY,
+    iexclound: process.env.IEXCLOUND_URL,
+    iexcloundLimitUsage: parseInt(process.env.IEXCLOUND_LIMIT_USAGE || 50000),
+    iexcloundKey: process.env.IEXCLOUND_KEY,
+    iexcloundKeyAdmin: process.env.IEXCLOUND_KEY_ADMIN,
     yieldapi: process.env.YIELD_URL,
     server:{
         url,

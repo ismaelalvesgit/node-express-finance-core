@@ -8,6 +8,14 @@ import transactionType from "../enum/transactionType";
 
 /**
  * @param {import("../model/investment.model").Investment} where 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findStokeAll = (where, sortBy, orderBy, limit) =>{
+    return investmentModel.findStokeAll({where, sortBy, orderBy, limit});
+};
+
+/**
+ * @param {import("../model/investment.model").Investment} where 
  * @param {Object} joinWhere 
  * @returns {import('knex').Knex.QueryBuilder}
  */

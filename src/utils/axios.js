@@ -7,12 +7,17 @@ export default class HttpAdapter {
     /** @type { import ('axios').AxiosInstance} */
     instance
 
-    constructor(baseUrl, headers = {}){
+    constructor({
+        baseUrl, 
+        headers = {}, 
+        params = {}
+    }){
         this.instance = axios.create({
             baseURL: baseUrl,
             headers: Object.assign(headers, {
                 id:  uuidv4()
-            })
+            }),
+            params
         });
 
         this.instance.interceptors.request.use(resquest =>{

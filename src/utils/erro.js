@@ -37,7 +37,13 @@ export class Brapi extends CustomError {
 
 export class YahooApi extends CustomError {
     constructor({statusCode, message }){
-        super(statusCode, message, "brapi");
+        super(statusCode, message, "yahoo");
+    }
+}
+
+export class IexCloundApi extends CustomError {
+    constructor({statusCode, message }){
+        super(statusCode, message, "iexclound");
     }
 }
 

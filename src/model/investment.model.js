@@ -1,4 +1,5 @@
 import knex from "../db";
+import categoryType from "../enum/categoryType";
 import { jsonObjectArrayQuerySelect, jsonObjectQuerySelect } from "../utils";
 import transacting from "../utils/transacting";
 import * as categoryModel from "./category.model";
@@ -68,6 +69,44 @@ export const findTransaction = (options, trx) => {
         .groupBy(`${TABLE_NAME}.id`);
     return transacting(query, trx);
 };
+
+/**
+ * @param {Object} options 
+ * @param {Investment} options.where 
+ * @param {string} options.sortBy 
+ * @param {'desc'|'asc'} options.orderBy 
+ * @param {number} options.limit 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findStokeAll = (options, trx) => {
+    const query = knex(TABLE_NAME)
+        .select([
+            knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
+            ...selectDefault.map((select) => {
+                return `${TABLE_NAME}.${select}`;
+            }),
+            knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as priceAverage"),
+            knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt"),
+            knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME}) * 100 ), 2) as 'percent'`)
+        ])
+        .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
+        .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`)
+        .whereIn("category.name", [categoryType.EQUITY, categoryType.ETF_INTER])
+        .whereNotNull("transaction.id")
+        .groupBy(`${TABLE_NAME}.id`);
+    if(options.where){
+        query.where(options.where);
+    }
+    if (options?.sortBy) {
+        query.orderBy(options.sortBy, options.orderBy || "asc");
+    }
+    if (options?.limit) {
+        query.limit(options.limit);
+    }
+    return transacting(query, trx);
+};
+
 /**
  * @param {Object} options 
  * @param {Investment} options.where 

@@ -1,4 +1,4 @@
-import { investmentService, brapiService, yahooService } from "../../services";
+import { investmentService, brapiService, iexcloundService } from "../../services";
 import { investService } from "../../socket/services";
 import { isAfter, parseISO } from "date-fns";
 import knex from "../../db";
@@ -11,12 +11,12 @@ const schedule = "*/5 9-20 * * 1-5";
 const deadline = 180;
 
 const command = async () => {
-    const investments = await investmentService.findAll({categoryId: 3});
+    const investments = await investmentService.findAll();
     await knex.transaction(async (trx) => {
         await Promise.all(investments.map(async (invest) => {
             try {
                 const qoute = categoryIsBR(invest.category.name) ? await brapiService.findQoute(invest.name) : 
-                    await yahooService.findQoute(invest.name);
+                    await iexcloundService.findQoute(invest.name);
 
                 if (isAfter(parseISO(qoute.regularMarketTime), parseISO(invest.updatedAt))) {
                     logger.info(`Updating values investment: ${invest.name}`);
@@ -58,7 +58,7 @@ const command = async () => {
                     }));
                 }
             } catch (error) {
-                logger.error(`Faill to update investment - error: ${error}`);
+                logger.error(`Faill to update investment: ${invest.name} - error: ${error}`);
             }
         }));
     });

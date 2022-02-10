@@ -5,6 +5,7 @@ import * as updateInvestment from "./jobs/updateInvestment";
 import * as updateDividends from "./jobs/updateDividends";
 import * as asyncDividendsFiis from "./jobs/asyncDividendsFiis";
 import * as asyncDividendsAcao from "./jobs/asyncDividendsAcao";
+import * as asyncDividendsStoke from "./jobs/asyncDividendsStoke";
 import * as backupData from "./jobs/backupData";
 import * as notifyPriceDay from "./jobs/notifyPriceDay";
 
@@ -22,6 +23,9 @@ const jobs = [
     }, null, true, env.timezone),
     new CronJob(asyncDividendsAcao.schedule, async ()=>{
         await asyncDividendsAcao.command();
+    }, null, true, env.timezone),
+    new CronJob(asyncDividendsStoke.schedule, async ()=>{
+        await asyncDividendsStoke.command();
     }, null, true, env.timezone),
     new CronJob(backupData.schedule, async ()=>{
         await backupData.command();

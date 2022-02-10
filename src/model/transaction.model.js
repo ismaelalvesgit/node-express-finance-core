@@ -150,7 +150,7 @@ export const findAllDividensByMonth = (options, trx) => {
     if (options?.date) {
         query.where("negotiationDate", "<=", options?.date);
     }
-
+    
     return transacting(query, trx);
 };
 

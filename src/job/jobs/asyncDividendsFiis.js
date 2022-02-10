@@ -68,8 +68,6 @@ const command = async () => {
     return `Execute ${name} done`;
 };
 
-command();
-
 export {
     command,
     name,
