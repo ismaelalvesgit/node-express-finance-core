@@ -1,4 +1,5 @@
 import { Chance } from "chance";
+import categoryType from "../../../src/enum/categoryType";
 import transactionType from "../../../src/enum/TransactionType";
 import { createTransactionSchema, findAllTransactionSchema } from "../../../src/validations/Transaction";
 import { validateSchema } from "../../utils";
@@ -27,7 +28,7 @@ describe("Transaction Schemas", () => {
                 body:{
                     broker: "RICO INVESTIMENTOS",
                     investment: "VINO11",
-                    category: "FIIS",
+                    category: categoryType.FIIS,
                     type: transactionType.BUY,
                     negotiationDate: chance.date(),
                     qnt: 1,

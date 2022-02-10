@@ -25,7 +25,7 @@ export const createTransactionSchema = joi.object({
     body: joi.object({
         investment: joi.string().required(),
         broker: joi.string().required(),
-        category: joi.string().valid(...Object.keys(categoryType)).required(),
+        category: joi.string().valid(...Object.values(categoryType)).required(),
         type: joi.string().valid(...Object.keys(transactionType)).required(),
         negotiationDate: joi.date().required(),
         dueDate: joi.when("type", {
