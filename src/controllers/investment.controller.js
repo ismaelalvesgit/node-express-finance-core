@@ -22,6 +22,13 @@ export const find = catchAsync(async (req, res) =>{
     res.json(data);
 });
 
+export const findAvailable = catchAsync(async (req, res) =>{
+    const search = req.query.search;
+    const category = req.query.category;
+    const data = await investmentService.findAvailable(search, category);
+    res.json(data);
+});
+
 export const create = catchAsync((req, res, next) =>{
     const data = req.body;
     investmentService.create(data).then((result)=>{

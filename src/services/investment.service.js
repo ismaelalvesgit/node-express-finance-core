@@ -1,10 +1,11 @@
 import * as investmentModel from "../model/investment.model";
 import * as categoryModel from "../model/category.model";
 import * as transactionModel from "../model/transaction.model";
-import * as brapiService from "./brapi.service";
+import * as iexcloundService from "./iexclound.service";
 import knex from "../db";
 import { BadRequest, Brapi, NotFound } from "../utils/erro";
 import transactionType from "../enum/transactionType";
+import { categoryIsBR, findBrapiQoute, searchBrapiQoute } from "../utils";
 
 /**
  * @param {import("../model/investment.model").Investment} where 
@@ -24,21 +25,32 @@ export const findAll = (where, joinWhere, sortBy, orderBy, limit) =>{
 };
 
 /**
+ * 
+ * @param {string} search 
+ * @param {import('../enum/categoryType')} category 
+ */
+export const findAvailable = (search, category) =>{
+    return categoryIsBR(category) ? searchBrapiQoute(category, search) : new Error("Not Implemented");
+};
+
+/**
  * @param {import("../model/investment.model").Investment} data 
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const create = async(data) =>{
     return knex.transaction(async(trx)=>{
-        const qoute = await brapiService.findQoute(data.name);
-
-        if (!qoute) {
-            throw new Brapi({ statusCode: 404, message: "Investment not Found" });
-        }
 
         const category = await categoryModel.findAll({where: {id: data.categoryId}}, trx);
         
         if(!category.length > 0){
             throw new NotFound({code: "Category"});
+        }
+
+        const qoute = categoryIsBR(category[0].name) ? await findBrapiQoute(category[0].name, data.name) : 
+            await iexcloundService.findQoute(data.name);
+
+        if (!qoute) {
+            throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }
 
         return investmentModel.create(data, trx);

@@ -6,7 +6,7 @@ import env from "../env";
 /**
  * @typedef Quote
  * @type {Object}
- * @property {Number} symbol
+ * @property {string} symbol
  * @property {String} shortName
  * @property {String} logourl
  * @property {String} longName
@@ -36,6 +36,25 @@ import env from "../env";
  * @property {String} twoHundredDayAverageChangePercent
  */
 
+/**
+ * @typedef QuoteCoin
+ * @type {Object}
+ * @property {string} coin
+ * @property {String} coinName
+ * @property {String} coinImageUrl
+ * @property {String} currency
+ * @property {number} currencyRateFromUSD
+ * @property {Number} regularMarketPrice
+ * @property {String} regularMarketDayHigh
+ * @property {String} regularMarketDayLow
+ * @property {String} regularMarketDayRange
+ * @property {Number} regularMarketChange
+ * @property {String} regularMarketChangePercent
+ * @property {String} regularMarketTime
+ * @property {String} marketCap
+ * @property {Number} regularMarketVolume
+ */
+
 const http = new HttpAdapter({
     baseUrl: env.brapi
 });
@@ -47,13 +66,92 @@ const http = new HttpAdapter({
  */
 export const findQoute = async (name)=>{
     try {
-        const response = await http.send({
+        const { data } = await http.send({
             url: `/quote/${name.toLocaleUpperCase()}?fundamental=true`,
             method: "GET"
         });
-        return response.data.results[0];
+        return data.results[0];
     } catch (error) {
-        const defaultMessage = "Failed to get quote";
+        const defaultMessage = "Failed to get quote brapi";
+        const message = R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        );
+        throw new Brapi({statusCode: error?.response?.status, message});
+    }
+};
+
+/**
+ * 
+ * @param {string} name 
+ * @returns {Promise<Quote>}
+ */
+export const searchQoute = async (name)=>{
+    try {
+        const { data } = await http.send({
+            url: "/available",
+            method: "GET",
+            params:{
+                search: name
+            }
+        });
+        return data.stocks;
+    } catch (error) {
+        const defaultMessage = "Failed to search quote brapi";
+        const message = R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        );
+        throw new Brapi({statusCode: error?.response?.status, message});
+    }
+};
+
+/**
+ * 
+ * @param {string} name 
+ * @returns {Promise<QuoteCoin>}
+ */
+export const findQouteCoin = async (name)=>{
+    try {
+        const { data } = await http.send({
+            url: "v2/crypto",
+            method: "GET",
+            params: {
+                coin: name,
+                currency: "BRL"
+            }
+        });
+        return data.coins[0];
+    } catch (error) {
+        const defaultMessage = "Failed to get quote coin brapi";
+        const message = R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        );
+        throw new Brapi({statusCode: error?.response?.status, message});
+    }
+};
+
+/**
+ * 
+ * @param {string} name 
+ * @returns {Promise<[string]>}
+ */
+export const searchQouteCoin = async (name)=>{
+    try {
+        const { data } = await http.send({
+            url: "v2/crypto/available",
+            method: "GET",
+            params: {
+                search: name
+            }
+        });
+        return data.coins;
+    } catch (error) {
+        const defaultMessage = "Failed to search quote coin brapi";
         const message = R.pathOr(
             defaultMessage,
             ["response", "data", "error"],

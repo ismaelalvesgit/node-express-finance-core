@@ -1,5 +1,34 @@
 import categoryType from "../enum/categoryType";
 import dividendsType from "../enum/dividendsType";
+import * as brapiService from "../services/brapi.service";
+
+/**
+ * 
+ * @param {import('../enum/categoryType')} type 
+ * @param {string} name 
+ */
+ export const findBrapiQoute = (type, name) =>{
+    switch (type) {
+        case categoryType.CRIPTOMOEDA:
+            return brapiService.findQouteCoin(name);
+        default:
+            return brapiService.findQoute(name);
+    }
+};
+
+/**
+ * 
+ * @param {import('../enum/categoryType')} type 
+ * @param {string} name 
+ */
+ export const searchBrapiQoute = (type, name) =>{
+    switch (type) {
+        case categoryType.CRIPTOMOEDA:
+            return brapiService.searchQouteCoin(name);
+        default:
+            return brapiService.searchQoute(name);
+    }
+};
 
 /**
  * 
@@ -11,6 +40,7 @@ import dividendsType from "../enum/dividendsType";
         case categoryType.ACAO:
         case categoryType.ETF:
         case categoryType.FIIS:
+        case categoryType.CRIPTOMOEDA:
             return true;
         default:
             return false;

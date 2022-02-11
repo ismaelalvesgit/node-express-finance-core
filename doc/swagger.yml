@@ -759,11 +759,46 @@ paths:
           $ref: "#/components/responses/internal"
 
   # Investment
+  /investment/available:
+    get:
+      tags:
+        - Investment
+      summary: Retorna a lista de investimentos existentes.
+      parameters:
+        - in: query
+          name: category
+          description: categoria de ativos
+          schema:
+            type: string
+            example: "CRIPTOMOEDA"
+        - in: query
+          name: search
+          description: Filtro de pesquisa
+          schema:
+            type: string
+            example: ETH
+      responses:
+        200: # status code
+          description: pesquia de investimentos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "ETH"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+          
   /investment:
     get:
       tags:
         - Investment
-      summary: Retorna a lista de investmentos.
+      summary: Retorna a lista de investimentos.
       parameters:
         - in: query
           name: sortBy
@@ -796,7 +831,7 @@ paths:
     post:
       tags:
         - Dividends
-      summary: Criação de investmentos.
+      summary: Criação de investimentos.
       requestBody:
         content:
           application/json:
@@ -804,7 +839,7 @@ paths:
               $ref: "#/components/schemas/investment"
       responses:
         200: # status code
-          description: Cadastro de investmentos.
+          description: Cadastro de investimentos.
           content:
             application/json:
               schema:
@@ -836,7 +871,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  
                   category:
                     type: object
                     properties:
@@ -1207,7 +1241,7 @@ components:
                   example: "2021-03-31 22:34:36.476"
     
     investment:
-      description: lista de investmentos.
+      description: lista de investimentos.
       content:
         application/json:
           schema:

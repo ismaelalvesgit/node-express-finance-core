@@ -6,6 +6,7 @@ import knex from "../../src/db";
 import transactionType from "../../src/enum/transactionType";
 import * as brapiService from "../../src/services/brapi.service";
 import * as categoryModel from "../../src/model/category.model";
+import categoryType from "../../src/enum/categoryType";
 
 /* eslint-disable no-import-assign */
 const chance = new  Chance();
@@ -19,6 +20,17 @@ describe("Investment Router", () => {
     });
 
     describe("sucess", ()=>{
+        it("search", async() => {
+            const res = await request(app)
+            .get("/investment/available")
+            .query({
+                search: "ETH",
+                category: categoryType.CRIPTOMOEDA
+            })
+            .expect(StatusCodes.OK);
+            expect(res.body).toBeDefined();
+        });
+
         it("findOne", async() => {
             const [ categoryId ] = await knex("category").insert({
                 name: chance.name()
@@ -58,7 +70,7 @@ describe("Investment Router", () => {
             });
 
             const [ categoryId ] = await knex("category").insert({
-                name: chance.name()
+                name: categoryType.ACAO
             });
             
             const res = await request(app)
@@ -105,6 +117,16 @@ describe("Investment Router", () => {
     });
     
     describe("erro", ()=>{
+        it("search", async() => {
+            await request(app)
+            .get("/investment/available")
+            .query({
+                search: "1",
+                category: categoryType.CRIPTOMOEDA
+            })
+            .expect(StatusCodes.NOT_FOUND);
+        });
+
         it("findOne", async() => {
             await request(app)
             .get(`/investment/${chance.integer()}`)

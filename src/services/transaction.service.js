@@ -1,13 +1,12 @@
 import * as transactionModel from "../model/transaction.model";
 import * as categoryModel from "../model/category.model";
 import * as brokerModel from "../model/broker.model";
-import * as brapiService from "./brapi.service";
 import * as iexcloundService from "./iexclound.service";
 import * as investmentService from "./investment.service";
 import knex from "../db";
 import { Brapi } from "../utils/erro";
 import transactionType from "../enum/transactionType";
-import { categoryIsBR } from "../utils";
+import { categoryIsBR, findBrapiQoute } from "../utils";
 
 /**
  * @param {import("../model/transaction.model").Transaction} where 
@@ -34,7 +33,7 @@ export const findAllDividensByMonth = (where, date, trx) => {
 export const create = async (data) => {
     return knex.transaction(async (trx) => {
 
-        const qoute = categoryIsBR(data.category) ? await brapiService.findQoute(data.investment) : 
+        const qoute = categoryIsBR(data.category) ? await findBrapiQoute(data.category, data.investment) : 
             await iexcloundService.findQoute(data.investment);
 
         if (!qoute) {
@@ -81,7 +80,9 @@ export const create = async (data) => {
  */
 export const update = (where, data) => {
     return knex.transaction(async (trx) => {
-        const qoute = await brapiService.findQoute(data.investment);
+        const qoute = categoryIsBR(data.category) ? await findBrapiQoute(data.category, data.investment) : 
+            await iexcloundService.findQoute(data.investment);
+
         if (!qoute) {
             throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }

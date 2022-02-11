@@ -1,9 +1,10 @@
-import { investmentService, brapiService, iexcloundService } from "../../services";
+import { investmentService, iexcloundService } from "../../services";
 import { investService } from "../../socket/services";
 import { isAfter, parseISO } from "date-fns";
 import knex from "../../db";
 import logger from "../../logger";
-import { categoryIsBR, diffPercent, parseDecimalValue, parseFloatValue, parsePercent } from "../../utils";
+import { categoryIsBR, diffPercent, findBrapiQoute, parseDecimalValue, parseFloatValue, parsePercent } from "../../utils";
+import categoryType from "../../enum/categoryType";
 
 const name = "update-investment";
 const group = "minute";
@@ -15,14 +16,14 @@ const command = async () => {
     await knex.transaction(async (trx) => {
         await Promise.all(investments.map(async (invest) => {
             try {
-                const qoute = categoryIsBR(invest.category.name) ? await brapiService.findQoute(invest.name) : 
+                const qoute = categoryIsBR(invest.category.name) ? await findBrapiQoute(invest.category.name, invest.name) : 
                     await iexcloundService.findQoute(invest.name);
 
                 if (isAfter(parseISO(qoute.regularMarketTime), parseISO(invest.updatedAt))) {
                     logger.info(`Updating values investment: ${invest.name}`);
                     const priceAverage = parseFloatValue(invest.priceAverage ?? 0);
-                    const longName = qoute.longName;
-                    const logoUrl = qoute.logourl;
+                    const longName = invest.category.name === categoryType.CRIPTOMOEDA ? qoute.coinName : qoute.longName;
+                    const logoUrl = invest.category.name === categoryType.CRIPTOMOEDA ? qoute.coinImageUrl : qoute.logourl;
                     const priceDay = parseDecimalValue(qoute.regularMarketPrice);
                     const priceDayHigh = parseDecimalValue(qoute.regularMarketDayHigh);
                     const priceDayLow = parseDecimalValue(qoute.regularMarketDayLow);

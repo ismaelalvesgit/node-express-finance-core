@@ -36,6 +36,8 @@ module.exports = {
       "src/enum",
       "src/app.js",
       "src/db.js",
+      "src/services/iexclound.service.js",
+      "src/services/yahoo.service.js",
       "src/redis.js",
     ],
 
