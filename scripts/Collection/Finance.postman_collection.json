@@ -211,6 +211,44 @@
 			"name": "Investment",
 			"item": [
 				{
+					"name": "Investment - FindAvailables",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/investment/available?search=a&category=CRIPTOMOEDA",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"investment",
+								"available"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "a"
+								},
+								{
+									"key": "category",
+									"value": "CRIPTOMOEDA",
+									"description": "AÇÕES, CRIPTOMOEDA"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Investment - FindAll",
 					"request": {
 						"method": "GET",
@@ -704,7 +742,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"investment\":\"VINO11\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"FUNDOS IMOBILIÁRIOS\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2021-12-10T18:33:31.550Z\",\r\n    \"qnt\": 1,\r\n    \"price\": 5438\r\n}",
+							"raw": "{\r\n    \"investment\":\"SRET\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"EQUITY\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2021-12-10T18:33:31.550Z\",\r\n    \"qnt\": 4,\r\n    \"price\": 885\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -788,6 +826,97 @@
 							"port": "3000",
 							"path": [
 								"transaction",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Events",
+			"item": [
+				{
+					"name": "Events - FindAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/events?search={\"investmentId\":\"2\"}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"events"
+							],
+							"query": [
+								{
+									"key": "sortBy",
+									"value": "id",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "asc",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "search",
+									"value": "{\"investmentId\":\"2\"}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Events - Find",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/dividends/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"dividends",
 								":id"
 							],
 							"variable": [

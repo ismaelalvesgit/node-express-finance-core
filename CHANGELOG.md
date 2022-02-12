@@ -6,6 +6,11 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Foi adicionado a rota /events
+- Adicionado novo job para colhimento de eventos corporativos (AÇÃO, FIIS)
+- Adicionado novo jobs pra auto dividens (AÇÃO, FIIS, ETF, REITS, STOKES)
+- Adicionado novo job pra atualização de valores de ativos exteriores
+- Adicionado nova integração com yahoo finace e iexclound api
 - Adicionado novo job para envio de altas / baixas dos investimentos cadastrados
 - Adicionado função `jsonObjectArrayQuerySelect` em utils
 - Adicionado função `jsonObjectQuerySelect` em utils

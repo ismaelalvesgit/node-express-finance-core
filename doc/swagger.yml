@@ -25,6 +25,8 @@ tags:
     description: Transaction namespace
   - name: Dividends
     description: Dividends namespace
+  - name: Events
+    description: Events namespace
   - name: Investment
     description: Investment namespace
   - name: System
@@ -757,6 +759,111 @@ paths:
           $ref: "#/components/responses/notFound"
         500: # status code
           $ref: "#/components/responses/internal"
+  
+  # Events
+  /events:
+    get:
+      tags:
+        - Events
+      summary: Retorna a lista de eventos corporativos.
+      parameters:
+        - in: query
+          name: sortBy
+          description: Atributo de ordenação
+          schema:
+            type: string
+            example: "name"
+        - in: query
+          name: orderBy
+          description: Tipo de ordenação (asc | desc)
+          schema:
+            type: string
+            example: "asc"
+        - in: query
+          name: limit
+          description: Limite de itens retornados
+          schema:
+            type: string
+            example: "10"
+        - in: query
+          name: search
+          description: Filtro de pesquisa
+          schema:
+            type: string
+            example: {"name":"ismael"}
+      responses:
+        200: # status code
+          $ref: "#/components/responses/events"
+
+  /events/{id}:
+    get:
+      tags:
+        - Events
+      summary: Retorna um evento corporativo por ID.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do evento
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          description: evento corporativo.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  investment:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                  dateReference:
+                    type: string
+                    example: "2022-01-31"
+                  dateDelivery:
+                    type: string
+                    example: "2022-01-31"
+                  assetMainId:
+                    type: number
+                    example: 1
+                  link:
+                    type: string
+                    description: "url de documento"
+                    example: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=263283&cvm=true'
+                  description:
+                    type: string
+                    description: "descrição do documento"
+                    example: 'Relatórios, Relatório Gerencial'
+                  createdAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  updatedAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
 
   # Investment
   /investment/available:
@@ -830,7 +937,7 @@ paths:
 
     post:
       tags:
-        - Dividends
+        - Investment
       summary: Criação de investimentos.
       requestBody:
         content:
@@ -1233,6 +1340,57 @@ components:
                   type: number
                   description: "Formatação de valores Ex: R$ 20,00 === 2000"
                   example: 2000
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+   
+    events:
+      description: lista de eventos corporativos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 1
+                investment:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: "Ismael Alves"
+                    createdAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                    updatedAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                dateReference:
+                  type: string
+                  example: "2022-01-31"
+                dateDelivery:
+                  type: string
+                  example: "2022-01-31"
+                assetMainId:
+                  type: number
+                  example: 1
+                link:
+                  type: string
+                  description: "url de documento"
+                  example: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=263283&cvm=true'
+                description:
+                  type: string
+                  description: "descrição do documento"
+                  example: 'Relatórios, Relatório Gerencial'
                 createdAt:
                   type: string
                   example: "2021-03-31 22:34:36.476"

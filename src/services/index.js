@@ -6,6 +6,7 @@ import * as iexcloundService from "./iexclound.service";
 import * as transactionService from "./transaction.service";
 import * as investmentService from "./investment.service";
 import * as dividendsService from "./dividends.service";
+import * as eventsService from "./events.service";
 
 export {
     categoryService,
@@ -15,5 +16,6 @@ export {
     yahooService,
     iexcloundService,
     investmentService,
-    dividendsService
+    dividendsService,
+    eventsService
 }; 

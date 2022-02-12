@@ -106,6 +106,25 @@ exports.up = async function (knex) {
     updatedAt(knex, table);
   });
 
+  await knex.schema.createTable("events", (table) => {
+    table.bigIncrements("id").unsigned();
+    table.bigInteger("investmentId")
+      .unsigned()
+      .notNullable()
+      .references("id")
+      .inTable("investment")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
+    table.bigInteger("assetMainId").notNullable();
+    table.unique(["assetMainId", "investmentId"]);
+    table.date("dateReference").notNullable();
+    table.date("dateDelivery").notNullable();
+    table.text("link").notNullable();
+    table.string("description").notNullable();
+    createdAt(knex, table);
+    updatedAt(knex, table);
+  });
+
 };
 
 /**
@@ -113,6 +132,7 @@ exports.up = async function (knex) {
 */
 exports.down = async function (knex) {
   await knex.schema.dropTable("dividends");
+  await knex.schema.dropTable("events");
   await knex.schema.dropTable("transaction");
   await knex.schema.dropTable("broker");
   await knex.schema.dropTable("investment");
