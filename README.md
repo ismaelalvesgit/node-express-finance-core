@@ -52,7 +52,7 @@ docker-compose up -d
 Obs: Deixei uma aquivo de [DockerCompose](https://docs.docker.com/compose/) para que a utilização deste 
 projeto seja mais simples
 
-#### 3) Setup Data base
+#### 3) Setup Data base and Initial Data
 ``` sh
 npm run setup:up
 ```

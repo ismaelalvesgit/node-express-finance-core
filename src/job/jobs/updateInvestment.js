@@ -8,7 +8,7 @@ import categoryType from "../../enum/categoryType";
 
 const name = "update-investment";
 const group = "minute";
-const schedule = "*/5 9-20 * * 1-5";
+const schedule = "*/10 9-20 * * 1-5";
 const deadline = 180;
 
 const command = async () => {
