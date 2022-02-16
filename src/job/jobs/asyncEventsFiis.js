@@ -25,12 +25,20 @@ const command = async () => {
                         const events = JSON.parse($(".documents > .list").attr()["data-page"]);
                         await Promise.all(events.map(async(event) => {
                             if(event.status === 0){
+                                let dateReference = format(new Date(), "yyyy-MM-dd"); 
+                                let dateDelivery = format(new Date(), "yyyy-MM-dd"); 
                                 try {
-                                    await eventsService.findOrCreate({
+                                    dateReference = format(stringToDate(event.dataReferencia, "dd/MM/yyyy","/"), "yyyy-MM-dd");
+                                    dateDelivery = format(stringToDate(event.dataEntrega, "dd/MM/yyyy","/"), "yyyy-MM-dd");
+                                // eslint-disable-next-line no-empty
+                                } catch (error) {}
+
+                                try {
+                                    await eventsService.create({
                                         investmentId: investment.id,
                                         assetMainId: event.id,
-                                        dateReference: format(stringToDate(event.dataReferencia, "dd/MM/yyyy","/"), "yyyy-MM-dd"),
-                                        dateDelivery: format(stringToDate(event.dataEntrega, "dd/MM/yyyy","/"), "yyyy-MM-dd"),
+                                        dateReference,
+                                        dateDelivery,
                                         link: event.link,
                                         description: event.description,
                                     }, trx);

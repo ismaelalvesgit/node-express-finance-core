@@ -2,7 +2,7 @@ import { dividendsService } from "../../services";
 import { format } from "date-fns";
 import knex from "../../db";
 import logger from "../../logger";
-import dividendsType from "../../enum/dividendsType";
+import dividendsStatus from "../../enum/dividendsStatus";
 
 const name = "update-divideds";
 const group = "day";
@@ -14,7 +14,7 @@ const command = async () => {
     await knex.transaction(async (trx) => {
         await Promise.all(dividends.map(async (dy) => {
             try {
-                await dividendsService.update({id: dy.id}, {status: dividendsType.PAID}, trx);
+                await dividendsService.update({id: dy.id}, {status: dividendsStatus.PAID}, trx);
                 logger.info(`Auto PAID dividend, investment: ${dy.investment.name}`);
             } catch (error) {
                 logger.error(`Faill to update dividend - error: ${error}`);

@@ -26,11 +26,19 @@ const command = async () => {
                         await Promise.all(events.map(async(event) => {
                             if(event.status === 0){
                                 try {
-                                    await eventsService.findOrCreate({
+                                    let dateReference = format(new Date(), "yyyy-MM-dd"); 
+                                    let dateDelivery = format(new Date(), "yyyy-MM-dd"); 
+                                    try {
+                                        dateReference = format(stringToDate(event.dataReferencia, "dd/MM/yyyy","/"), "yyyy-MM-dd");
+                                        dateDelivery = format(stringToDate(event.dataEntrega, "dd/MM/yyyy","/"), "yyyy-MM-dd");
+                                    // eslint-disable-next-line no-empty
+                                    } catch (error) {}
+                                    
+                                    await eventsService.create({
                                         investmentId: investment.id,
                                         assetMainId: event.id,
-                                        dateReference: format(stringToDate(event.dataReferencia, "dd/MM/yyyy","/"), "yyyy-MM-dd"),
-                                        dateDelivery: format(stringToDate(event.dataEntrega, "dd/MM/yyyy","/"), "yyyy-MM-dd"),
+                                        dateReference,
+                                        dateDelivery,
                                         link: event.link,
                                         description: event.description,
                                     }, trx);

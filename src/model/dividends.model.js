@@ -1,5 +1,5 @@
 import knex from "../db";
-import dividendsType from "../enum/dividendsType";
+import dividendsStatus from "../enum/dividendsStatus";
 import { jsonObjectQuerySelect } from "../utils";
 import transacting from "../utils/transacting";
 import * as investmentModel from "./investment.model";
@@ -80,18 +80,17 @@ export const findAll = (options, trx) => {
  */
 export const findUpdateDivideds = (date, trx) => {
     const query = knex(TABLE_NAME)
-        .select([
-            knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
-            ...selectDefault.map((select) => {
-                return `${TABLE_NAME}.${select}`;
-            })
-        ])
-        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
+    .select([
+        knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
+        ...selectDefault.map((select) => {
+            return `${TABLE_NAME}.${select}`;
+        })
+    ])
+    .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
+    .where(`${TABLE_NAME}.status`, "=", dividendsStatus.PROVISIONED);
     if (date) {
-        query.where(`${TABLE_NAME}.dueDate`, "<=", date)
-        .where("type", "=", dividendsType.PROVISIONED);
+        query.where(`${TABLE_NAME}.dueDate`, "<=", date);
     }
-
     return transacting(query, trx);
 };
 
