@@ -6,7 +6,8 @@ const excludeUrl = [
     "/",
     "/favicon.ico",
     "/system/metrics",
-    "/system/healthcheck"
+    "/system/healthcheck",
+    "/static/uploads/system/default.png"
 ];
 
 export const numOfRequests = new Counter({

@@ -66,7 +66,7 @@ const _formatDataQoute = (data)=>{
         marketCap: data.marketCap,
         regularMarketPreviousClose: data.previousClose,
         regularMarketOpen: data.iexOpen,
-        regularMarketVolume: data.previousVolume,
+        regularMarketVolume: data.avgTotalVolume,
     };
 };
 
