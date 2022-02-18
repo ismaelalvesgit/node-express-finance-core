@@ -1,4 +1,4 @@
-import { dividendsService } from "../../services";
+import { dividendsService, transactionService } from "../../services";
 import { format } from "date-fns";
 import knex from "../../db";
 import logger from "../../logger";
@@ -14,7 +14,12 @@ const command = async () => {
     await knex.transaction(async (trx) => {
         await Promise.all(dividends.map(async (dy) => {
             try {
-                await dividendsService.update({id: dy.id}, {status: dividendsStatus.PAID}, trx);
+                const { qnt } = await transactionService.findAllDividensByMonth({investmentId: dy.investment.id}, dy.dateBasis, trx);
+                await dividendsService.update({id: dy.id}, {
+                    status: dividendsStatus.PAID,
+                    qnt,
+                    total: Number(qnt) * Number(dy.price),
+                }, trx);
                 logger.info(`Auto PAID dividend, investment: ${dy.investment.name}`);
             } catch (error) {
                 logger.error(`Faill to update dividend - error: ${error}`);

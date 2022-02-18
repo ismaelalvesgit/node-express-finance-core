@@ -10,6 +10,7 @@ export const selectDefault = [
     "status",
     "type",
     "dueDate",
+    "dateBasis",
     "qnt",
     "price",
     "total",
@@ -26,6 +27,7 @@ export const selectDefault = [
  * @property {import('../enum/dividendsStatus')} status
  * @property {import('../enum/dividendsType')} type
  * @property {Date} dueDate
+ * @property {Date} dateBasis
  * @property {Number} qnt
  * @property {Number} price
  * @property {Number} total

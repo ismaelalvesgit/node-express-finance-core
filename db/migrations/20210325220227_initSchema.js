@@ -99,6 +99,7 @@ exports.up = async function (knex) {
     table.enum("status", Object.keys(dividendsStatus)).defaultTo(dividendsStatus.PROVISIONED).notNullable();
     table.enum("type", Object.keys(dividendsType)).notNullable();
     table.date("dueDate").notNullable();
+    table.date("dateBasis").notNullable();
     table.integer("qnt").notNullable();
     table.bigInteger("price").notNullable();
     table.bigInteger("total").notNullable();
