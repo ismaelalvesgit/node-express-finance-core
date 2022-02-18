@@ -37,6 +37,7 @@ const command = async () => {
                             if(qnt > 0 && extract.dueDate && extract.price){
                                 await dividendsService.findOrCreate({
                                     investmentId: investment.id,
+                                    dateBasis: extract.dateBasis,
                                     dueDate: extract.dueDate,
                                     price: extract.price,
                                     qnt,
