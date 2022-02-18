@@ -679,6 +679,9 @@ paths:
                         example: "2021-03-31 22:34:36.476"
                   type:
                     $ref: '#/components/schemas/DividendsTypeEnum'
+                  dateBasis:
+                    type: string
+                    example: "2022-01-15T18:33:31.550Z"
                   dueDate:
                     type: string
                     example: "2022-01-15T18:33:31.550Z"
@@ -1038,6 +1041,11 @@ paths:
                     example: 4
                   percent:
                     type: number
+                    description: "Porcentage do ativo na carteira"
+                    example: 10.00
+                  percentCategory:
+                    type: number
+                    description: "Porcentage do ativo na carteira por categoria"
                     example: 10.00
                   changePercentTotal:
                     type: number
@@ -1329,6 +1337,9 @@ components:
                 dueDate:
                   type: string
                   example: "2022-01-15T18:33:31.550Z"
+                dateBasis:
+                  type: string
+                  example: "2022-01-15T18:33:31.550Z"
                 qnt:
                   type: number
                   example: 1
@@ -1442,6 +1453,11 @@ components:
                   example: 1
                 percent:
                   type: number
+                  description: "Porcentage do ativo na carteira"
+                  example: 10.00
+                percentCategory:
+                  type: number
+                  description: "Porcentage do ativo na carteira por categoria"
                   example: 10.00
                 sector:
                   type: string
@@ -1575,6 +1591,9 @@ components:
           example: 10
         type:
           $ref: '#/components/schemas/DividendsTypeEnum'
+        dateBasis:
+          type: string
+          example: "2022-01-15T18:33:31.550Z"
         dueDate:
           type: string
           example: "2022-01-15T18:33:31.550Z"
