@@ -5,6 +5,8 @@ import { Chance } from "chance";
 import knex from "../../src/db";
 import transactionType from "../../src/enum/transactionType";
 import categoryType from "../../src/enum/categoryType";
+import * as transactionModel from "../../src/model/transaction.model";
+import * as investmentService from "../../src/services/investment.service";
 
 const chance = new  Chance();
 describe("Transaction Router", () => {
@@ -13,6 +15,7 @@ describe("Transaction Router", () => {
         await Promise.all([
             knex("investment").del()
         ]);
+        jest.clearAllMocks();
     });
 
     describe("sucess", ()=>{
@@ -129,29 +132,19 @@ describe("Transaction Router", () => {
         });
         
         it("delete", async() => {
-            const [ brokerId ] = await knex("broker").insert({
-                name: chance.name()
+            // eslint-disable-next-line no-import-assign
+            transactionModel.findOne = jest.fn().mockResolvedValue({
+                investment: {
+                    id: chance.string({numeric: true})
+                }
             });
-            const [ categoryId ] = await knex("category").insert({
-                name: chance.name()
-            });
-            const [ investmentId ] = await knex("investment").insert({
-                name: chance.name(),
-                categoryId
-            });
-           const [ id ] = await knex("transaction").insert({
-                brokerId,
-                investmentId,
-                type: chance.pickone(Object.keys(transactionType)),
-                negotiationDate: chance.date(),
-                dueDate:chance.date(),
-                qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
-            });
+            // eslint-disable-next-line no-import-assign
+            transactionModel.del = jest.fn().mockReturnThis();
+            // eslint-disable-next-line no-import-assign
+            investmentService.updateBalance = jest.fn().mockResolvedValue(1);
 
             await request(app)
-            .del(`/transaction/${id}`)
+            .del(`/transaction/${chance.string({numeric: true})}`)
             .expect(StatusCodes.NO_CONTENT);
         });
     });
@@ -232,6 +225,9 @@ describe("Transaction Router", () => {
         });
         
         it("delete", async() => {
+            // eslint-disable-next-line no-import-assign
+            transactionModel.findOne = jest.fn().mockResolvedValue(null);
+
             await request(app)
             .del(`/transaction/${chance.integer()}`)
             .expect(StatusCodes.NOT_FOUND);

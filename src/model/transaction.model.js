@@ -90,7 +90,7 @@ export const findAll = (options, trx) => {
  * @param {Transaction} where 
  * @param {Array<string} join 
  * @param {import('knex').Knex.Transaction} trx 
- * @returns {import('knex').Knex.QueryBuilder}
+ * @returns {Promise<Transaction>}
  */
 export const findOne = (where, join = [], trx) => {
     const query = knex(TABLE_NAME)
@@ -99,28 +99,32 @@ export const findOne = (where, join = [], trx) => {
             return `${TABLE_NAME}.${select}`;
         }));
 
-    switch (join) {
-        case "broker":
-            query.innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`);
-            query.select([
-                knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
-            ]);
-            break;
-        case "investment":
-            query.innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
-            query.select([
-                knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
-            ]);
-            break;
-        case "category":
-            query.innerJoin("category", "category.id", "=", "investment.id");
-            query.select([
-                knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
-            ]);
-            break;
-
-        default:
-            break;
+    if(join){
+        join.forEach((e)=>{
+            switch (e) {
+                case "broker":
+                    query.innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`);
+                    query.select([
+                        knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
+                    ]);
+                    break;
+                case "investment":
+                    query.innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
+                    query.select([
+                        knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
+                    ]);
+                    break;
+                case "category":
+                    query.innerJoin("category", "category.id", "=", "investment.id");
+                    query.select([
+                        knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
+                    ]);
+                    break;
+        
+                default:
+                    break;
+            }
+        });
     }
 
     if (where) {

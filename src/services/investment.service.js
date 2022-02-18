@@ -4,7 +4,6 @@ import * as transactionModel from "../model/transaction.model";
 import * as iexcloundService from "./iexclound.service";
 import knex from "../db";
 import { BadRequest, Brapi, NotFound } from "../utils/erro";
-import transactionType from "../enum/transactionType";
 import { categoryIsBR, findBrapiQoute, searchBrapiQoute } from "../utils";
 import env from "../env";
 
@@ -69,28 +68,6 @@ export const findOrCreate = (data, trx) =>{
 
 /**
  * @param {import("../model/investment.model").Investment} where 
- * @param {Object} data
- * @param {number} data.amount
- * @param {import("../enum/transactionType")} data.operationType
- * @param {import('knex').Knex.Transaction} trx   
- * @returns {import('knex').Knex.QueryBuilder}
- */
-export const updateBalance = async(where, data, trx) =>{
-    if(!trx){
-        trx = knex.transaction();
-    }
-
-    if(data.operationType === transactionType.SELL && Number(data.amount) > 0){
-        data.amount = Number(data.amount) * -1;
-    }
-
-    return investmentModel.updateBalance({id: where.id}, {
-        balance: Number(data.amount)
-    }, trx);
-};
-
-/**
- * @param {import("../model/investment.model").Investment} where 
  * @param {import("../model/investment.model").Investment} data 
  * @returns {import('knex').Knex.QueryBuilder}
  */
@@ -103,12 +80,25 @@ export const update = (where, data) =>{
             }
         }
 
-        if(data?.logoUrl && data?.logoUrl.endsWith('favicon.svg')){
-            data?.logoUrl = `${env.server.url}/static/uploads/system/default.png`
+        if(data.logoUrl && data.logoUrl.endsWith("favicon.svg")){
+            data.logoUrl = `${env.server.url}/static/uploads/system/default.png`;
         }
 
         return investmentModel.update(where, data, trx);
     });
+};
+
+/**
+ * @param {import("../model/investment.model").Investment} where 
+ * @param {import('knex').Knex.Transaction} trx   
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+ export const updateBalance = async(where, trx) =>{
+    const { balance } = await investmentModel.getBalance(where.id, trx);
+
+    return investmentModel.update({id: where.id}, {
+        balance: Number(balance)
+    }, trx);
 };
 
 /**

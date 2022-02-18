@@ -4,7 +4,7 @@ import * as brokerModel from "../model/broker.model";
 import * as iexcloundService from "./iexclound.service";
 import * as investmentService from "./investment.service";
 import knex from "../db";
-import { Brapi } from "../utils/erro";
+import { Brapi, NotFound } from "../utils/erro";
 import transactionType from "../enum/transactionType";
 import { categoryIsBR, findBrapiQoute } from "../utils";
 
@@ -55,12 +55,7 @@ export const create = async (data) => {
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
         const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
         
-        await investmentService.updateBalance(investment, {
-            amount: total,
-            operationType: data.type,
-        }, trx);
-
-        return transactionModel.create({
+        await transactionModel.create({
             brokerId: broker.id,
             investmentId: investment.id,
             type: data.type,
@@ -70,6 +65,8 @@ export const create = async (data) => {
             price: data.price,
             total,
         }, trx);
+
+        return investmentService.updateBalance(investment, trx);
     });
 };
 
@@ -86,6 +83,7 @@ export const update = (where, data) => {
         if (!qoute) {
             throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }
+        
         const category = await categoryModel.findOrCreate({ name: data.category }, trx);
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
         const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
@@ -98,7 +96,7 @@ export const update = (where, data) => {
             total = (Number(data.qnt) * (data.price)) * -1;
         }
 
-        return transactionModel.update(where, {
+        await transactionModel.update(where, {
             brokerId: broker.id,
             investmentId: investment.id,
             type: data.type,
@@ -108,6 +106,8 @@ export const update = (where, data) => {
             price: data.price,
             total
         }, trx);
+
+        return investmentService.updateBalance(investment, trx);
     });
 };
 
@@ -116,5 +116,15 @@ export const update = (where, data) => {
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const del = (where) => {
-    return transactionModel.del(where);
+    return knex.transaction(async (trx) => {
+        const transaction = await transactionModel.findOne({id: where.id}, ["investment"], trx);
+    
+        if (!transaction) {
+            throw new NotFound({code: "Investment"});
+        }
+        
+        await transactionModel.del(where, trx);
+
+        return investmentService.updateBalance({id: transaction.investment.id}, trx);
+    });
 };

@@ -31,7 +31,7 @@ exports.up = async function (knex) {
       .inTable("category")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
-    table.unique("name");
+    table.unique(["name", "categoryId"]);
     table.string("name").notNullable();
     table.string("longName").nullable();
     table.text("logoUrl").nullable();

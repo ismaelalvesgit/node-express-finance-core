@@ -31,7 +31,6 @@ export const selectDefault = [
  * @property {Number} id
  * @property {String} name
  * @property {String} longName
- * @property {String} logoUrl
  * @property {Number} balance
  * @property {String} sector
  * @property {Number} volumeDay
@@ -157,15 +156,20 @@ export const findAll = (options, trx) => {
 };
 
 /**
- * @param {Investment} where 
+ * @param {number} id 
  * @param {import('knex').Knex.Transaction} trx 
- * @returns {import('knex').Knex.QueryBuilder}
+ * @returns {Promise<{balance: number}>}
  */
-export const getBalance = (where, trx) => {
+export const getBalance = (id, trx) => {
     const query = knex(TABLE_NAME)
-        .select("balance")
         .first()
-        .where(where);
+        .select(knex.raw("TRUNCATE(SUM(transaction.total), 0) as balance"))
+        .innerJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
+        .groupBy(`${TABLE_NAME}.id`)
+        .where({
+           [`${TABLE_NAME}.id`]: id
+        });
+        
     return transacting(query, trx);
 };
 
@@ -216,19 +220,6 @@ export const update = (where, data, trx) => {
         .where(where)
         .update(data)
         .forUpdate();
-    return transacting(query, trx);
-};
-
-/**
- * @param {Investment} where 
- * @param {Investment} data 
- * @param {import('knex').Knex.Transaction} trx 
- * @returns {import('knex').Knex.QueryBuilder}
- */
-export const updateBalance = (where, data, trx) => {
-    const query = knex(TABLE_NAME)
-        .where(where)
-        .increment("balance", data.balance);
     return transacting(query, trx);
 };
 

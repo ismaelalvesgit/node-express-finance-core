@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Melhorado update balance
 - Foi adicionado a rota /events
 - Adicionado novo job para colhimento de eventos corporativos (AÇÃO, FIIS)
 - Adicionado novo jobs pra auto dividens (AÇÃO, FIIS, ETF, REITS, STOKES)

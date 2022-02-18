@@ -25,12 +25,11 @@ export const find = catchAsync(async (req, res) =>{
 export const create = catchAsync((req, res, next) =>{
     const data = req.body;
     transactionService.create(data).then((result)=>{
-        if(result.length){
-            delCache(req, ["finance/investment"]);
-            res.status(StatusCodes.CREATED).json(req.__("Transaction.create"));
-        }else{
+        if(result != 1){
             throw new InternalServer({code: "Transaction"});
         }
+        delCache(req, ["finance/investment"]);
+        res.status(StatusCodes.CREATED).json(req.__("Transaction.create"));
     }).catch(next);
 });
 
