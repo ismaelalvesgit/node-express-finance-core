@@ -20,25 +20,15 @@ const command = async () => {
                         await Promise.all(dividends.map(async(dividend)=>{
                             const { qnt } = await transactionService.findAllDividensByMonth({investmentId: investment.id}, dividend.dateBasis, trx);
                             if(qnt > 0 && dividend.dueDate && dividend.price){
-                                const [ exist ] = await dividendsService.findAll({
+                                await dividendsService.findOrCreate({
                                     investmentId: investment.id,
                                     dueDate: dividend.dueDate,
                                     price: dividend.price,
+                                    qnt,
                                     type: dividend.type,
-                                });
-    
-                                if(!exist){
-                                    await dividendsService.create({
-                                        investmentId: investment.id,
-                                        dueDate: dividend.dueDate,
-                                        price: dividend.price,
-                                        qnt,
-                                        type: dividend.type,
-                                        total: Number(qnt) * Number(dividend.price),
-                                    }, trx);
-            
-                                    logger.info(`Auto created dividend, investment: ${investment.name}`);
-                                }
+                                    total: Number(qnt) * Number(dividend.price),
+                                }, trx);
+                                logger.info(`Auto created dividend, investment: ${investment.name}`); 
                             }
                         }));
                     }

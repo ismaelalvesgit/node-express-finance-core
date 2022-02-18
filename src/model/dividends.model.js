@@ -100,10 +100,6 @@ export const findUpdateDivideds = (date, trx) => {
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findOrCreate = (data, trx) => {
-    if (!trx) {
-        trx = knex.transaction();
-    }
-    
     return knex(TABLE_NAME).where(data)
         .first()
         .transacting(trx)

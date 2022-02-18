@@ -35,25 +35,15 @@ const command = async () => {
                             const { qnt } = await transactionService.findAllDividensByMonth({investmentId: investment.id}, extract.dateBasis, trx);
         
                             if(qnt > 0 && extract.dueDate && extract.price){
-                                const [ exist ] = await dividendsService.findAll({
+                                await dividendsService.findOrCreate({
                                     investmentId: investment.id,
                                     dueDate: extract.dueDate,
                                     price: extract.price,
-                                    type: parseStringToDividendType(extract.type),
-                                });
-    
-                                if(!exist){
-                                    await dividendsService.create({
-                                        investmentId: investment.id,
-                                        dueDate: extract.dueDate,
-                                        price: extract.price,
-                                        qnt,
-                                        type: extract.type,
-                                        total: Number(qnt) * Number(extract.price),
-                                    }, trx);
-            
-                                    logger.info(`Auto created dividend, investment: ${investment.name}`);
-                                }
+                                    qnt,
+                                    type: extract.type,
+                                    total: Number(qnt) * Number(extract.price),
+                                }, trx);
+                                logger.info(`Auto created dividend, investment: ${investment.name}`);
                             }
                         }
                         
