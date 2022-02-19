@@ -89,6 +89,16 @@ export const update = (where, data) =>{
 };
 
 /**
+ * @param {number} id 
+ * @param {import('knex').Knex.Transaction} trx   
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+ export const getBalance = async(id, trx) =>{
+    return investmentModel.getBalance(id, trx);
+};
+
+
+/**
  * @param {import("../model/investment.model").Investment} where 
  * @param {import('knex').Knex.Transaction} trx   
  * @returns {import('knex').Knex.QueryBuilder}

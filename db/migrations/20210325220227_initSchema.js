@@ -83,6 +83,7 @@ exports.up = async function (knex) {
     table.integer("qnt").notNullable();
     table.bigInteger("price").notNullable();
     table.bigInteger("total").notNullable();
+    table.bigInteger("profit").notNullable();
     createdAt(knex, table);
     updatedAt(knex, table);
   });

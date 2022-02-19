@@ -96,7 +96,7 @@ export const findStokeAll = (options, trx) => {
         .whereIn("category.name", [categoryType.EQUITY, categoryType.ETF_INTER])
         .whereNotNull("transaction.id")
         .groupBy(`${TABLE_NAME}.id`);
-    if(options.where){
+    if (options.where) {
         query.where(options.where);
     }
     if (options?.sortBy) {
@@ -136,16 +136,16 @@ export const findAll = (options, trx) => {
     if (options?.where) {
         let tableName;
         let value;
-        if(typeof options?.where === "object"){
+        if (typeof options?.where === "object") {
             tableName = Object.keys(options?.where)[0];
             value = Object.values(options?.where)[0];
-        }else{
+        } else {
             tableName = Object.keys(JSON.parse(options?.where))[0];
             value = Object.values(JSON.parse(options?.where))[0];
         }
         query.where(`${TABLE_NAME}.${tableName}`, "like", `%${value}%`);
     }
-    if(options.joinWhere){
+    if (options.joinWhere) {
         query.where(options.joinWhere);
     }
     if (options?.sortBy) {
@@ -169,9 +169,9 @@ export const getBalance = (id, trx) => {
         .innerJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
         .groupBy(`${TABLE_NAME}.id`)
         .where({
-           [`${TABLE_NAME}.id`]: id
+            [`${TABLE_NAME}.id`]: id
         });
-        
+
     return transacting(query, trx);
 };
 
@@ -181,23 +181,34 @@ export const getBalance = (id, trx) => {
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findOrCreate = (data, trx) => {
-    if (!trx) {
-        trx = knex.transaction();
-    }
-    return knex(TABLE_NAME).where(data)
-        .first()
-        .transacting(trx)
-        .then(res => {
-            if (!res) {
-                return knex(TABLE_NAME).insert(data)
-                    .transacting(trx)
-                    .then(() => {
-                        return knex(TABLE_NAME).where(data).first().transacting(trx);
-                    });
-            } else {
-                return res;
-            }
-        });
+    const querySelect = knex(TABLE_NAME)
+    .first()
+    .select([
+        ...selectDefault.map((select) => {
+            return `${TABLE_NAME}.${select}`;
+        }),
+        knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as priceAverage"),
+        knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt"),
+    ])
+    .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
+    .transacting(trx);
+
+    Object.keys(data).forEach((key)=>{
+       querySelect.where(`${TABLE_NAME}.${key}`, '=', data[key])
+    })
+
+    return querySelect
+    .then(res => {
+        if (!res) {
+            return knex(TABLE_NAME).insert(data)
+                .transacting(trx)
+                .then(() => {
+                    return querySelect;
+                });
+        } else {
+            return res;
+        }
+    });
 };
 
 /**

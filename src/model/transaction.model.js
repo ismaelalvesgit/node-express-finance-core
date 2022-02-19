@@ -158,6 +158,29 @@ export const findAllDividensByMonth = (options, trx) => {
     return transacting(query, trx);
 };
 
+
+/**
+ * @param {object} where  
+ * @param {number} where.id  
+ * @param {number} where.investmentId 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {Promise<{priceAverage: number, balance: number}>}
+ */
+export const getLastAveragePrice = (where, trx) => {
+    const query = knex(TABLE_NAME)
+        .first()
+        .select([
+            knex.raw("TRUNCATE(SUM((total + fees + brokerage + taxes)) / SUM(qnt), 0) as priceAverage"),
+            knex.raw("SUM(total) as balance"),
+        ])
+        .where({
+            investmentId: where.investmentId
+        })
+        .whereNot('id', where.id);
+    
+    return transacting(query, trx);
+};
+
 /**
  * @param {Transaction} data 
  * @param {import('knex').Knex.Transaction} trx 

@@ -40,21 +40,26 @@ export const create = async (data) => {
             throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }
 
-        let total = 0;
-        let qnt = 0;
-
-        if(data.type === transactionType.BUY){
-            total = Number(data.qnt) * (data.price);
-            qnt = Number(data.qnt);
-        }else{
-            total = (Number(data.qnt) * (data.price)) * -1;
-            qnt = Number(data.qnt) * -1;
-        }
-
         const category = await categoryModel.findOrCreate({ name: data.category }, trx);
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
         const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
-        
+
+        let total = 0;
+        let qnt = 0;
+        let profit = 0;
+
+        if(data.type === transactionType.BUY){
+            total = Number(data.qnt) * Number(data.price);
+            qnt = Number(data.qnt);
+        }else{
+            profit = (Number(data.price) - Number(investment.priceAverage)) * Number(data.qnt);
+            qnt = Number(data.qnt) * -1;
+            total = (Number(data.qnt) * Number(data.price)) * -1;
+            if(investment.balance && Number(investment.balance) < Math.abs(total)){
+                total = Number(investment.balance) * -1;
+            }
+        } 
+
         await transactionModel.create({
             brokerId: broker.id,
             investmentId: investment.id,
@@ -64,6 +69,7 @@ export const create = async (data) => {
             qnt,
             price: data.price,
             total,
+            profit,
         }, trx);
 
         return investmentService.updateBalance(investment, trx);
@@ -87,14 +93,27 @@ export const update = (where, data) => {
         const category = await categoryModel.findOrCreate({ name: data.category }, trx);
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
         const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
-
+       
         let total = 0;
+        let qnt = 0;
+        let profit = 0;
 
         if(data.type === transactionType.BUY){
-            total = Number(data.qnt) * (data.price);
+            total = Number(data.qnt) * Number(data.price);
+            qnt = Number(data.qnt);
         }else{
-            total = (Number(data.qnt) * (data.price)) * -1;
-        }
+            const { priceAverage, balance } = await transactionModel.getLastAveragePrice({
+                id: where.id,
+                investmentId: investment.id
+            }, trx);
+
+            profit = (Number(data.price) - Number(priceAverage)) * Number(data.qnt);
+            qnt = Number(data.qnt) * -1;
+            total = (Number(data.qnt) * Number(data.price)) * -1;
+            if(balance && Number(balance) < Math.abs(total)){
+                total = Number(balance) * -1;
+            }
+        } 
 
         await transactionModel.update(where, {
             brokerId: broker.id,
@@ -102,9 +121,10 @@ export const update = (where, data) => {
             type: data.type,
             negotiationDate: data.negotiationDate,
             dueDate: data.dueDate,
-            qnt: data.qnt,
+            qnt,
             price: data.price,
-            total
+            total,
+            profit,
         }, trx);
 
         return investmentService.updateBalance(investment, trx);
