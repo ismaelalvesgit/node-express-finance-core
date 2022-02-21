@@ -2,7 +2,7 @@
 	"ServiceUnavailable.router": "A rota ainda não foi configurada",
 	"ServiceUnavailable.throttling": "Limite de solicitação atingido 😅, aguarde um pouco e tente novamente 😇",
 	"NotFound": "{{code}} não encontrado",
-	"BadRequest.Contact": "",
+	"Transaction.Qnt": "Quantidade de cotas supera a quantidade cotas do investimento 😅",
 	"BadRequest.Duplicate": "Valor único já cadastrado '{{duplicateValue}}'",
 	"ValidadeSchema.required": "{{name}} e obrigátorio",
 	"ValidadeSchema.min": "{{name}} deve ser pelo menos {{limit}} caracteres",

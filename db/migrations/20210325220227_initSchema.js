@@ -80,10 +80,10 @@ exports.up = async function (knex) {
     table.bigInteger("brokerage").defaultTo(0).nullable();
     table.bigInteger("fees").defaultTo(0).nullable();
     table.bigInteger("taxes").defaultTo(0).nullable();
+    table.bigInteger("profit").defaultTo(0).nullable();
     table.integer("qnt").notNullable();
     table.bigInteger("price").notNullable();
     table.bigInteger("total").notNullable();
-    table.bigInteger("profit").notNullable();
     createdAt(knex, table);
     updatedAt(knex, table);
   });

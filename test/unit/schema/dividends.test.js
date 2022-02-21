@@ -1,4 +1,5 @@
 import { Chance } from "chance";
+import dividendsStatus from "../../../src/enum/dividendsStatus";
 import dividendsType from "../../../src/enum/dividendsType";
 import { createDividendsSchema, findAllDividendsSchema } from "../../../src/validations/dividends";
 import { validateSchema } from "../../utils";
@@ -27,6 +28,8 @@ describe("Dividends Schemas", () => {
                 body:{
                     investmentId: 1,
                     type: chance.pickone(Object.keys(dividendsType)),
+                    status: chance.pickone(Object.keys(dividendsStatus)),
+                    dateBasis: chance.date(),
                     dueDate: chance.date(),
                     qnt: 2,
                     price: 2000

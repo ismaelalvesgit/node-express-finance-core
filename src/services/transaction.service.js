@@ -4,7 +4,7 @@ import * as brokerModel from "../model/broker.model";
 import * as iexcloundService from "./iexclound.service";
 import * as investmentService from "./investment.service";
 import knex from "../db";
-import { Brapi, NotFound } from "../utils/erro";
+import { BadRequest, Brapi, NotFound } from "../utils/erro";
 import transactionType from "../enum/transactionType";
 import { categoryIsBR, findBrapiQoute } from "../utils";
 
@@ -52,11 +52,19 @@ export const create = async (data) => {
             total = Number(data.qnt) * Number(data.price);
             qnt = Number(data.qnt);
         }else{
-            profit = (Number(data.price) - Number(investment.priceAverage)) * Number(data.qnt);
-            qnt = Number(data.qnt) * -1;
             total = (Number(data.qnt) * Number(data.price)) * -1;
-            if(investment.balance && Number(investment.balance) < Math.abs(total)){
-                total = Number(investment.balance) * -1;
+            qnt = Number(data.qnt) * -1;
+            profit = (Number(data.price) - Number(investment.priceAverage)) * Number(data.qnt);
+            if(Number(data.qnt) >= Number(investment.qnt)){
+                const block = Number(data.qnt) > Number(investment.qnt);
+                if(block){
+                    throw new BadRequest({code: "Transaction.qnt"});
+                }
+                
+                if(Number(data.qnt) === Number(investment.qnt)){
+                    total = Number(investment.balance) * -1;
+                    profit = (Number(data.qnt) * Number(data.price)) - Number(investment.balance);
+                }
             }
         } 
 
@@ -102,16 +110,24 @@ export const update = (where, data) => {
             total = Number(data.qnt) * Number(data.price);
             qnt = Number(data.qnt);
         }else{
-            const { priceAverage, balance } = await transactionModel.getLastAveragePrice({
+            const { priceAverage, balance, quantity } = await transactionModel.getLastAveragePrice({
                 id: where.id,
                 investmentId: investment.id
             }, trx);
 
-            profit = (Number(data.price) - Number(priceAverage)) * Number(data.qnt);
-            qnt = Number(data.qnt) * -1;
             total = (Number(data.qnt) * Number(data.price)) * -1;
-            if(balance && Number(balance) < Math.abs(total)){
-                total = Number(balance) * -1;
+            qnt = Number(data.qnt) * -1;
+            profit = (Number(data.price) - Number(priceAverage)) * Number(data.qnt);
+            if(Number(data.qnt) >= Number(quantity)){
+                const block = Number(data.qnt) > Number(quantity);
+                if(block){
+                    throw new BadRequest({code: "Transaction.qnt"});
+                }
+
+                if(Number(data.qnt) === Number(quantity)){
+                    total = Number(balance) * -1;
+                    profit = (Number(data.qnt) * Number(data.price)) - Number(balance);
+                }
             }
         } 
 

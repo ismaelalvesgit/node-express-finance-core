@@ -127,6 +127,7 @@ export const findAll = (options, trx) => {
             }),
             knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as priceAverage"),
             knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt"),
+            knex.raw("TRUNCATE(SUM(transaction.profit), 0) as tradingAmount"),
             knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME}) * 100 ), 2) as 'percent'`),
             knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME} where categoryId = category.id) * 100 ), 2) as 'percentCategory'`)
         ])
@@ -194,12 +195,12 @@ export const findOrCreate = (data, trx) => {
     .transacting(trx);
 
     Object.keys(data).forEach((key)=>{
-       querySelect.where(`${TABLE_NAME}.${key}`, '=', data[key])
-    })
+       querySelect.where(`${TABLE_NAME}.${key}`, "=", data[key]);
+    });
 
     return querySelect
     .then(res => {
-        if (!res) {
+        if (!res.id) {
             return knex(TABLE_NAME).insert(data)
                 .transacting(trx)
                 .then(() => {

@@ -2,6 +2,7 @@
 	"ServiceUnavailable.router": "Route is yet to be configured",
 	"ServiceUnavailable.throttling": "Request limit reached 😅, wait a while and try again 😇",
 	"NotFound": "{{code}} not found",
+	"Transaction.Qnt": "Number of shares exceeds the number of shares in the investment 😅",
 	"BadRequest.Contact": "Fail to create Contact",
 	"BadRequest.Duplicate": "Unique value already registered '{{duplicateValue}}'",
 	"ValidadeSchema.required": "{{name}} is required",

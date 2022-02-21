@@ -4,6 +4,7 @@ import { app } from "../../src/app";
 import { Chance } from "chance";
 import knex from "../../src/db";
 import dividendsType from "../../src/enum/dividendsType";
+import dividendsStatus from "../../src/enum/dividendsStatus";
 
 const chance = new  Chance();
 describe("Dividends Router", () => {
@@ -26,7 +27,9 @@ describe("Dividends Router", () => {
             const [ id ] = await knex("dividends").insert({
                 investmentId: investmentId,
                 type: chance.pickone(Object.keys(dividendsType)),
+                status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
+                dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000,
                 total: 2 * 2000
@@ -50,7 +53,9 @@ describe("Dividends Router", () => {
             await knex("dividends").insert({
                 investmentId: investmentId,
                 type: chance.pickone(Object.keys(dividendsType)),
+                status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
+                dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000,
                 total: 2 * 2000
@@ -76,7 +81,9 @@ describe("Dividends Router", () => {
             .send({
                 investmentId: investmentId,
                 type: chance.pickone(Object.keys(dividendsType)),
+                status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
+                dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000
             })
@@ -95,7 +102,9 @@ describe("Dividends Router", () => {
             const [ id ] = await knex("dividends").insert({
                 investmentId: investmentId,
                 type: chance.pickone(Object.keys(dividendsType)),
+                status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
+                dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000,
                 total: 2 * 2000
@@ -106,7 +115,9 @@ describe("Dividends Router", () => {
             .send({
                 investmentId: investmentId,
                 type: chance.pickone(Object.keys(dividendsType)),
+                status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
+                dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000
             })
@@ -125,7 +136,9 @@ describe("Dividends Router", () => {
             const [ id ] = await knex("dividends").insert({
                 investmentId: investmentId,
                 type: chance.pickone(Object.keys(dividendsType)),
+                status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
+                dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000,
                 total: 2 * 2000
@@ -157,7 +170,9 @@ describe("Dividends Router", () => {
             .send({
                 investmentId: 1,
                 type: chance.pickone(Object.keys(dividendsType)),
+                status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
+                dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000
             })

@@ -26,6 +26,7 @@ const errorsConfigs = [
 
     { class: InternalServer, code: "Category", i18n: "InternalServer.Category" },
     { class: InternalServer, code: "Broker", i18n: "InternalServer.Broker" },
+    { class: BadRequest, code: "Transaction.qnt", i18n: "Transaction.Qnt" },
 
     { class: Error, code: "ER_DUP_ENTRY", i18n: "BadRequest.Duplicate" },
     { class: ValidadeSchema, code: "any.required", i18n: "ValidadeSchema.required" },
