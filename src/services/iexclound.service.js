@@ -56,7 +56,7 @@ const _formatDataQoute = (data)=>{
     return {
         symbol: data.symbol,
         logourl: `https://storage.googleapis.com/iex/api/logos/${data.symbol}.png`,
-        shortName: data.companyName,
+        longName: data.companyName,
         regularMarketPrice: data.latestPrice,
         regularMarketDayHigh: data.high,
         regularMarketDayLow: data.low,

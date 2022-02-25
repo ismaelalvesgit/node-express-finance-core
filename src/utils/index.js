@@ -139,13 +139,12 @@ export const formatAmount = (value) =>{
 export const parseStringToDividendType = (value)=>{
     switch (value) {
         case "RENDIMENTO":
-            return dividendsType.DIVIDEND;
         case "DIVIDENDO":
-            return dividendsType.YIELD;
+            return dividendsType.DIVIDEND;
         case "JCP":
             return dividendsType.JCP;
         default:
-            return dividendsType.YIELD;
+            return dividendsType.DIVIDEND;
     }
 };
 
