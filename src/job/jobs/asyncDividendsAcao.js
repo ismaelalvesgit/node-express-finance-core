@@ -32,19 +32,23 @@ const command = async () => {
                                 price: parseDecimalValue(formatAmount(temp[4]), 1),
                             };
                             
-                            const { qnt } = await transactionService.findAllDividensByMonth({investmentId: investment.id}, extract.dateBasis, trx);
-
-                            if(qnt > 0 && extract.dueDate && extract.price){
-                                await dividendsService.findOrCreate({
-                                    investmentId: investment.id,
-                                    dateBasis: extract.dateBasis,
-                                    dueDate: extract.dueDate,
-                                    price: extract.price,
-                                    qnt,
-                                    type: extract.type,
-                                    total: Number(qnt) * Number(extract.price),
-                                }, trx);
-                                logger.info(`Auto created dividend, investment: ${investment.name}`);
+                            const transactions = await transactionService.findAllDividensByMonth({investmentId: investment.id}, extract.dateBasis, trx);
+        
+                            if(extract.dueDate && extract.price){
+                                await Promise.all(transactions.map(async(transaction)=>{
+                                    const { qnt, broker: { id: brokerId } } = transaction;
+                                    await dividendsService.findOrCreate({
+                                        investmentId: investment.id,
+                                        brokerId,
+                                        dateBasis: extract.dateBasis,
+                                        dueDate: extract.dueDate,
+                                        price: extract.price,
+                                        qnt,
+                                        type: extract.type,
+                                        total: Number(qnt) * Number(extract.price),
+                                    }, trx);
+                                    logger.info(`Auto created dividend, investment: ${investment.name}, broker: ${transaction.broker.name}`);
+                                }));
                             }
                         }  
                     }

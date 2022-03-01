@@ -27,6 +27,7 @@ describe("Dividends Schemas", () => {
             const params = {
                 body:{
                     investmentId: 1,
+                    brokerId: 1,
                     type: chance.pickone(Object.keys(dividendsType)),
                     status: chance.pickone(Object.keys(dividendsStatus)),
                     dateBasis: chance.date(),

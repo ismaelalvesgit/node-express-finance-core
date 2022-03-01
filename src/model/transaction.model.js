@@ -145,8 +145,13 @@ export const findOne = (where, join = [], trx) => {
  */
 export const findAllDividensByMonth = (options, trx) => {
     const query = knex(TABLE_NAME)
-        .first()
-        .sum({ qnt: "qnt" });
+        .select([
+            knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
+            knex.raw(`SUM(${TABLE_NAME}.qnt) as qnt`),
+        ])
+        .sum({ qnt: "qnt" })
+        .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
+        .groupBy("broker.id");
     if (options?.where) {
         query.where(options?.where);
     }

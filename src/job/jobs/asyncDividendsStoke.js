@@ -18,18 +18,22 @@ const command = async () => {
                     if(usage){
                         const dividends = await iexcloundService.findDividens(investment.name.toUpperCase());
                         await Promise.all(dividends.map(async(dividend)=>{
-                            const { qnt } = await transactionService.findAllDividensByMonth({investmentId: investment.id}, dividend.dateBasis, trx);
-                            if(qnt > 0 && dividend.dueDate && dividend.price){
-                                await dividendsService.findOrCreate({
-                                    investmentId: investment.id,
-                                    dateBasis: dividend.dateBasis,
-                                    dueDate: dividend.dueDate,
-                                    price: dividend.price,
-                                    qnt,
-                                    type: dividend.type,
-                                    total: Number(qnt) * Number(dividend.price),
-                                }, trx);
-                                logger.info(`Auto created dividend, investment: ${investment.name}`); 
+                            const transactions = await transactionService.findAllDividensByMonth({investmentId: investment.id}, dividend.dateBasis, trx);
+                            if(dividend.dueDate && dividend.price){
+                                await Promise.all(transactions.map(async(transaction)=>{
+                                    const { qnt, broker: { id: brokerId } } = transaction;
+                                    await dividendsService.findOrCreate({
+                                        investmentId: investment.id,
+                                        brokerId,
+                                        dateBasis: dividend.dateBasis,
+                                        dueDate: dividend.dueDate,
+                                        price: dividend.price,
+                                        qnt,
+                                        type: dividend.type,
+                                        total: Number(qnt) * Number(dividend.price),
+                                    }, trx);
+                                    logger.info(`Auto created dividend, investment: ${investment.name}, broker: ${transaction.broker.name}`);
+                                }));
                             }
                         }));
                     }

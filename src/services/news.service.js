@@ -16,7 +16,7 @@ import env from "../env";
  * @property {string} category
  * @property {string} language
  * @property {string} country
- * @property {Date} published_at
+ * @property {Date} publishedAt
  */
 
 /**
@@ -41,6 +41,22 @@ const http = new HttpAdapter({
 
 /**
  * 
+ * @param {NewsDataApi} data 
+ * @returns { NewsDataApi }
+ */
+ const _formatData = (data)=>{
+    return {
+        pagination: data.pagination,
+        data: data.data.map((e) =>{
+            e["publishedAt"] = e.published_at;
+            delete e.published_at;
+            return e;
+        })
+    };   
+};
+
+/**
+ * 
  * @param {string} name 
  * @returns {Promise<NewsDataApi>}
  */
@@ -53,7 +69,7 @@ export const findNews = async (params)=>{
             params
         });
 
-        return data;
+        return _formatData(data);
         
     } catch (error) {
         const defaultMessage = "Failed to get news NewsApi";

@@ -94,116 +94,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Category - Create",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "accept-language",
-								"value": "en-US",
-								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"oi ds sw mundo\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/category",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"category"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Category - Update",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "accept-language",
-								"value": "en-US",
-								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\":\"Dona barra\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3000/category/:id",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"category",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Category - Delete",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "accept-language",
-								"value": "en-US",
-								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://localhost:3000/category/:id",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3000",
-							"path": [
-								"category",
-								":id"
-							],
-							"variable": [
-								{
-									"key": "id",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -742,7 +632,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"investment\":\"SRET\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"EQUITY\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2021-12-10T18:33:31.550Z\",\r\n    \"qnt\": 4,\r\n    \"price\": 885\r\n}",
+							"raw": "{\r\n    \"investment\":\"SRET\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"ETF INTERNACIONAL\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2021-12-10T18:33:31.550Z\",\r\n    \"qnt\": 2,\r\n    \"price\": 885\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -777,7 +667,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"investment\":\"VGHF11\",\r\n    \"broker\": \"RICO INVESTIMENTOS\",\r\n    \"category\": \"FIIS\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2022-01-15T18:33:31.550Z\",\r\n    \"qnt\": 2,\r\n    \"price\": 20000\r\n}",
+							"raw": "{\r\n    \"investment\":\"HGCR11\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"FUNDOS IMOBILIÁRIOS\",\r\n    \"type\": \"SELL\",\r\n    \"negotiationDate\": \"2021-09-22T18:33:31.550Z\",\r\n    \"qnt\": 8,\r\n    \"price\": 10485\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -798,7 +688,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "87"
 								}
 							]
 						}
@@ -831,7 +721,69 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "88"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "News",
+			"item": [
+				{
+					"name": "News - FindAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/news",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"news"
+							],
+							"query": [
+								{
+									"key": "keywords",
+									"value": "global",
+									"description": "Pesquise uma noticia chave",
+									"disabled": true
+								},
+								{
+									"key": "languages",
+									"value": "en, pt",
+									"description": "ar, de, en, es, fr, he, it, nl, no, pt, ru, se, zh",
+									"disabled": true
+								},
+								{
+									"key": "countries",
+									"value": "br",
+									"description": "ar, au, at, be, br, bg, ca, cn, co, cz, eg, fr, de, gr, hk, hu, in, id, ie, il, it, jp, lv, lt, my, mx, ma, nl, nz, ng, no, ph, pl, pt, ro, sa, rs, sg, sk, si, za, kr, se, ch, tw, th, tr, ae, ua, gb, us, ve",
+									"disabled": true
+								},
+								{
+									"key": "source",
+									"value": "InfoMoney",
+									"disabled": true
 								}
 							]
 						}
@@ -1035,7 +987,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"investmentId\":\"1\",\r\n    \"type\": \"PROVISIONED\",\r\n    \"dueDate\": \"2022-01-15T18:33:31.550Z\",\r\n    \"qnt\": 2,\r\n    \"price\": 2000\r\n}",
+							"raw": "{\r\n    \"investmentId\":\"7\",\r\n    \"brokerId\":\"47\",\r\n    \"status\": \"PROVISIONED\",\r\n    \"type\": \"DIVIDEND\",\r\n    \"dateBasis\": \"2021-10-29T18:33:31.550Z\",\r\n    \"dueDate\": \"2021-11-16T18:33:31.550Z\",\r\n    \"qnt\": 1,\r\n    \"price\": 54\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1070,7 +1022,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"investment\":\"VGHF11\",\r\n    \"broker\": \"RICO INVESTIMENTOS\",\r\n    \"category\": \"FIIS\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2022-01-15T18:33:31.550Z\",\r\n    \"qnt\": 2,\r\n    \"price\": 20000\r\n}",
+							"raw": "{\r\n    \"investmentId\":\"7\",\r\n    \"brokerId\":\"47\",\r\n    \"status\": \"PROVISIONED\",\r\n    \"type\": \"DIVIDEND\",\r\n    \"dateBasis\": \"2021-10-29T18:33:31.550Z\",\r\n    \"dueDate\": \"2021-11-16T18:33:31.550Z\",\r\n    \"qnt\": 1,\r\n    \"price\": 54\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

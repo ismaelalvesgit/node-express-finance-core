@@ -17,6 +17,9 @@ describe("Dividends Router", () => {
 
     describe("sucess", ()=>{
         it("findOne", async() => {
+            const [ brokerId ] = await knex("broker").insert({
+                name: chance.name()
+            });
             const [ categoryId ] = await knex("category").insert({
                 name: chance.name()
             });
@@ -25,7 +28,8 @@ describe("Dividends Router", () => {
                 categoryId
             });
             const [ id ] = await knex("dividends").insert({
-                investmentId: investmentId,
+                investmentId,
+                brokerId,
                 type: chance.pickone(Object.keys(dividendsType)),
                 status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
@@ -43,6 +47,9 @@ describe("Dividends Router", () => {
         });
         
         it("find", async() => {
+            const [ brokerId ] = await knex("broker").insert({
+                name: chance.name()
+            });
             const [ categoryId ] = await knex("category").insert({
                 name: chance.name()
             });
@@ -51,7 +58,8 @@ describe("Dividends Router", () => {
                 categoryId
             });
             await knex("dividends").insert({
-                investmentId: investmentId,
+                investmentId,
+                brokerId,
                 type: chance.pickone(Object.keys(dividendsType)),
                 status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
@@ -69,6 +77,9 @@ describe("Dividends Router", () => {
         });
         
         it("create", async() => {
+            const [ brokerId ] = await knex("broker").insert({
+                name: chance.name()
+            });
             const [ categoryId ] = await knex("category").insert({
                 name: chance.name()
             });
@@ -79,7 +90,8 @@ describe("Dividends Router", () => {
             const res = await request(app)
             .post("/dividends")
             .send({
-                investmentId: investmentId,
+                investmentId,
+                brokerId,
                 type: chance.pickone(Object.keys(dividendsType)),
                 status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
@@ -92,6 +104,9 @@ describe("Dividends Router", () => {
         });
        
         it("update", async() => {
+            const [ brokerId ] = await knex("broker").insert({
+                name: chance.name()
+            });
             const [ categoryId ] = await knex("category").insert({
                 name: chance.name()
             });
@@ -100,7 +115,8 @@ describe("Dividends Router", () => {
                 categoryId
             });
             const [ id ] = await knex("dividends").insert({
-                investmentId: investmentId,
+                investmentId,
+                brokerId,
                 type: chance.pickone(Object.keys(dividendsType)),
                 status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
@@ -113,7 +129,8 @@ describe("Dividends Router", () => {
             const res = await request(app)
             .put(`/dividends/${id}`)
             .send({
-                investmentId: investmentId,
+                investmentId,
+                brokerId,
                 type: chance.pickone(Object.keys(dividendsType)),
                 status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
@@ -126,6 +143,9 @@ describe("Dividends Router", () => {
         });
         
         it("delete", async() => {
+            const [ brokerId ] = await knex("broker").insert({
+                name: chance.name()
+            });
             const [ categoryId ] = await knex("category").insert({
                 name: chance.name()
             });
@@ -134,7 +154,8 @@ describe("Dividends Router", () => {
                 categoryId
             });
             const [ id ] = await knex("dividends").insert({
-                investmentId: investmentId,
+                investmentId,
+                brokerId,
                 type: chance.pickone(Object.keys(dividendsType)),
                 status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),
@@ -169,6 +190,7 @@ describe("Dividends Router", () => {
             .post("/dividends")
             .send({
                 investmentId: 1,
+                brokerId: 1,
                 type: chance.pickone(Object.keys(dividendsType)),
                 status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),

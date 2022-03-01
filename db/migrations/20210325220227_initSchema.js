@@ -90,6 +90,13 @@ exports.up = async function (knex) {
 
   await knex.schema.createTable("dividends", (table) => {
     table.bigIncrements("id").unsigned();
+    table.bigInteger("brokerId")
+      .unsigned()
+      .notNullable()
+      .references("id")
+      .inTable("broker")
+      .onUpdate("CASCADE")
+      .onDelete("CASCADE");
     table.bigInteger("investmentId")
       .unsigned()
       .notNullable()

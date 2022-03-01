@@ -3,6 +3,7 @@ import dividendsStatus from "../enum/dividendsStatus";
 import { jsonObjectQuerySelect } from "../utils";
 import transacting from "../utils/transacting";
 import * as investmentModel from "./investment.model";
+import * as brokerModel from "./broker.model";
 
 const TABLE_NAME = "dividends";
 export const selectDefault = [
@@ -24,6 +25,8 @@ export const selectDefault = [
  * @property {Number} id
  * @property {Number} investmentId
  * @property {import("./investment.model").Investment} investment
+ * @property {Number} brokerId
+ * @property {import("./broker.model").broker} broker
  * @property {import('../enum/dividendsStatus')} status
  * @property {import('../enum/dividendsType')} type
  * @property {Date} dueDate
@@ -48,11 +51,13 @@ export const findAll = (options, trx) => {
     const query = knex(TABLE_NAME)
         .select([
             knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
+            knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
             ...selectDefault.map((select) => {
                 return `${TABLE_NAME}.${select}`;
             })
         ])
-        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
+        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
+        .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`);
     if (options?.where) {
         let tableName;
         let value;
@@ -84,11 +89,13 @@ export const findUpdateDivideds = (date, trx) => {
     const query = knex(TABLE_NAME)
     .select([
         knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
+        knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
         ...selectDefault.map((select) => {
             return `${TABLE_NAME}.${select}`;
         })
     ])
     .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
+    .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
     .where(`${TABLE_NAME}.status`, "=", dividendsStatus.PROVISIONED);
     if (date) {
         query.where(`${TABLE_NAME}.dueDate`, "<=", date);

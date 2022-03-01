@@ -1,5 +1,6 @@
 import * as dividendsModel from "../model/dividends.model";
 import * as investmentModel from "../model/investment.model";
+import * as brokerModel from "../model/broker.model";
 import knex from "../db";
 import { NotFound } from "../utils/erro";
 
@@ -29,9 +30,13 @@ export const create = async (data) => {
         if (!investment) {
             throw new NotFound({ code: "Dividends" });
         }
+        const [ broker ] = await brokerModel.findAll({ where: { id: data.brokerId } }, trx);
+        if (!broker) {
+            throw new NotFound({ code: "Dividends" });
+        }
         return dividendsModel.create({
             ...data,
-            total: data.qnt * data.price
+            total: Number(data.qnt) * Number(data.price)
         }, trx);
     });
 };
@@ -51,7 +56,20 @@ export const create = async (data) => {
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const update = (where, data) => {
-    return dividendsModel.update(where, data);
+    return knex.transaction(async(trx)=>{
+        const [ investment ] = await investmentModel.findAll({ where: { id: data.investmentId } }, trx);
+        if (!investment) {
+            throw new NotFound({ code: "Dividends" });
+        }
+        const [ broker ] = await brokerModel.findAll({ where: { id: data.brokerId } }, trx);
+        if (!broker) {
+            throw new NotFound({ code: "Dividends" });
+        }
+        return dividendsModel.update(where, {
+            ...data,
+            total: Number(data.qnt) * Number(data.price)
+        });
+    });
 };
 
 /**
