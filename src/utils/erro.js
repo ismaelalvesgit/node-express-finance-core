@@ -47,6 +47,12 @@ export class IexCloundApi extends CustomError {
     }
 }
 
+export class NewsApi extends CustomError {
+    constructor({statusCode, message }){
+        super(statusCode, message, "newsapi");
+    }
+}
+
 export class ValidadeSchema extends CustomError{
     constructor(message){
         super(StatusCodes.BAD_REQUEST, JSON.stringify(message));

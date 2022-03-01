@@ -43,7 +43,12 @@ const command = async () => {
                                     qnt,
                                     type: extract.type,
                                     total: Number(qnt) * Number(extract.price),
-                                }, trx);
+                                }, trx, {
+                                    investmentId: investment.id,
+                                    dateBasis: extract.dateBasis,
+                                    dueDate: extract.dueDate,
+                                    type: extract.type, 
+                                });
                                 logger.info(`Auto created dividend, investment: ${investment.name}`);
                             }
                         }

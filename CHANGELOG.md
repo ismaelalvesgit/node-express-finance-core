@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado nova integração de API de noticias
 - Atualizado update balance
 - Foi adicionado a rota /events
 - Adicionado novo job para colhimento de eventos corporativos (AÇÃO, FIIS)

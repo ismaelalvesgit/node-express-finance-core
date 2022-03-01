@@ -101,8 +101,8 @@ export const findUpdateDivideds = (date, trx) => {
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findOrCreate = (data, trx) => {
-    return knex(TABLE_NAME).where(data)
+export const findOrCreate = (data, trx, find) => {
+    return knex(TABLE_NAME).where(find || data)
         .first()
         .transacting(trx)
         .then(res => {

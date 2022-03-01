@@ -27,6 +27,8 @@ tags:
     description: Dividends namespace
   - name: Events
     description: Events namespace
+  - name: News
+    description: News namespace
   - name: Investment
     description: Investment namespace
   - name: System
@@ -763,6 +765,50 @@ paths:
         500: # status code
           $ref: "#/components/responses/internal"
   
+  # News
+  /news:
+    get:
+      tags:
+        - News
+      summary: Retorna a lista de noticias.
+      parameters:
+        - in: query
+          name: keywords
+          description: Pesquise uma noticia chave
+          schema:
+            type: string
+            example: "fiis"
+        - in: query
+          name: languages
+          description: Linguagem da noticia
+          schema:
+            type: string
+            description: |
+              Valores: 
+                ar, de, en, es, fr, he, it, nl, no, pt, ru, se, zh
+            example: pt
+        - in: query
+          name: countries
+          description: Pais da noticia
+          schema:
+            type: string
+            description: |
+              Valores: 
+                ar, au, at, be, br, bg, ca, cn, co, cz, eg, fr, de, gr, hk, hu, in, 
+                id, ie, il, it, jp, lv, lt, my, mx, ma, nl, nz, ng, no, ph, pl, pt, 
+                ro, sa, rs, sg, sk, si, za, kr, se, ch, tw, th, tr, ae, ua, gb, us, 
+                ve
+            example: br
+        - in: query
+          name: source
+          description: Origem da publicação
+          schema:
+            type: string
+            example: InfoMoney
+      responses:
+        200: # status code
+          $ref: "#/components/responses/news"
+          
   # Events
   /events:
     get:
@@ -797,6 +843,12 @@ paths:
       responses:
         200: # status code
           $ref: "#/components/responses/events"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
 
   /events/{id}:
     get:
@@ -1426,6 +1478,74 @@ components:
                 updatedAt:
                   type: string
                   example: "2021-03-31 22:34:36.476"
+    
+    news:
+      description: lista de noticias.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              pagination:
+                type: object
+                properties:
+                  limit:
+                    type: number
+                    description: limite de paginação
+                  offset:
+                    type: number
+                    description: deslocamento de paginação
+                  count:
+                    type: number
+                    description: contagem de resultados na página atual.
+                  total:
+                    type: number
+                    description: contagem total de resultados disponíveis.
+              data:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    author:
+                      type: string
+                      description: nome do autor do artigo fornecido.
+                      example: "Mitchel Diniz"
+                    title:
+                      type: string
+                      description: texto do título do artigo fornecido.
+                      example: "Índice de ADRs Brazil"
+                    description:
+                      type: string
+                      description: texto de descrição do artigo fornecido.
+                      example: Com a B3 fechada, ADR's de empresas brasileiras negociadas no exterior...
+                    url:
+                      type: number
+                      description: URL que leva ao artigo fornecido.
+                      example: "https://www.infomoney.com.br/mercados/indice-de-adrs-brazil-titans-se-recupera-e-fecha-em-alta-de-032-com-vale-entre-maiores-altas-e-aereas-em-baixa/"
+                    source:
+                      type: string
+                      description: "descrição do documento"
+                      example: 'InfoMoney'
+                    image:
+                      type: string
+                      description: URL de imagem associado ao artigo fornecido.
+                      example: null
+                    category:
+                      type: string
+                      description: categoria associada ao artigo fornecido.
+                      example: "business"
+                    language:
+                      type: string
+                      description: idioma em que o artigo fornecido está.
+                      example: "pt"
+                    country:
+                      type: string
+                      description: código do país associado ao artigo fornecido.
+                      example: "br"
+                    published_at:
+                      type: string
+                      description: carimbo de hora exato em que o artigo foi publicado.
+                      example: "2021-03-31 22:34:36.476"
     
     investment:
       description: lista de investimentos.

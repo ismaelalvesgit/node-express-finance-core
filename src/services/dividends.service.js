@@ -41,8 +41,8 @@ export const create = async (data) => {
  * @param {import('knex').Knex.Transaction} trx  
  * @returns {import('knex').Knex.QueryBuilder}
  */
- export const findOrCreate = async (data, trx) => {
-    return dividendsModel.findOrCreate(data, trx);
+ export const findOrCreate = async (data, trx, find) => {
+    return dividendsModel.findOrCreate(data, trx, find);
  };
 
 /**

@@ -2,6 +2,7 @@ import {
     BadRequest,
     Brapi,
     InternalServer,
+    NewsApi,
     NotFound,
     ValidadeSchema
 } from "../utils/erro";
@@ -119,6 +120,10 @@ export default function errorHandler(error, req, res, next) {
         }
         case Brapi: {
             res.status(error.statusCode || 400).json([{ message: error.message }]);
+            break;
+        }
+        case NewsApi: {
+            res.status(error.statusCode || 400).json([JSON.parse(error.message)]);
             break;
         }
         case BadRequest: {
