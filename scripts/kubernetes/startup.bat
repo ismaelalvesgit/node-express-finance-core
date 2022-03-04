@@ -4,6 +4,9 @@ echo iniciando statup
 echo Criando os secrets 
 kubectl apply -f secret.yml
 
+echo Criando os cronjobs
+kubectl apply -f cronjob.yml
+
 echo Criando os services
 kubectl apply -f service.yml
 

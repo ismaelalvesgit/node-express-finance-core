@@ -79,6 +79,31 @@ export const findAll = (options, trx) => {
     return transacting(query, trx);
 };
 
+/**
+ * @param {Dividends} where 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findOne = (where, trx) => {
+    const query = knex(TABLE_NAME)
+        .first()
+        .select([
+            knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
+            knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
+            ...selectDefault.map((select) => {
+                return `${TABLE_NAME}.${select}`;
+            })
+        ])
+        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
+        .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`);
+    
+    Object.keys(where).forEach((key)=>{
+        query.where(`${TABLE_NAME}.${key}`, "=", where[key]);
+    });
+    
+    return transacting(query, trx);
+};
+
 
 /**
  * @param {string} date 

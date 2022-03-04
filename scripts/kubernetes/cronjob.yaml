@@ -1,0 +1,261 @@
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "finance-update-investment-job"
+  namespace: default
+  labels:
+    jobgroup: minute
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "update-investment-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - update-divideds
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "finance-update-divideds-job"
+  namespace: default
+  labels:
+    jobgroup: minute
+spec:
+  schedule: "*/1 * * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "update-divideds-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - update-divideds
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "finance-async-divideds-fiis-job"
+  namespace: default
+  labels:
+    jobgroup: day
+spec:
+  schedule: "0 10 * * 1-5"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "async-divideds-fiis-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - async-divideds-fiis
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "finance-async-divideds-acao-job"
+  namespace: default
+  labels:
+    jobgroup: day
+spec:
+  schedule: "0 10 * * 1-5"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "async-divideds-acao-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - async-divideds-acao
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "finance-async-divideds-stoke-job"
+  namespace: default
+  labels:
+    jobgroup: day
+spec:
+  schedule: "0 10 * * 1-5"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "async-divideds-stoke-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - async-divideds-stoke
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "finance-async-events-fiis-job"
+  namespace: default
+  labels:
+    jobgroup: day
+spec:
+  schedule: "0 10 * * 1-5"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "async-events-fiis-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - async-events-fiis
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "finance-async-events-acao-job"
+  namespace: default
+  labels:
+    jobgroup: day
+spec:
+  schedule: "0 10 * * 1-5"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "async-events-acao-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - async-events-acao
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "finance-backup-data-job"
+  namespace: default
+  labels:
+    jobgroup: day
+spec:
+  schedule: "0 20 * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "backup-data-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - backup-data
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: "finance-notify-price-day-job"
+  namespace: default
+  labels:
+    jobgroup: day
+spec:
+  schedule: "10 18 * * 1-5"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "notify-price-day-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - notify-price-day

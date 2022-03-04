@@ -6,6 +6,7 @@ import * as categoryModel from "./category.model";
 import * as transactionModel from "./transaction.model";
 
 const TABLE_NAME = "investment";
+const VIEW = "view_investment";
 export const selectDefault = [
     "id",
     "name",
@@ -119,32 +120,11 @@ export const findStokeAll = (options, trx) => {
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findAll = (options, trx) => {
-    const query = knex(TABLE_NAME)
-        .select([
-            knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
-            ...selectDefault.map((select) => {
-                return `${TABLE_NAME}.${select}`;
-            }),
-            knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as priceAverage"),
-            knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt"),
-            knex.raw("TRUNCATE(SUM(transaction.profit), 0) as tradingAmount"),
-            knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME}) * 100 ), 2) as 'percent'`),
-            knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME} where categoryId = category.id) * 100 ), 2) as 'percentCategory'`)
-        ])
-        .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
-        .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`)
-        .groupBy(`${TABLE_NAME}.id`);
+    const query = knex(VIEW);
     if (options?.where) {
-        let tableName;
-        let value;
-        if (typeof options?.where === "object") {
-            tableName = Object.keys(options?.where)[0];
-            value = Object.values(options?.where)[0];
-        } else {
-            tableName = Object.keys(JSON.parse(options?.where))[0];
-            value = Object.values(JSON.parse(options?.where))[0];
-        }
-        query.where(`${TABLE_NAME}.${tableName}`, "like", `%${value}%`);
+        const key = Object.keys(options?.where)[0];
+        const value = Object.values(options?.where)[0];
+        query.where(`${key}`, "like", `%${value}%`);
     }
     if (options.joinWhere) {
         query.where(options.joinWhere);
@@ -155,6 +135,17 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
+  
+    return transacting(query, trx);
+};
+
+/**
+ * @param {Investment} where 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findOne = (where, trx) => {
+    const query = knex(VIEW).first().where(where);
     return transacting(query, trx);
 };
 
@@ -182,25 +173,21 @@ export const getBalance = (id, trx) => {
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findOrCreate = (data, trx) => {
-    const querySelect = knex(TABLE_NAME)
+    const querySelect = knex(VIEW)
     .first()
-    .select([
-        ...selectDefault.map((select) => {
-            return `${TABLE_NAME}.${select}`;
-        }),
-        knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as priceAverage"),
-        knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt"),
-    ])
-    .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
     .transacting(trx);
 
     Object.keys(data).forEach((key)=>{
-       querySelect.where(`${TABLE_NAME}.${key}`, "=", data[key]);
+        if(key === "categoryId"){
+            querySelect.whereRaw("category->\"$.id\" = ?", [Number(data[key])]);
+        }else{
+            querySelect.where(`${key}`, "=", data[key]);
+        }
     });
 
     return querySelect
     .then(res => {
-        if (!res.id) {
+        if (!res) {
             return knex(TABLE_NAME).insert(data)
                 .transacting(trx)
                 .then(() => {

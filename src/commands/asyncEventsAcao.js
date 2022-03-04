@@ -1,12 +1,12 @@
 import axios from "axios";
 import cheerio from "cheerio";
-import { investmentService, eventsService } from "../../services";
-import knex from "../../db";
-import categoryType from "../../enum/categoryType";
-import logger from "../../logger";
-import env from "../../env";
+import { investmentService, eventsService } from "../services";
+import knex from "../db";
+import categoryType from "../enum/categoryType";
+import logger from "../logger";
+import env from "../env";
 import { format } from "date-fns";
-import { stringToDate } from "../../utils";
+import { stringToDate } from "../utils";
 
 const name = "async-events-acao";
 const group = "day";

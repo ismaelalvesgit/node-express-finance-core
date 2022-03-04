@@ -6,7 +6,7 @@ import { delCache } from "../utils/cache";
 
 export const findOne = catchAsync(async (req, res) =>{
     const where = {id: req.params.id};
-    const [ data ] = await transactionService.findAll(where);
+    const data = await transactionService.findOne(where);
     if(!data){
         throw new NotFound({code: "Transaction"});
     }

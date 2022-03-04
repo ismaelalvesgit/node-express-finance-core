@@ -1,0 +1,60 @@
+import { jsonObjectQuerySelect } from "../../src/utils";
+import * as categoryModel from "../../src/model/category.model";
+
+/**
+* @param {import('knex').Knex} knex
+*/
+exports.up = function (knex) {
+    const TABLE_NAME = "investment";
+    const selectDefault = [
+        "id",
+        "name",
+        "longName",
+        "balance",
+        "sector",
+        "volumeDay",
+        "previousClosePrice",
+        "changePercentDay",
+        "variationDay",
+        "changePercentTotal",
+        "variationTotal",
+        "priceDay",
+        "priceDayHigh",
+        "priceDayLow",
+        "createdAt",
+        "updatedAt",
+    ];
+    return knex.schema.createView("view_investment", (view) => {
+        view.columns([
+            "category",
+            ...selectDefault,
+            "priceAverage",
+            "qnt",
+            "tradingAmount",
+            "percent",
+            "percentCategory"
+        ]);
+        view.as(knex(TABLE_NAME)
+            .select([
+                knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
+                ...selectDefault.map((select) => {
+                    return `${TABLE_NAME}.${select}`;
+                }),
+                knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as priceAverage"),
+                knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt"),
+                knex.raw("TRUNCATE(SUM(transaction.profit), 0) as tradingAmount"),
+                knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME}) * 100 ), 2) as 'percent'`),
+                knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME} where categoryId = category.id) * 100 ), 2) as 'percentCategory'`)
+            ])
+            .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
+            .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`)
+            .groupBy(`${TABLE_NAME}.id`));
+    });
+};
+
+/**
+* @param {import('knex').Knex} knex
+*/
+exports.down = function (knex) {
+    return knex.schema.dropView("view_investment");
+};

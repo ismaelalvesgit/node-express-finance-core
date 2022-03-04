@@ -12,6 +12,15 @@ export const findAll = (where, sortBy, orderBy, limit) =>{
 };
 
 /**
+ * @param {import("../model/broker.model").Broker} where
+ * @param {import('knex').Knex.Transaction} trx  
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findOne = (where, trx) =>{
+    return brokerModel.findOne(where, trx);
+};
+
+/**
  * @param {import("../model/broker.model").Broker} data 
  * @returns {import('knex').Knex.QueryBuilder}
  */

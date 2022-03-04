@@ -25,6 +25,15 @@ export const findAll = (where, joinWhere, sortBy, orderBy, limit) =>{
 };
 
 /**
+ * @param {import("../model/investment.model").Investment} where 
+ * @param {import('knex').Knex.Transaction} trx   
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findOne = (where, trx) =>{
+    return investmentModel.findOne(where, trx);
+};
+
+/**
  * 
  * @param {string} search 
  * @param {import('../enum/categoryType')} category 

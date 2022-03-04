@@ -1,7 +1,7 @@
-import { dividendsService, investmentService, transactionService,  iexcloundService} from "../../services";
-import knex from "../../db";
-import logger from "../../logger";
-import env from "../../env";
+import { dividendsService, investmentService, transactionService,  iexcloundService} from "../services";
+import knex from "../db";
+import logger from "../logger";
+import env from "../env";
 
 const name = "async-divideds-stoke";
 const group = "day";
@@ -31,7 +31,13 @@ const command = async () => {
                                         qnt,
                                         type: dividend.type,
                                         total: Number(qnt) * Number(dividend.price),
-                                    }, trx);
+                                    }, trx, {
+                                        investmentId: investment.id,
+                                        brokerId,
+                                        dateBasis: dividend.dateBasis,
+                                        dueDate: dividend.dueDate,
+                                        type: dividend.type,
+                                    });
                                     logger.info(`Auto created dividend, investment: ${investment.name}, broker: ${transaction.broker.name}`);
                                 }));
                             }

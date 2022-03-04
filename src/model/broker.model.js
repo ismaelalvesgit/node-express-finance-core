@@ -50,6 +50,16 @@ export const findAll = (options, trx) => {
 };
 
 /**
+ * @param {Broker} where 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findOne = (where, trx) => {
+    const query = knex(TABLE_NAME).first().where(where);
+    return transacting(query, trx);
+};
+
+/**
  * @param {Broker} data 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}

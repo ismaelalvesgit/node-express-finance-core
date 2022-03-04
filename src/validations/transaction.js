@@ -28,11 +28,6 @@ export const createTransactionSchema = joi.object({
         category: joi.string().valid(...Object.values(categoryType)).required(),
         type: joi.string().valid(...Object.keys(transactionType)).required(),
         negotiationDate: joi.date().required(),
-        dueDate: joi.when("type", {
-            is: transactionType.RENT, then: joi.date().required()
-        }).when("type", {
-            not: transactionType.RENT, then: joi.date().optional()
-        }),
         brokerage: joi.number().integer().unsafe().positive().min(1),
         fees: joi.number().integer().unsafe().positive().min(1),
         taxes: joi.number().integer().unsafe().positive().min(1),

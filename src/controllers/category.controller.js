@@ -6,7 +6,7 @@ import { delCache } from "../utils/cache";
 
 export const findOne = catchAsync(async (req, res) =>{
     const where = {id: req.params.id};
-    const [ data ] = await categoryService.findAll(where);
+    const data = await categoryService.findOne(where);
     if(!data){
         throw new NotFound({code: "Category"});
     }

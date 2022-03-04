@@ -10,7 +10,6 @@ export const selectDefault = [
     "id",
     "type",
     "negotiationDate",
-    "dueDate",
     "brokerage",
     "fees",
     "taxes",
@@ -27,7 +26,6 @@ export const selectDefault = [
  * @property {Number} id
  * @property {import('../enum/transactionType')} type
  * @property {Date} negotiationDate
- * @property {Date} dueDate
  * @property {Number} brokerage
  * @property {Number} fees
  * @property {Number} taxes
@@ -74,7 +72,7 @@ export const findAll = (options, trx) => {
             tableName = Object.keys(JSON.parse(options?.where))[0];
             value = Object.values(JSON.parse(options?.where))[0];
         }
-        query.where(`${TABLE_NAME}.${tableName}`, "like", `%${value}%`);
+        query.where(`${TABLE_NAME}.${tableName}`, "like", `${value}`);
     }
     if (options?.sortBy) {
         query.orderBy(`${TABLE_NAME}.${options.sortBy}`, options.orderBy || "asc");
@@ -82,13 +80,13 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
-
+    
     return transacting(query, trx);
 };
 
 /**
  * @param {Transaction} where 
- * @param {Array<string} join 
+ * @param {Array<string>} join 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {Promise<Transaction>}
  */
@@ -127,12 +125,10 @@ export const findOne = (where, join = [], trx) => {
         });
     }
 
-    if (where) {
-        const tableName = Object.keys(where)[0];
-        const value = Object.values(where)[0];
-        query.where(`${TABLE_NAME}.${tableName}`, "like", `%${value}%`);
-    }
-
+    Object.keys(where).forEach((key) => {
+        query.where(`${TABLE_NAME}.${key}`, "=", where[key]);
+    });
+    
     return transacting(query, trx);
 };
 

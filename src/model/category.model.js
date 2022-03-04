@@ -50,6 +50,17 @@ export const findAll = (options, trx) => {
 };
 
 /**
+
+ * @param {Category} where 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findOne = (where, trx) => {
+    const query = knex(TABLE_NAME).first().where(where);
+    return transacting(query, trx);
+};
+
+/**
  * @param {Category} data 
  * @returns {import('knex').Knex.QueryBuilder}
  */

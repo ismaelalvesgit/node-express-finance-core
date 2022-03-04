@@ -1,9 +1,9 @@
 import { format } from "date-fns";
-import logger from "../../logger";
+import logger from "../logger";
 import mysqldump from "mysqldump";
-import env from "../../env";
+import env from "../env";
 import { mkdirSync, existsSync } from "fs";
-import { send } from "../../utils/mail";
+import { send } from "../utils/mail";
 
 const name = "backup-data";
 const group = "day";

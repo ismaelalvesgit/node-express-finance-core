@@ -1,10 +1,10 @@
-import { investmentService, iexcloundService } from "../../services";
-import { investService } from "../../socket/services";
+import { investmentService, iexcloundService } from "../services";
+import { investService } from "../socket/services";
 import { isAfter, parseISO } from "date-fns";
-import knex from "../../db";
-import logger from "../../logger";
-import { categoryIsBR, diffPercent, findBrapiQoute, parseDecimalValue, parseFloatValue, parsePercent } from "../../utils";
-import categoryType from "../../enum/categoryType";
+import knex from "../db";
+import logger from "../logger";
+import { categoryIsBR, diffPercent, findBrapiQoute, parseDecimalValue, parseFloatValue, parsePercent } from "../utils";
+import categoryType from "../enum/categoryType";
 
 const name = "update-investment";
 const group = "minute";
@@ -30,7 +30,7 @@ const command = async () => {
                     const changePercentDay = qoute.regularMarketChangePercent;
                     const volumeDay = parseDecimalValue(qoute.regularMarketVolume);
                     const previousClosePrice = parseDecimalValue(qoute.regularMarketDayLow);
-                    const variationDay = parseDecimalValue(parsePercent(changePercentDay, parseFloatValue(priceDay)));
+                    const variationDay = parseDecimalValue(qoute.regularMarketChange);
                     const changePercentTotal = diffPercent(parseFloatValue(priceDay), priceAverage); 
                     const variationTotal = parseDecimalValue(parsePercent(changePercentTotal, priceAverage) * Number(invest.qnt ?? 0));
                     await investmentService.update({ id: invest.id }, {

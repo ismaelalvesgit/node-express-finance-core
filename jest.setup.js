@@ -14,7 +14,7 @@ beforeAll(async()=>{
 
 afterAll(async ()=>{
     try {
-        await executeSql(`DROP DATABASE IF EXISTS test_${env.db.database}`);
+        // await executeSql(`DROP DATABASE IF EXISTS test_${env.db.database}`);
     } catch (error) {logger.info(error);}
 });
 

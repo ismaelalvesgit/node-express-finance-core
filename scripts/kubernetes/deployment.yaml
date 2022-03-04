@@ -1,0 +1,132 @@
+---
+# Source: finance/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: finance
+  labels: 
+    app: finance
+    version: v1
+  namespace: default
+spec:
+  replicas: 1
+  minReadySeconds: 100
+  strategy:
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 0
+    type: RollingUpdate
+  selector:
+    matchLabels: 
+      app: finance
+      version: v1
+  template:
+    metadata:
+      labels: 
+        app: finance
+        version: v1
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      initContainers:
+      - name: migrations
+        env:
+          - name: APM_SERVER_URL
+            value: "http://kubernetes.docker.internal:8200"
+          - name: APM_SERVICE_NAME
+            value: "finance"
+          - name: DB_DATABASE
+            value: "finance"
+          - name: DB_HOST
+            value: "kubernetes.docker.internal"
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_USERNAME
+            value: "root"
+          - name: NODE_ENV
+            value: "production"
+          - name: REDIS_HOST
+            value: "localhost"
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_PREFIX
+            value: "finance"
+          - name: SERVER_ACTIVE
+            value: "true"
+          - name: SERVER_BODY_LIMIT
+            value: "500kb"
+          - name: SERVER_PORT
+            value: "3000"
+          - name: TIME_ZONE
+            value: "America/Fortaleza"
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: DB_PASSWORD
+        image: "smaelalvesdoc/express-finance:latest"
+        imagePullPolicy: Always
+        command: ["/bin/sh"]
+        args: ["-c", "npm run migrate:up"]
+      containers:
+      - name: finance
+        image: "smaelalvesdoc/express-finance:latest"
+        imagePullPolicy: IfNotPresent
+        env:
+          - name: APM_SERVER_URL
+            value: "http://kubernetes.docker.internal:8200"
+          - name: APM_SERVICE_NAME
+            value: "finance"
+          - name: DB_DATABASE
+            value: "finance"
+          - name: DB_HOST
+            value: "kubernetes.docker.internal"
+          - name: DB_PORT
+            value: "3306"
+          - name: DB_USERNAME
+            value: "root"
+          - name: NODE_ENV
+            value: "production"
+          - name: REDIS_HOST
+            value: "localhost"
+          - name: REDIS_PORT
+            value: "6379"
+          - name: REDIS_PREFIX
+            value: "finance"
+          - name: SERVER_ACTIVE
+            value: "true"
+          - name: SERVER_BODY_LIMIT
+            value: "500kb"
+          - name: SERVER_PORT
+            value: "3000"
+          - name: TIME_ZONE
+            value: "America/Fortaleza"
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: DB_PASSWORD
+        ports:
+          - name: http
+            containerPort: 3000
+            protocol: TCP
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+          initialDelaySeconds: 35
+          timeoutSeconds: 30
+          failureThreshold: 5
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: 100m
+          limits:
+            memory: "500Mi"
+            cpu: 200m
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities: {}
+          privileged: false
+          procMount: Default
+          readOnlyRootFilesystem: false
+          runAsNonRoot: false

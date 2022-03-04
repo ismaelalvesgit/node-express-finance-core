@@ -115,7 +115,6 @@ describe("Broker Router", () => {
                 investmentId: investmentId,
                 type: chance.pickone(Object.keys(transactionType)),
                 negotiationDate: chance.date(),
-                dueDate:chance.date(),
                 qnt: 1,
                 price: 1000,
                 total: 1 * 1000,

@@ -189,8 +189,8 @@ describe("Dividends Router", () => {
             const res = await request(app)
             .post("/dividends")
             .send({
-                investmentId: 1,
-                brokerId: 1,
+                investmentId: 1000,
+                brokerId: 100000,
                 type: chance.pickone(Object.keys(dividendsType)),
                 status: chance.pickone(Object.keys(dividendsStatus)),
                 dueDate: chance.date(),

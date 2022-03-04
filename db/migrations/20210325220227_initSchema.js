@@ -76,7 +76,6 @@ exports.up = async function (knex) {
       .onDelete("CASCADE");
     table.enum("type", Object.keys(transactionType)).notNullable();
     table.date("negotiationDate").notNullable();
-    table.date("dueDate").nullable();
     table.bigInteger("brokerage").defaultTo(0).nullable();
     table.bigInteger("fees").defaultTo(0).nullable();
     table.bigInteger("taxes").defaultTo(0).nullable();

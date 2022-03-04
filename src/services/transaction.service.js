@@ -18,6 +18,16 @@ export const findAll = (where, sortBy, orderBy, limit) => {
 
 /**
  * @param {import("../model/transaction.model").Transaction} where 
+ * @param {Array<string>} join 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findOne = (where, join, trx) => {
+    return transactionModel.findOne(where, join, trx);
+};
+
+/**
+ * @param {import("../model/transaction.model").Transaction} where 
  * @param {string} date
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {Promise<Array<{
@@ -76,7 +86,6 @@ export const create = async (data) => {
             investmentId: investment.id,
             type: data.type,
             negotiationDate: data.negotiationDate,
-            dueDate: data.dueDate,
             qnt,
             price: data.price,
             total,
@@ -139,7 +148,6 @@ export const update = (where, data) => {
             investmentId: investment.id,
             type: data.type,
             negotiationDate: data.negotiationDate,
-            dueDate: data.dueDate,
             qnt,
             price: data.price,
             total,

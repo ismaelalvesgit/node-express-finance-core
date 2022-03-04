@@ -53,7 +53,7 @@ export const findAll = (options, trx) => {
     if (options?.where) {
         let tableName;
         let value;
-        if(typeof options?.where === "object"){
+        if (typeof options?.where === "object") {
             tableName = Object.keys(options?.where)[0];
             value = Object.values(options?.where)[0];
         } else {
@@ -71,11 +71,34 @@ export const findAll = (options, trx) => {
 };
 
 /**
+ * @param {Events} where 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const findOne = (where, trx) => {
+    const query = knex(TABLE_NAME)
+        .first()
+        .select([
+            knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
+            ...selectDefault.map((select) => {
+                return `${TABLE_NAME}.${select}`;
+            })
+        ])
+        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
+
+    Object.keys(where).forEach((key) => {
+        query.where(`${TABLE_NAME}.${key}`, "=", where[key]);
+    });
+    
+    return transacting(query, trx);
+};
+
+/**
  * @param {Dividends} data 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
- export const create = (data, trx) => {
+export const create = (data, trx) => {
     const query = knex(TABLE_NAME)
         .insert(data);
     return transacting(query, trx);

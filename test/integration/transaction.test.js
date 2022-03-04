@@ -8,6 +8,7 @@ import categoryType from "../../src/enum/categoryType";
 import * as transactionModel from "../../src/model/transaction.model";
 import * as investmentService from "../../src/services/investment.service";
 
+/* eslint-disable no-import-assign */
 const chance = new  Chance();
 describe("Transaction Router", () => {
     
@@ -35,7 +36,6 @@ describe("Transaction Router", () => {
                 investmentId,
                 type: chance.pickone(Object.keys(transactionType)),
                 negotiationDate: chance.date(),
-                dueDate: chance.date(),
                 qnt: 1,
                 price: 1000,
                 total: 1 * 1000,
@@ -49,28 +49,12 @@ describe("Transaction Router", () => {
         });
         
         it("find", async() => {
-            const [ brokerId ] = await knex("broker").insert({
-                name: chance.name()
-            });
-            const [ categoryId ] = await knex("category").insert({
-                name: chance.name()
-            });
-            const [ investmentId ] = await knex("investment").insert({
-                name: chance.name(),
-                categoryId
-            });
-            await knex("transaction").insert({
-                brokerId,
-                investmentId,
-                type: chance.pickone(Object.keys(transactionType)),
-                negotiationDate: chance.date(),
-                dueDate:chance.date(),
-                qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
-            });
+            transactionModel.findAll = jest.fn().mockResolvedValue([{
+                id: chance.integer(),
+                type: chance.string(),
+            }]);
             const res = await request(app)
-            .get(`/transaction?sortBy=id&orderBy=asc&limit=1&search={"investmentId":"${investmentId}"}`)
+            .get(`/transaction?sortBy=id&orderBy=asc&limit=1&search={"investmentId":"${chance.integer()}"}`)
             .expect(StatusCodes.OK);
             expect(res.body[0]).toHaveProperty("type");
             expect(res.body[0]).toHaveProperty("id");
@@ -109,7 +93,6 @@ describe("Transaction Router", () => {
                 investmentId,
                 type: chance.pickone(Object.keys(transactionType)),
                 negotiationDate: chance.date(),
-                dueDate:chance.date(),
                 qnt: 1,
                 price: 1000,
                 total: 1 * 1000,
@@ -132,15 +115,12 @@ describe("Transaction Router", () => {
         });
         
         it("delete", async() => {
-            // eslint-disable-next-line no-import-assign
             transactionModel.findOne = jest.fn().mockResolvedValue({
                 investment: {
                     id: chance.string({numeric: true})
                 }
             });
-            // eslint-disable-next-line no-import-assign
             transactionModel.del = jest.fn().mockReturnThis();
-            // eslint-disable-next-line no-import-assign
             investmentService.updateBalance = jest.fn().mockResolvedValue(1);
 
             await request(app)
@@ -151,6 +131,8 @@ describe("Transaction Router", () => {
     
     describe("erro", ()=>{
         it("findOne", async() => {
+            transactionModel.findOne = jest.fn().mockResolvedValue(null);
+
             await request(app)
             .get(`/transaction/${chance.integer()}`)
             .expect(StatusCodes.NOT_FOUND);
@@ -202,7 +184,6 @@ describe("Transaction Router", () => {
                 investmentId,
                 type: chance.pickone(Object.keys(transactionType)),
                 negotiationDate: chance.date(),
-                dueDate:chance.date(),
                 qnt: 1,
                 price: 1000,
                 total: 1 * 1000,
@@ -225,7 +206,6 @@ describe("Transaction Router", () => {
         });
         
         it("delete", async() => {
-            // eslint-disable-next-line no-import-assign
             transactionModel.findOne = jest.fn().mockResolvedValue(null);
 
             await request(app)
@@ -236,3 +216,4 @@ describe("Transaction Router", () => {
     });
     
 });
+/* eslint-enable no-import-assign */

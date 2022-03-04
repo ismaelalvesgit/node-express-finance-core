@@ -4,7 +4,7 @@ import catchAsync from "../utils/catchAsync";
 
 export const findOne = catchAsync(async (req, res) =>{
     const where = {id: req.params.id};
-    const [ data ] = await eventsService.findAll(where);
+    const data = await eventsService.findOne(where);
     if(!data){
         throw new NotFound({code: "Events"});
     }

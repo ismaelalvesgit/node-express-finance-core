@@ -1,7 +1,7 @@
-import { investmentService } from "../../services";
-import logger from "../../logger";
-import { send } from "../../utils/mail";
-import env from "../../env";
+import { investmentService } from "../services";
+import logger from "../logger";
+import { send } from "../utils/mail";
+import env from "../env";
 
 const name = "notify-price-day";
 const group = "day";

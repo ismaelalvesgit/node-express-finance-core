@@ -3,7 +3,7 @@ namespace:
 replicaCount: 1
 
 image:
-  repository: ismaelalvesdoc/express-example
+  repository: smaelalvesdoc/express-finance
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -12,7 +12,7 @@ service:
   type: NodePort
 
 env:
-  NODE_ENV: development
+  NODE_ENV: production
   TIME_ZONE: America/Fortaleza
   SERVER_ACTIVE: true
   SERVER_PORT: 3000
@@ -40,6 +40,70 @@ resources:
   limits:
     memory: "500Mi"
     cpu: 200m
+
+jobs:
+  - name: update-investment
+    schedule: "*/1 * * * *"
+    namespace:
+    labels: 
+      jobgroup: "minute"  
+    command: update-divideds
+
+  - name: update-divideds
+    schedule: "*/1 * * * *"
+    namespace:
+    labels: 
+      jobgroup: "minute"  
+    command: update-divideds
+
+  - name: async-divideds-fiis
+    schedule: "0 10 * * 1-5"
+    namespace:
+    labels: 
+      jobgroup: "day"  
+    command: async-divideds-fiis
+
+  - name: async-divideds-acao
+    schedule: "0 10 * * 1-5"
+    namespace:
+    labels: 
+      jobgroup: "day"  
+    command: async-divideds-acao
+
+  - name: async-divideds-stoke
+    schedule: "0 10 * * 1-5"
+    namespace:
+    labels: 
+      jobgroup: "day"  
+    command: async-divideds-stoke
+
+  - name: async-events-fiis
+    schedule: "0 10 * * 1-5"
+    namespace:
+    labels: 
+      jobgroup: "day"  
+    command: async-events-fiis
+
+  - name: async-events-acao
+    schedule: "0 10 * * 1-5"
+    namespace:
+    labels: 
+      jobgroup: "day"  
+    command: async-events-acao
+
+  - name: backup-data
+    schedule: "0 20 * * *"
+    namespace:
+    labels: 
+      jobgroup: "day"  
+    command: backup-data
+
+  - name: notify-price-day
+    schedule: "10 18 * * 1-5"
+    namespace:
+    labels: 
+      jobgroup: "day"  
+    command: notify-price-day
 
 autoscaling:
   enabled: true
