@@ -58,6 +58,9 @@ export default {
         autoBackup: process.env.BACKUP_DB === "true"
     },
     system:{
+        fees: {
+            outsidePercent: parseInt(process.env.FEES_OUTSIDE_PERCENT || "30")
+        },
         files:{
             default: url+"/static/uploads/system/default.png",
             uploadsPath: "./src/public/uploads/",

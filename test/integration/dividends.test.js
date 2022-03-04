@@ -36,7 +36,8 @@ describe("Dividends Router", () => {
                 dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000,
-                total: 2 * 2000
+                total: 2 * 2000,
+                fees: 0,
             });
 
             const res = await request(app)
@@ -66,7 +67,8 @@ describe("Dividends Router", () => {
                 dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000,
-                total: 2 * 2000
+                total: 2 * 2000,
+                fees: 0
             });
 
             const res = await request(app)
@@ -97,7 +99,8 @@ describe("Dividends Router", () => {
                 dueDate: chance.date(),
                 dateBasis: chance.date(),
                 qnt: 2,
-                price: 2000
+                price: 2000,
+                fees: 0
             })
             .expect(StatusCodes.CREATED);
             expect(res.body).toBeDefined();
@@ -123,7 +126,8 @@ describe("Dividends Router", () => {
                 dateBasis: chance.date(),
                 qnt: 2,
                 price: 2000,
-                total: 2 * 2000
+                total: 2 * 2000,
+                fees: 0
             });
 
             const res = await request(app)

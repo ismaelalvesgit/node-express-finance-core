@@ -110,6 +110,7 @@ exports.up = async function (knex) {
     table.integer("qnt").notNullable();
     table.bigInteger("price").notNullable();
     table.bigInteger("total").notNullable();
+    table.bigInteger("fees").nullable().defaultTo(0);
     createdAt(knex, table);
     updatedAt(knex, table);
   });

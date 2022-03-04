@@ -2,6 +2,7 @@ import { dividendsService, investmentService, transactionService,  iexcloundServ
 import knex from "../db";
 import logger from "../logger";
 import env from "../env";
+import { parsePercent } from "../utils";
 
 const name = "async-divideds-stoke";
 const group = "day";
@@ -22,6 +23,7 @@ const command = async () => {
                             if(dividend.dueDate && dividend.price){
                                 await Promise.all(transactions.map(async(transaction)=>{
                                     const { qnt, broker: { id: brokerId } } = transaction;
+                                    const total = Number(qnt) * Number(dividend.price);
                                     await dividendsService.findOrCreate({
                                         investmentId: investment.id,
                                         brokerId,
@@ -30,7 +32,8 @@ const command = async () => {
                                         price: dividend.price,
                                         qnt,
                                         type: dividend.type,
-                                        total: Number(qnt) * Number(dividend.price),
+                                        total,
+                                        fees: parsePercent(env.system.fees.outsidePercent, total)
                                     }, trx, {
                                         investmentId: investment.id,
                                         brokerId,

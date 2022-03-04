@@ -15,6 +15,7 @@ export const selectDefault = [
     "qnt",
     "price",
     "total",
+    "fees",
     "createdAt",
     "updatedAt",
 ];
