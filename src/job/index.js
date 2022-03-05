@@ -15,7 +15,7 @@ if(env.env === "development"){
         );
     });
 }else{
-    logger.info("Not Registered service JOB batch is OFF NODE_ENV is not development");
+    logger.info(`Not Registered service JOB batch is OFF NODE_ENV is not development ${env.env}`);
 }
 
 logger.info(`Running ${jobs.length} jobs`);
