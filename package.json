@@ -64,6 +64,7 @@
         "winston": "^3.4.0",
         "winston-daily-rotate-file": "^4.5.5",
         "x-xss-protection": "^2.0.0",
+        "xml-js": "^1.6.11",
         "yamljs": "^0.3.0"
     },
     "devDependencies": {

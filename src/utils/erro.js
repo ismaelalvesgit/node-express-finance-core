@@ -35,6 +35,12 @@ export class Brapi extends CustomError {
     }
 }
 
+export class Currencyapi extends CustomError {
+    constructor({statusCode, message }){
+        super(statusCode, message, "currencyapi");
+    }
+}
+
 export class YahooApi extends CustomError {
     constructor({statusCode, message }){
         super(statusCode, message, "yahoo");

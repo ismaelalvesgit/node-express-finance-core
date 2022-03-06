@@ -8,6 +8,9 @@ $(document).ready(function(){
     socket.on('/update-investment', (newInvestment)=>{
         console.log(newInvestment)
     })
+    socket.on('/update-currency', (newCurrency)=>{
+        console.log(newCurrency)
+    })
 
     // timer arguments: 
     //   #1 - time of animation in mileseconds, 

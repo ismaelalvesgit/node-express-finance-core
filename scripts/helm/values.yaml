@@ -43,14 +43,21 @@ resources:
 
 jobs:
   - name: update-investment
-    schedule: "*/1 * * * *"
+    schedule: "*/10 9-20 * * 1-5"
     namespace:
     labels: 
       jobgroup: "minute"  
     command: update-divideds
 
+  - name: notify-currency
+    schedule: "*/30 * * * * *"
+    namespace:
+    labels: 
+      jobgroup: "second"  
+    command: notify-currency
+
   - name: update-divideds
-    schedule: "*/1 * * * *"
+    schedule: "0 10 * * 1-5"
     namespace:
     labels: 
       jobgroup: "minute"  

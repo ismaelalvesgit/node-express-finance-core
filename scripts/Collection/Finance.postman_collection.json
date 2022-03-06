@@ -884,6 +884,177 @@
 			]
 		},
 		{
+			"name": "Currency",
+			"item": [
+				{
+					"name": "Currency - FindAll",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/currency",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Currency - FindAvaliable",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/currency/available",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"currency",
+								"available"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Currency - Code",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/currency/code",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"currency",
+								"code"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Currency - Create",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":\"BTC-BRL\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3000/currency",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Currency - Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/broker/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"broker",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Dividends",
 			"item": [
 				{

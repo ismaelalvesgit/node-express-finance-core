@@ -24,5 +24,7 @@
 	"InternalServer.Dividends": "Falha ao Modificar o Dividendo 😞",
 	"Investment.create": "Investimento cadastrado com sucesso!! 😆",
 	"Investment.update": "Investimento atualizado com sucesso!!",
-	"InternalServer.Investment": "Falha ao Modificar o Investimento 😞"
+	"InternalServer.Investment": "Falha ao Modificar o Investimento 😞",
+	"Currency.create": "Currency criado com sucesso!!!",
+	"InternalServer.Currency": "Falha ao Modificar o Currency 😞"
 }

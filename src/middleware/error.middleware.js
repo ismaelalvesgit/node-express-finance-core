@@ -1,6 +1,7 @@
 import {
     BadRequest,
     Brapi,
+    Currencyapi,
     InternalServer,
     NewsApi,
     NotFound,
@@ -119,6 +120,10 @@ export default function errorHandler(error, req, res, next) {
             break;
         }
         case Brapi: {
+            res.status(error.statusCode || 400).json([{ message: error.message }]);
+            break;
+        }
+        case Currencyapi: {
             res.status(error.statusCode || 400).json([{ message: error.message }]);
             break;
         }

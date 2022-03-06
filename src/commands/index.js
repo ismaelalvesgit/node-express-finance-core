@@ -7,6 +7,7 @@ import * as asyncEventsFiis from "./asyncEventsFiis";
 import * as asyncEventsAcao from "./asyncEventsAcao";
 import * as backupData from "./backupData";
 import * as notifyPriceDay from "./notifyPriceDay";
+import * as notifyPriceCurrency from "./notifyPriceCurrency";
 
 /**
  * @typedef Commands
@@ -30,5 +31,6 @@ commands.push(asyncEventsFiis);
 commands.push(asyncEventsAcao);
 commands.push(backupData);
 commands.push(notifyPriceDay);
+commands.push(notifyPriceCurrency);
 
 export default commands;

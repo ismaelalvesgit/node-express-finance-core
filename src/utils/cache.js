@@ -8,7 +8,7 @@ import redisClient from "../redis";
  * @param {number} timeExp 
  * @returns {Promise<"OK">}
  */
-export const setCache = (key, value, timeExp) => {
+export const setCache = (key, value, timeExp = 86400) => {
     if (env.redis.host) {
         return redisClient.set(key, value, "EX", timeExp);
     }
@@ -22,7 +22,11 @@ export const setCache = (key, value, timeExp) => {
 export const getCache = async (key) => {
     if (env.redis.host) {
         const data = await redisClient.get(key);
-        return data ? JSON.parse(data) : null;
+        try {
+            return JSON.parse(data);
+        } catch (error) {
+            return data;
+        }
     }
 };
 

@@ -8,7 +8,7 @@ metadata:
   labels:
     jobgroup: minute
 spec:
-  schedule: "*/1 * * * *"
+  schedule: "*/10 9-20 * * 1-5"
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 3
@@ -32,12 +32,41 @@ spec:
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
+  name: "finance-notify-currency-job"
+  namespace: default
+  labels:
+    jobgroup: minute
+spec:
+  schedule: "*/30 * * * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  successfulJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      parallelism: 1
+      backoffLimit: 4
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: "update-investment-job"
+              image: "smaelalvesdoc/express-finance:latest"
+              imagePullPolicy: Always
+              command:
+                - babel-node
+                - cron
+                - notify-currency
+---
+# Source: finance/templates/cronjob.yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
   name: "finance-update-divideds-job"
   namespace: default
   labels:
     jobgroup: minute
 spec:
-  schedule: "*/1 * * * *"
+  schedule: "*0 10 * * 1-5"
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 1
   successfulJobsHistoryLimit: 3

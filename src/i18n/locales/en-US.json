@@ -14,8 +14,8 @@
 	"Category.create": "Category Created",
 	"Category.update": "Category update sucess",
 	"InternalServer.Category": "Failed to Modify Category 😞",
-	"Broker.create": "Category Created",
-	"Broker.update": "Category update sucess",
+	"Broker.create": "Broker Created",
+	"Broker.update": "Broker update sucess",
 	"InternalServer.Broker": "Failed to Modify Broker 😞",
 	"Transaction.create": "Transaction successful!! 😆",
 	"Transaction.update": "Transaction update sucess",
@@ -25,5 +25,7 @@
 	"InternalServer.Dividends": "Failed to Modify Investment 😞",
 	"Investment.create": "Investment successful!! 😆",
 	"Investment.update": "Investment update sucess",
-	"InternalServer.Investment": "Failed to Modify Investment 😞"
+	"InternalServer.Investment": "Failed to Modify Investment 😞",
+	"Currency.create": "Currency created",
+	"InternalServer.Currency": "Failed to Modify Currency 😞"
 }

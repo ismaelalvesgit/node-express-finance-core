@@ -29,6 +29,8 @@ tags:
     description: Events namespace
   - name: News
     description: News namespace
+  - name: Currency
+    description: Currency namespace
   - name: Investment
     description: Investment namespace
   - name: System
@@ -67,7 +69,7 @@ paths:
         500: # status code
           $ref: "#/components/responses/internal"
    
-  # Broker       
+  # Category       
   /category:
     get:
       tags:
@@ -363,6 +365,79 @@ paths:
       responses:
         204: # status code
           description: Broker deletado com sucesso.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+  
+  # Currency
+  /currency/available:
+    get:
+      tags:
+        - Currency
+      summary: Retorna a lista completa de combinações.
+      responses:
+        200: # status code
+          $ref: "#/components/responses/currencyCode"
+          
+  /currency/code:
+    get:
+      tags:
+        - Currency
+      summary: Retorna a lista de nome das moedas.
+      responses:
+        200: # status code
+          $ref: "#/components/responses/currencyCode"
+          
+  /currency:
+    get:
+      tags:
+        - Currency
+      summary: Retorna a lista de currency salvos.
+      responses:
+        200: # status code
+          $ref: "#/components/responses/currency"
+
+    post:
+      tags:
+        - Currency
+      summary: Criação de brokers.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/currency"
+      responses:
+        200: # status code
+          description: Cadastro de currency.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Currency criado com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /currency/{id}:
+    delete:
+      tags:
+        - Currency
+      summary: Deleta um currency.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do currency
+          schema:
+            type: string
+            example: "1"
+      responses:
+        204: # status code
+          description: currency deletado com sucesso.
         400: # status code
           $ref: "#/components/responses/badRequest"
         404: # status code
@@ -1286,6 +1361,43 @@ components:
                   type: string
                   example: "2021-03-31 22:34:36.476"
 
+    currency:
+      description: lista de currency.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 1
+                code:
+                  type: string
+                  example: "USD-BRL"
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+    
+    currencyCode:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 1
+                code:
+                  type: string
+                  example: "string"
+                  
     broker:
       description: lista de brokers.
       content:
@@ -1710,6 +1822,15 @@ components:
         name:
           type: string
           example: "Ismael Alves"
+    
+    currency:
+      type: object
+      required:
+        - code
+      properties:
+        name:
+          type: string
+          example: "USD-BRL"
     
     TransactionTypeEnum:
       type: string
