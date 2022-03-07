@@ -18,6 +18,12 @@ export const code = catchAsync(async (req, res) =>{
     res.json(data);
 });
 
+export const last = catchAsync(async (req, res) =>{
+    const currency = await currencyService.findAll();
+    const data = await currencyApiService.getCurrency(currency.map(e => e.code));
+    res.json(data);
+});
+
 export const create = catchAsync(async(req, res, next) =>{
     const data = req.body;
     await currencyApiService.getCurrency([data.code]);

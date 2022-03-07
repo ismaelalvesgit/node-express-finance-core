@@ -373,6 +373,15 @@ paths:
           $ref: "#/components/responses/internal"
   
   # Currency
+  /currency/last:
+    get:
+      tags:
+        - Currency
+      summary: Retorna a lista de acompanhamento selecionada.
+      responses:
+        200: # status code
+          $ref: "#/components/responses/currencyLast"
+          
   /currency/available:
     get:
       tags:
@@ -1361,6 +1370,52 @@ components:
                   type: string
                   example: "2021-03-31 22:34:36.476"
 
+    currencyLast:
+      description: lista de currency.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: USDBRL
+                code:
+                  type: string
+                  example: "USD"
+                codein:
+                  type: string
+                  example: "BRL"
+                name:
+                  type: string
+                  example: "Dólar Americano/Real Brasileiro"
+                high:
+                  type: string
+                  example: "5.1147"
+                low:
+                  type: string
+                  example: "5.029"
+                varBid:
+                  type: string
+                  example: "0.0499"
+                pctChange:
+                  type: string
+                  example: "0.99"
+                bid:
+                  type: string
+                  example: "5.1115"
+                ask:
+                  type: string
+                  example: "5.1124"
+                timestamp:
+                  type: string
+                  example: "1646688600"
+                createDate:
+                  type: string
+                  example: "2022-03-07 18:30:00"
+                  
     currency:
       description: lista de currency.
       content:
@@ -1384,6 +1439,7 @@ components:
                   example: "2021-03-31 22:34:36.476"
     
     currencyCode:
+      description: ''
       content:
         application/json:
           schema:

@@ -4,7 +4,7 @@ import logger from "../logger";
 
 const name = "notify-currency";
 const group = "second";
-const schedule = "*/30 * * * * 1-5";
+const schedule = "*/30 * 9-19 * * 1-5";
 const deadline = 180;
 
 const command = async () => {

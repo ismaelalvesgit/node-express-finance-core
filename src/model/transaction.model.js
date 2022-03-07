@@ -61,7 +61,7 @@ export const findAll = (options, trx) => {
         ])
         .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
         .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
-        .innerJoin("category", "category.id", "=", "investment.id");
+        .innerJoin("category", "category.id", "=", "investment.categoryId");
     if (options?.where) {
         let tableName;
         let value;
@@ -113,7 +113,7 @@ export const findOne = (where, join = [], trx) => {
                     ]);
                     break;
                 case "category":
-                    query.innerJoin("category", "category.id", "=", "investment.id");
+                    query.innerJoin("category", "category.id", "=", "investment.categoryId");
                     query.select([
                         knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
                     ]);

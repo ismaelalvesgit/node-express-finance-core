@@ -1,7 +1,7 @@
 const prefix = "/currency";
 import express from "express";
 const router = express.Router();
-import { find, available, code, del, create } from "../controllers/currency.controller";
+import { find, available, code, last, del, create } from "../controllers/currency.controller";
 import verify from "../middleware/verifiy.middleware";
 import { createCurrencySchema } from "../validations/currency";
 
@@ -17,6 +17,12 @@ router.route("/available")
  * */
 router.route("/code")
     .get(code);
+
+/**
+ * GET - /currency/last
+ * */
+router.route("/last")
+    .get(last);
 
 /**
 * GET - /currency

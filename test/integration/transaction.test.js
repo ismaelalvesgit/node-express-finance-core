@@ -49,12 +49,28 @@ describe("Transaction Router", () => {
         });
         
         it("find", async() => {
-            transactionModel.findAll = jest.fn().mockResolvedValue([{
-                id: chance.integer(),
-                type: chance.string(),
-            }]);
+            const [ brokerId ] = await knex("broker").insert({
+                name: chance.name()
+            });
+            const [ categoryId ] = await knex("category").insert({
+                name: chance.name()
+            });
+            const [ investmentId ] = await knex("investment").insert({
+                name: chance.name(),
+                categoryId
+            });
+            await knex("transaction").insert({
+                brokerId,
+                investmentId,
+                type: chance.pickone(Object.keys(transactionType)),
+                negotiationDate: chance.date(),
+                qnt: 1,
+                price: 1000,
+                total: 1 * 1000,
+            });
+
             const res = await request(app)
-            .get(`/transaction?sortBy=id&orderBy=asc&limit=1&search={"investmentId":"${chance.integer()}"}`)
+            .get(`/transaction?sortBy=id&orderBy=asc&limit=1&search={"investmentId":"${investmentId}"}`)
             .expect(StatusCodes.OK);
             expect(res.body[0]).toHaveProperty("type");
             expect(res.body[0]).toHaveProperty("id");

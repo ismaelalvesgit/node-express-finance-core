@@ -23,8 +23,8 @@ export const findAllTransactionSchema = joi.object({
 
 export const createTransactionSchema = joi.object({
     body: joi.object({
-        investment: joi.string().required(),
-        broker: joi.string().required(),
+        investment: joi.string().required().uppercase(),
+        broker: joi.string().required().uppercase(),
         category: joi.string().valid(...Object.values(categoryType)).required(),
         type: joi.string().valid(...Object.keys(transactionType)).required(),
         negotiationDate: joi.date().required(),

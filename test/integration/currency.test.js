@@ -15,6 +15,18 @@ describe("Currency Router", () => {
 
     describe("sucess", ()=>{
 
+        it("last", async() => {
+            await knex("currencyFavorite").insert({
+                code: "BTC-BRL"
+            });
+
+            const res = await request(app)
+            .get("/currency/last")
+            .expect(StatusCodes.OK);
+            expect(res.body[0]).toHaveProperty("code");
+            expect(res.body[0]).toHaveProperty("id");
+        });
+
         it("available", async() => {
             const res = await request(app)
             .get("/currency/available")

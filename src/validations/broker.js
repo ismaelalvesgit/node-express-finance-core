@@ -21,12 +21,12 @@ export const findAllBrokerSchema = joi.object({
 
 export const createBrokerSchema = joi.object({
     body: joi.object({
-        name: joi.string().required(),
+        name: joi.string().required().uppercase(),
     }).required(),
 });
 
 export const updateBrokerSchema = joi.object({
     body: joi.object({
-        name: joi.string().required(),
+        name: joi.string().required().uppercase(),
     }),
 });

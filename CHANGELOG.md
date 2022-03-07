@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado nova rota /currency
 - Adicionado novo job para colhimento de valores de moedas
 - Adicionado nova estrutura de jobs
 - Adicionado broker nos dividendos
