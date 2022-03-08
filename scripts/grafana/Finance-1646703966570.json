@@ -575,6 +575,20 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Preço QYLD"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -800,11 +814,12 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "text",
+            "mode": "fixed"
           },
           "custom": {
             "align": "center",
-            "displayMode": "auto",
+            "displayMode": "color-text",
             "filterable": true
           },
           "mappings": [],
@@ -812,7 +827,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
               }
             ]
@@ -896,6 +911,28 @@
               {
                 "id": "decimals",
                 "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
               }
             ]
           },
@@ -912,6 +949,28 @@
               {
                 "id": "decimals",
                 "value": 2
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "red",
+                      "value": null
+                    },
+                    {
+                      "color": "green",
+                      "value": 0
+                    }
+                  ]
+                }
               }
             ]
           },
@@ -958,8 +1017,8 @@
         "showHeader": true,
         "sortBy": [
           {
-            "desc": true,
-            "displayName": "Total de Aportes"
+            "desc": false,
+            "displayName": "Lucro/Prejuízo"
           }
         ]
       },
@@ -1059,7 +1118,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\ninv.name as \"Código\",\ntran.price / 100 as \"Preço\",\nDATE_FORMAT(tran.negotiationDate, \"%d/%m/%y\") as \"Data\"\nFROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\nwhere tran.id in (SELECT max(id) from finance.transaction group by investmentId) and \nnegotiationDate > last_day(now() - INTERVAL 2 MONTH)\ngroup by inv.id\n",
+          "rawSql": "SELECT\ninv.name as \"Código\",\ntran.price / 100 as \"Preço\",\nDATE_FORMAT(tran.negotiationDate, \"%d/%m/%y\") as \"Data\"\nFROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\nwhere tran.id in (SELECT max(id) from finance.transaction group by investmentId) and \nnegotiationDate > last_day(now() - INTERVAL 1 MONTH)\ngroup by inv.id\n",
           "refId": "A",
           "select": [
             [
@@ -1081,7 +1140,7 @@
           ]
         }
       ],
-      "title": "Últimas compras (2M)",
+      "title": "Últimas compras (1M)",
       "type": "table"
     },
     {
@@ -1489,7 +1548,7 @@
           "group": [],
           "metricColumn": "description",
           "rawQuery": true,
-          "rawSql": "SELECT\n  even.dateDelivery AS \"time\",\n  even.description AS metric,\n  even.link,\n  inv.name\nFROM finance.events even\ninner join finance.investment inv on inv.id = even.investmentId\nORDER BY even.dateDelivery",
+          "rawSql": "SELECT\n  DATE_ADD(even.dateReference, INTERVAL 1 DAY) AS \"time\",\n  even.description AS metric,\n  even.link,\n  inv.name\nFROM finance.events even\ninner join finance.investment inv on inv.id = even.investmentId\nORDER BY even.dateReference",
           "refId": "A",
           "select": [
             [
@@ -1586,7 +1645,7 @@
           "hide": false,
           "metricColumn": "total",
           "rawQuery": true,
-          "rawSql": "SELECT\n   DATE_FORMAT(t.negotiationDate, \"%m/%y\") as \"Date\",\n    (select sum(t2.total / 100) from finance.transaction t2 where t2.negotiationDate <= LAST_DAY(t.negotiationDate)) as \"Total Compra\"\nfrom finance.transaction t\ngroup by month(t.negotiationDate)\norder by t.negotiationDate asc;",
+          "rawSql": "SELECT\n   DATE_FORMAT(t.negotiationDate, \"%m/%y\") as \"Date\",\n    (select sum(t2.total / 100) from finance.transaction t2 where t2.negotiationDate <= LAST_DAY(t.negotiationDate)) as \"Total Compra\"\nfrom finance.transaction t\ngroup by DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by t.negotiationDate asc;",
           "refId": "A",
           "select": [
             [
@@ -2135,7 +2194,7 @@
           "hide": false,
           "metricColumn": "total",
           "rawQuery": true,
-          "rawSql": "SELECT\n   DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n  sum(total / 100) AS \"Total Compra\"\nFROM finance.transaction\nwhere `type` = \"BUY\"\nGROUP BY month(negotiationDate)\norder by negotiationDate asc",
+          "rawSql": "SELECT\n   DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n  sum(total / 100) AS \"Total Compra\"\nFROM finance.transaction\nwhere `type` = \"BUY\"\nGROUP BY  DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by negotiationDate asc",
           "refId": "A",
           "select": [
             [
@@ -2196,13 +2255,13 @@
     "list": []
   },
   "time": {
-    "from": "2022-03-02T19:36:59.941Z",
-    "to": "2022-03-03T00:56:59.941Z"
+    "from": "now-5m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Finance",
   "uid": "u6pvSDYnk",
-  "version": 25,
+  "version": 35,
   "weekStart": ""
 }
