@@ -1,12 +1,10 @@
 import axios from "axios";
-import cheerio from "cheerio";
 import { investmentService, eventsService } from "../services";
 import knex from "../db";
 import categoryType from "../enum/categoryType";
 import logger from "../logger";
 import env from "../env";
-import { format } from "date-fns";
-import { stringToDate } from "../utils";
+import FormData from "form-data";
 
 const name = "async-events-acao";
 const group = "day";
@@ -15,38 +13,40 @@ const deadline = 180;
 
 const command = async () => {
     if(env.yieldapi){
-        const investments = await investmentService.findAll(null, {"category.name": categoryType.ACAO});
+        const investments = await investmentService.findAll({"category.name": categoryType.ACAO});
         await knex.transaction(async (trx) => {
             await Promise.all(investments.map(async(investment)=>{
                 try {
-                    const { data } = await axios.default.get(`${env.yieldapi}/acoes/${investment.name.toLowerCase()}`);
-                    if(data){
-                        const $ = cheerio.load(data);
-                        const events = JSON.parse($(".documents > .list").attr()["data-page"]);
-                        await Promise.all(events.map(async(event) => {
-                            if(event.status === 0){
-                                try {
-                                    let dateReference = format(new Date(), "yyyy-MM-dd"); 
-                                    let dateDelivery = format(new Date(), "yyyy-MM-dd"); 
-                                    try {
-                                        dateReference = format(stringToDate(event.dataReferencia, "dd/MM/yyyy","/"), "yyyy-MM-dd");
-                                        dateDelivery = format(stringToDate(event.dataEntrega, "dd/MM/yyyy","/"), "yyyy-MM-dd");
-                                    // eslint-disable-next-line no-empty
-                                    } catch (error) {}
-                                    
+                    const formData = new FormData();
+                    formData.append("year", new Date().getFullYear());
+                    formData.append("code", investment.name);
+                    const { data } = await axios.post(`${env.yieldapi}/acao/getassetreports`, formData, {
+                        headers: formData.getHeaders()
+                    });
+
+                    if(data.data){
+                        await Promise.all(data.data.map(async(event) => {
+                            try {
+                                const check = await eventsService.findOne({
+                                    investmentId: investment.id,
+                                    link: event.linkPdf
+                                }, trx);
+
+                                if(!check){
                                     await eventsService.create({
                                         investmentId: investment.id,
-                                        assetMainId: event.id,
-                                        dateReference,
-                                        dateDelivery,
-                                        link: event.link,
-                                        description: event.description,
+                                        assetMainId: new Date().getTime(),
+                                        dateReference: event.dataReferencia,
+                                        dateDelivery: new Date(),
+                                        link: event.linkPdf,
+                                        description: event.assunto || event.tipo,
                                     }, trx);
-                                } catch (error) {
-                                    if(error.code !== "ER_DUP_ENTRY"){
-                                        logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
-                                    }   
+                                    logger.info(`Auto created event, investment: ${investment.name}`);
                                 }
+                            } catch (error) {
+                                if(error.code !== "ER_DUP_ENTRY"){
+                                    logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
+                                }   
                             }
                          }));
                     }

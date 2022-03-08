@@ -17,11 +17,10 @@ export const findStokeAll = (where, sortBy, orderBy, limit) =>{
 
 /**
  * @param {import("../model/investment.model").Investment} where 
- * @param {Object} joinWhere 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findAll = (where, joinWhere, sortBy, orderBy, limit) =>{
-    return investmentModel.findAll({where, sortBy, orderBy, limit, joinWhere});
+export const findAll = (where, sortBy, orderBy, limit) =>{
+    return investmentModel.findAll({where, sortBy, orderBy, limit});
 };
 
 /**

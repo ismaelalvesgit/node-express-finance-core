@@ -15,7 +15,7 @@ const deadline = 180;
 
 const command = async () => {
     if(env.yieldapi){
-        const investments = await investmentService.findAll(null, {"category.name": categoryType.FIIS});
+        const investments = await investmentService.findAll({"category.name": categoryType.FIIS});
         await knex.transaction(async (trx) => {
             await Promise.all(investments.map(async(investment)=>{
                 try {

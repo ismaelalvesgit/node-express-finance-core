@@ -38,6 +38,7 @@
         "ejs": "^3.1.6",
         "elastic-apm-node": "^3.26.0",
         "express": "^4.17.2",
+        "form-data": "^4.0.0",
         "googleapis": "^92.0.0",
         "helmet": "^4.6.0",
         "hide-powered-by": "^1.1.0",

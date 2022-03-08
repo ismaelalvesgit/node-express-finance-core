@@ -129,7 +129,7 @@ exports.up = async function (knex) {
     table.date("dateReference").notNullable();
     table.date("dateDelivery").notNullable();
     table.text("link").notNullable();
-    table.string("description").notNullable();
+    table.text("description").notNullable();
     createdAt(knex, table);
     updatedAt(knex, table);
   });

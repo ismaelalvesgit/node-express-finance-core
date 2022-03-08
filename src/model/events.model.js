@@ -48,7 +48,7 @@ export const findAll = (options, trx) => {
             })
         ])
         .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
-        .orderBy(options.sortBy || "dateReference", options.orderBy || "desc");
+        .orderBy(options.sortBy || `${TABLE_NAME}.dateReference`, options.orderBy || "desc");
 
     if (options?.where) {
         let tableName;
@@ -89,7 +89,7 @@ export const findOne = (where, trx) => {
     Object.keys(where).forEach((key) => {
         query.where(`${TABLE_NAME}.${key}`, "=", where[key]);
     });
-    
+
     return transacting(query, trx);
 };
 

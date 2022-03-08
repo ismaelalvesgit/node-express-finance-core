@@ -5,12 +5,12 @@ import env from "../env";
 
 const name = "notify-price-day";
 const group = "day";
-const schedule = "10 18 * * 1-5";
+const schedule = "30 18 * * 1-5";
 const deadline = 180;
 
 const command = async () => {
-    const priceHigh = await investmentService.findAll(null, null, "changePercentDay", "desc", 3);
-    const priceLow = await investmentService.findAll(null, null, "changePercentDay", "asc", 3);
+    const priceHigh = await investmentService.findAll(null, "changePercentDay", "desc", 3);
+    const priceLow = await investmentService.findAll(null, "changePercentDay", "asc", 3);
     await send({
         to: env.email.notificator,
         subject: "Altas / Baixas do Dia",

@@ -15,7 +15,7 @@ const deadline = 180;
 
 const command = async () => {
     if(env.yieldapi){
-        const investments = await investmentService.findAll(null, {"category.name": categoryType.FIIS});
+        const investments = await investmentService.findAll({"category.name": categoryType.FIIS});
         await knex.transaction(async (trx) => {
             await Promise.all(investments.map(async(investment)=>{
                 try {
@@ -42,6 +42,7 @@ const command = async () => {
                                         link: event.link,
                                         description: event.description,
                                     }, trx);
+                                    logger.info(`Auto created event, investment: ${investment.name}`);
                                 } catch (error) {
                                     if(error.code !== "ER_DUP_ENTRY"){
                                         logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 

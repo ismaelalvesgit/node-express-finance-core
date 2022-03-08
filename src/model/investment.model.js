@@ -112,7 +112,6 @@ export const findStokeAll = (options, trx) => {
 /**
  * @param {Object} options 
  * @param {Investment} options.where 
- * @param {Object} options.joinWhere 
  * @param {string} options.sortBy 
  * @param {'desc'|'asc'} options.orderBy 
  * @param {number} options.limit 
@@ -124,10 +123,12 @@ export const findAll = (options, trx) => {
     if (options?.where) {
         const key = Object.keys(options?.where)[0];
         const value = Object.values(options?.where)[0];
-        query.where(`${key}`, "like", `%${value}%`);
-    }
-    if (options.joinWhere) {
-        query.where(options.joinWhere);
+        if(key.startsWith("category")){
+            const e = key.split(".")[1];
+            query.whereRaw(`category->"$.${e}" = ?`, [value]);
+        }else{
+            query.where(`${key}`, "like", `%${value}%`);
+        }
     }
     if (options?.sortBy) {
         query.orderBy(options.sortBy, options.orderBy || "asc");
