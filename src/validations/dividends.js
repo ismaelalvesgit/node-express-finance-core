@@ -29,8 +29,8 @@ export const createDividendsSchema = joi.object({
         type: joi.string().valid(...Object.keys(dividendsType)).required(),
         dueDate: joi.date().required(),
         dateBasis: joi.date().required(),
-        qnt: joi.number().integer().unsafe().positive().min(1).required(),
-        price: joi.number().integer().unsafe().positive().min(1).required(),
-        fees: joi.number().integer().unsafe().min(0),
+        qnt: joi.number().unsafe().positive().min(1).required(),
+        price: joi.number().unsafe().positive().min(1).required(),
+        fees: joi.number().unsafe().min(0),
     }).required(),
 });

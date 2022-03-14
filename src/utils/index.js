@@ -88,19 +88,6 @@ export const parseFloatValue = (value) =>{
 
 /**
  * 
- * @param {number} value 
- * @param {number} mutiple 
- */
-export const parseDecimalValue = (value, mutiple = 100) =>{
-    const val = parseInt((value * mutiple).toFixed(), 10);
-    if(isNaN(val) || val === Infinity){
-        return 0;
-    }
-    return val;
-};
-
-/**
- * 
  * @param {string} date 
  * @param {string} format 
  * @param {string} delimiter 
@@ -126,9 +113,8 @@ export const stringToDate = (date, format, delimiter) =>{
  */
 export const formatAmount = (value) =>{
     return value
-        .replace(",", "")
-        .replace(" ", "")
-        .substring(0, value.length - 7);
+        .replace(",", ".")
+        .replace(" ", "");
 };
 
 /**

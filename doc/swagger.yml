@@ -594,8 +594,8 @@ paths:
                     example: 1
                   price:
                     type: number
-                    description: "Formatação de valores Ex: R$ 10,00 === 1000"
-                    example: 1000
+                    description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+                    example: 10.00
                   total:
                     type: number
                     description: "Formatação de valores Ex: R$ 20,00 === 2000"
@@ -791,8 +791,8 @@ paths:
                     example: 1
                   price:
                     type: number
-                    description: "Formatação de valores Ex: R$ 10,00 === 1000"
-                    example: 1000
+                    description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+                    example: 10.00
                   total:
                     type: number
                     description: "Formatação de valores Ex: R$ 20,00 === 2000"
@@ -1225,7 +1225,7 @@ paths:
                   tradingAmount:
                     type: number
                     description: "Valor total de operações de VENDAS(GANHOS & PERDAS)"
-                    example: 1000
+                    example: 10.00
                   createdAt:
                     type: string
                     example: "2021-03-31 22:34:36.476"
@@ -1547,8 +1547,8 @@ components:
                   example: 1
                 price:
                   type: number
-                  description: "Formatação de valores Ex: R$ 10,00 === 1000"
-                  example: 1000
+                  description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+                  example: 10.00
                 total:
                   type: number
                   description: "Formatação de valores Ex: R$ 20,00 === 2000"
@@ -1617,8 +1617,8 @@ components:
                   example: 1
                 price:
                   type: number
-                  description: "Formatação de valores Ex: R$ 10,00 === 1000"
-                  example: 1000
+                  description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+                  example: 10.00
                 total:
                   type: number
                   description: "Formatação de valores Ex: R$ 20,00 === 2000"
@@ -1851,7 +1851,7 @@ components:
                 tradingAmount:
                   type: number
                   description: "Valor total de operações de VENDAS(GANHOS & PERDAS)"
-                  example: 1000
+                  example: 10.00
                 createdAt:
                   type: string
                   example: "2021-03-31 22:34:36.476"
@@ -1929,8 +1929,8 @@ components:
           example: 1
         price:
           type: number
-          description: "Formatação de valores Ex: R$ 10,00 === 1000"
-          example: 1000
+          description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+          example: 10.00
           
     DividendsTypeEnum:
       type: string
@@ -1980,8 +1980,8 @@ components:
           example: 1
         price:
           type: number
-          description: "Formatação de valores Ex: R$ 10,00 === 1000"
-          example: 1000
+          description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+          example: 10.00
         fees:
           type: number
           description: "Formatação de valores Ex: R$ 00,10 === 10"

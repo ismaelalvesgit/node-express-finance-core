@@ -4,7 +4,7 @@ import { dividendsService, investmentService, transactionService } from "../serv
 import knex from "../db";
 import categoryType from "../enum/categoryType";
 import logger from "../logger";
-import { stringToDate, formatAmount, parseDecimalValue, parseStringToDividendType } from "../utils";
+import { stringToDate, formatAmount, parseStringToDividendType } from "../utils";
 import { format } from "date-fns";
 import env from "../env";
 
@@ -29,7 +29,7 @@ const command = async () => {
                                 type: parseStringToDividendType(temp[1]),
                                 dateBasis: format(stringToDate(temp[2], "dd/MM/yyyy","/"), "yyyy-MM-dd"),
                                 dueDate: format(stringToDate(temp[3], "dd/MM/yyyy","/"), "yyyy-MM-dd"),
-                                price: parseDecimalValue(formatAmount(temp[4]), 1),
+                                price: formatAmount(temp[4]),
                             };
                             
                             const transactions = await transactionService.findAllDividensByMonth({investmentId: investment.id}, extract.dateBasis, trx);

@@ -341,7 +341,7 @@
 																						style="text-align:center;padding-top:0px;padding-bottom:0px;padding-left:0px;padding-right:10px;">
 																						<img align="center" alt="BTC"
 																							class="icon" height="32"
-																							src="<%= url %>/images/00-icon-btc.png"
+																							src="<%= priceHigh[i].logoUrl %>"
 																							style="display: block; height: auto; border: 0;"
 																							width="32" /></td>
 																					<td
@@ -371,7 +371,7 @@
 																		style="font-size: 14px; mso-line-height-alt: 21px; color: #ffffff; line-height: 1.5; font-family: Varela Round, Trebuchet MS, Helvetica, sans-serif;">
 																		<p
 																			style="margin: 0; font-size: 14px; text-align: left;">
-																			R$ <%= parseFloat(priceHigh[i].priceDay / 100).toFixed(2) %></p>
+																			R$ <%= priceHigh[i].priceDay %></p>
 																	</div>
 																</div>
 															</td>
@@ -489,7 +489,7 @@
 																						style="text-align:center;padding-top:0px;padding-bottom:0px;padding-left:0px;padding-right:10px;">
 																						<img align="center" alt="ETH"
 																							class="icon" height="32"
-																							src="<%= url %>/images/01-icon-eth.png"
+																							src="<%= priceLow[i].logoUrl %>"
 																							style="display: block; height: auto; border: 0;"
 																							width="32" /></td>
 																					<td
@@ -519,7 +519,7 @@
 																		style="font-size: 14px; mso-line-height-alt: 21px; color: #ffffff; line-height: 1.5; font-family: Varela Round, Trebuchet MS, Helvetica, sans-serif;">
 																		<p
 																			style="margin: 0; font-size: 14px; text-align: left;">
-																			R$ <%= parseFloat(priceLow[i].priceDay / 100).toFixed(2) %>
+																			R$ <%= priceLow[i].priceDay %>
 																		</p>
 																	</div>
 																</div>

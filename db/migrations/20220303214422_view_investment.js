@@ -40,9 +40,9 @@ exports.up = function (knex) {
                 ...selectDefault.map((select) => {
                     return `${TABLE_NAME}.${select}`;
                 }),
-                knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as priceAverage"),
-                knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt"),
-                knex.raw("TRUNCATE(SUM(transaction.profit), 0) as tradingAmount"),
+                knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 2) as priceAverage"),
+                knex.raw("SUM(transaction.qnt) as qnt"),
+                knex.raw("TRUNCATE(SUM(transaction.profit), 2) as tradingAmount"),
                 knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME}) * 100 ), 2) as 'percent'`),
                 knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME} where categoryId = category.id) * 100 ), 2) as 'percentCategory'`)
             ])

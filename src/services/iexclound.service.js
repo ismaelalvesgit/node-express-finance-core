@@ -1,5 +1,4 @@
 import HttpAdapter from "../utils/axios";
-import { parseDecimalValue } from "../utils";
 import dividendsType from "../enum/dividendsType";
 import R from "ramda";
 import { IexCloundApi, } from "../utils/erro";
@@ -77,7 +76,7 @@ const _formatDataQoute = (data)=>{
 const _formatDataDy = (data = [])=>{
     return data.map((e)=>{
         return {
-            price: parseDecimalValue(e.amount),
+            price: e.amount,
             type: dividendsType.DIVIDEND,
             dateBasis: e.exDate,
             dueDate: e.paymentDate,
