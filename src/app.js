@@ -83,6 +83,9 @@ injectMetricsRoute(app);
 app.get("/", (req, res)=>{
     res.render("index");
 });
+app.get("/favicon.ico", (req, res)=>{
+    res.sendStatus(200);
+});
 
 app.use("/api-doc", swagger.serve, swagger.setup(swaggerDocument));
 

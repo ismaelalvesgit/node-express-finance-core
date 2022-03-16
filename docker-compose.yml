@@ -2,10 +2,47 @@ version: '3'
 
 services:
 
+  finance: 
+    build: .
+    container_name: finance
+    restart: always
+    ports:
+      - 3001:3000
+    environment:
+      NODE_ENV: development
+      DB_HOST: mysql
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_USERNAME: root
+      DB_DATABASE: finance
+      APM_SERVER_URL: http://apm-server:8200
+      APM_SERVICE_NAME: finance
+      REDIS_HOST: redis
+      BACKUP_DB: fasle
+      NEWS_URL: http://api.mediastack.com
+      NEWS_KEY: 
+      BRAPI_URL: https://brapi.ga/api
+      YIELD_URL: 
+      IEXCLOUND_URL: https://cloud.iexapis.com/stable
+      IEXCLOUND_KEY: 
+      IEXCLOUND_KEY_ADMIN: 
+      YAHOO_FINANCE_URL: https://yfapi.net
+      YAHOO_FINANCE_KEY: 
+      CURRENCY_URL: https://economia.awesomeapi.com.br
+      EMAIL_TYPE: ${EMAIL_TYPE}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_SECURE: ${EMAIL_SECURE}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+    depends_on:
+      - mysql
+      - apm-server
+
   mysql:
     image: mysql:5.7
     container_name: mysql1
     restart: always
+    command: mysqld --sql_mode="${MYSQL_MODE}"
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_DATABASE}
