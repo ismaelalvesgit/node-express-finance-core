@@ -159,7 +159,6 @@ export const findAllDividensByMonth = (options, trx) => {
     return transacting(query, trx);
 };
 
-
 /**
  * @param {object} where  
  * @param {number} where.id  
@@ -172,7 +171,7 @@ export const getLastAveragePrice = (where, trx) => {
         .first()
         .select([
             knex.raw("TRUNCATE(SUM((total + fees + brokerage + taxes)) / SUM(qnt), 0) as priceAverage"),
-            knex.raw("SUM(total) as balance"),
+            knex.raw("TRUNCATE(SUM(total), 2) as balance"),
             knex.raw("TRUNCATE(SUM(qnt), 0) as quantity"),
         ])
         .where({

@@ -158,12 +158,31 @@ export const findOne = (where, trx) => {
 export const getBalance = (id, trx) => {
     const query = knex(TABLE_NAME)
         .first()
-        .select(knex.raw("TRUNCATE(SUM(transaction.total), 0) as balance"))
+        .select(knex.raw("TRUNCATE(SUM(transaction.total), 2) as balance"))
         .innerJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
         .groupBy(`${TABLE_NAME}.id`)
         .where({
             [`${TABLE_NAME}.id`]: id
         });
+
+    return transacting(query, trx);
+};
+
+/**
+ * @param {number} id 
+ * @param {import('knex').Knex.Transaction} trx 
+ * @returns {Promise<{balance: number}>}
+ */
+export const syncBalance = (trx) => {
+    const query = knex(TABLE_NAME)
+        .select(
+            `${TABLE_NAME}.id`,
+            `${TABLE_NAME}.name`,
+            `${TABLE_NAME}.balance`,
+            knex.raw("TRUNCATE(SUM(transaction.total), 2) as asyncBalance"),
+        )
+        .innerJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
+        .groupBy(`${TABLE_NAME}.id`);
 
     return transacting(query, trx);
 };

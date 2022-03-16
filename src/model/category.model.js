@@ -1,5 +1,6 @@
 import knex from "../db";
 import transacting from "../utils/transacting";
+
 const TABLE_NAME = "category";
 export const selectDefault = [
     "id",

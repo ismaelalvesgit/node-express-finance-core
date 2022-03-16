@@ -116,8 +116,8 @@ describe("Broker Router", () => {
                 type: chance.pickone(Object.keys(transactionType)),
                 negotiationDate: chance.date(),
                 qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
+                price: 100.00,
+                total: 1 * 100.00,
             });
             await request(app)
             .del(`/broker/${id}`)

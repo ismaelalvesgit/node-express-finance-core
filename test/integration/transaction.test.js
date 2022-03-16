@@ -37,8 +37,8 @@ describe("Transaction Router", () => {
                 type: chance.pickone(Object.keys(transactionType)),
                 negotiationDate: chance.date(),
                 qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
+                price: 10.00,
+                total: 1 * 10.00,
             });
 
             const res = await request(app)
@@ -65,8 +65,8 @@ describe("Transaction Router", () => {
                 type: chance.pickone(Object.keys(transactionType)),
                 negotiationDate: chance.date(),
                 qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
+                price: 10.00,
+                total: 1 * 10.00,
             });
 
             const res = await request(app)
@@ -86,8 +86,8 @@ describe("Transaction Router", () => {
                 type: transactionType.BUY,
                 negotiationDate: chance.date(),
                 qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
+                price: 10.00,
+                total: 1 * 10.00,
             })
             .expect(StatusCodes.CREATED);
             expect(res.body).toBeDefined();
@@ -110,8 +110,8 @@ describe("Transaction Router", () => {
                 type: chance.pickone(Object.keys(transactionType)),
                 negotiationDate: chance.date(),
                 qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
+                price: 10.00,
+                total: 1 * 10.00,
             });
 
             const res = await request(app)
@@ -123,8 +123,8 @@ describe("Transaction Router", () => {
                 type: transactionType.BUY,
                 negotiationDate: chance.date(),
                 qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
+                price: 10.00,
+                total: 1 * 10.00,
             })
             .expect(StatusCodes.OK);
             expect(res.body).toBeDefined();
@@ -171,8 +171,8 @@ describe("Transaction Router", () => {
                 type: transactionType.BUY,
                 negotiationDate: chance.date(),
                 qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
+                price: 10.00,
+                total: 1 * 10.00,
             })
             .expect(StatusCodes.NOT_FOUND);
             expect(res.body).toBeDefined();
@@ -201,8 +201,8 @@ describe("Transaction Router", () => {
                 type: chance.pickone(Object.keys(transactionType)),
                 negotiationDate: chance.date(),
                 qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
+                price: 10.00,
+                total: 1 * 10.00,
             });
 
             const res = await request(app)
@@ -214,8 +214,8 @@ describe("Transaction Router", () => {
                 type: transactionType.BUY,
                 negotiationDate: chance.date(),
                 qnt: 1,
-                price: 1000,
-                total: 1 * 1000,
+                price: 10.00,
+                total: 1 * 10.00,
             })
             .expect(StatusCodes.NOT_FOUND);
             expect(res.body).toBeDefined();
