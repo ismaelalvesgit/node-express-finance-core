@@ -29,6 +29,8 @@ tags:
     description: Events namespace
   - name: News
     description: News namespace
+  - name: Bcb
+    description: Bcb namespace
   - name: Currency
     description: Currency namespace
   - name: Investment
@@ -911,6 +913,69 @@ paths:
       responses:
         200: # status code
           $ref: "#/components/responses/news"
+  
+  # Bcb
+  /bcb/selic:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna historio da taxa selic
+      parameters:
+        - in: query
+          name: dateStart
+          description: Data inicial de filtro
+          schema:
+            type: string
+            example: "2021-03-31 22:34:36.476"
+        - in: query
+          name: dateEnd
+          description: Data final de filtro
+          schema:
+            type: string
+            example: "2021-03-31 22:34:36.476"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/selic"
+          
+  /bcb/inflaction:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna historio da taxa de inflação
+      parameters:
+        - in: query
+          name: dateStart
+          description: Data inicial de filtro
+          schema:
+            type: string
+            example: "2021-03-31 22:34:36.476"
+        - in: query
+          name: dateEnd
+          description: Data final de filtro
+          schema:
+            type: string
+            example: "2022-03-31 22:34:36.476"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/selic"
+  
+  /bcb/inflactionIndicator:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dado macros da taxa de inflção
+      responses:
+        200: # status code
+          $ref: "#/components/responses/inflactionIndicator"
+  
+  /bcb/news:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna ultimas noticias do BACEM
+      responses:
+        200: # status code
+          $ref: "#/components/responses/bcbNews"
           
   # Events
   /events:
@@ -1752,6 +1817,89 @@ components:
                       type: string
                       description: carimbo de hora exato em que o artigo foi publicado.
                       example: "2021-03-31 22:34:36.476"
+    
+    selic:
+      description: lista de dados gistoricos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                data:
+                  type: string
+                  description: Data da taxa
+                  example: "17/03/2022"
+                value:
+                  type: string
+                  description: valor do indice
+                  example: "11.75"
+    
+    inflactionIndicator:
+      description: lista de dados gistoricos.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: indice
+                example: "INDICADOR_INFLACAO"
+              yearGoal:
+                type: string
+                description: ano do indice
+                example: 2022
+              targetRate:
+                type: string
+                description: Meta
+                example: 3.5
+              marginError:
+                type: string
+                description: Margem de erro
+                example: 1.5
+              rateInflation:
+                type: string
+                description: valor do indice
+                example: 10.54
+              accumulated:
+                type: string
+                description: Acumulado
+                example: 3.59
+    
+    bcbNews:
+      description: 'destaques no momento'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: titulo da publicação
+                  example: "Copom eleva a taxa Selic para 11,75% a.a."
+                body:
+                  type: string
+                  description: corpo da publicação
+                  example: "Em sua 245ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 11,75% a.a."
+                urlImg:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                      description: url da imagem
+                      example: "https://www.bcb.gov.br/content/home/PublishingImages/manchetes/IBC-BR_mar_2022_MANCHETE_PORT.png"
+                    description:
+                      type: string
+                      description: descrição da publicação
+                      example: "Copom - taxa Selic"
+                link:
+                  type: string
+                  description: link da publicação
+                  example: "https://www.bcb.gov.br/detalhenoticia/17637/nota"
     
     investment:
       description: lista de investimentos.

@@ -59,6 +59,12 @@ export class NewsApi extends CustomError {
     }
 }
 
+export class BcbApi extends CustomError {
+    constructor({statusCode, message }){
+        super(statusCode, message, "bcbapi");
+    }
+}
+
 export class ValidadeSchema extends CustomError{
     constructor(message){
         super(StatusCodes.BAD_REQUEST, JSON.stringify(message));

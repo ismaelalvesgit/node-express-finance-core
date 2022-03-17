@@ -4,6 +4,7 @@ import * as brapiService from "./brapi.service";
 import * as yahooService from "./yahoo.service";
 import * as iexcloundService from "./iexclound.service";
 import * as newsService from "./news.service";
+import * as bcbService from "./bcb.service";
 import * as currencyApiService from "./currencyapi.service";
 import * as currencyService from "./currency.service";
 import * as transactionService from "./transaction.service";
@@ -19,6 +20,7 @@ export {
     yahooService,
     iexcloundService,
     newsService,
+    bcbService,
     currencyService,
     currencyApiService,
     investmentService,

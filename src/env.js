@@ -11,6 +11,7 @@ export default {
     yahooKey: process.env.YAHOO_FINANCE_KEY,
     news: process.env.NEWS_URL,
     newsKey: process.env.NEWS_KEY,
+    bcb: process.env.BCB_URL,
     iexclound: process.env.IEXCLOUND_URL,
     iexcloundLimitUsage: parseInt(process.env.IEXCLOUND_LIMIT_USAGE || 50000),
     iexcloundKey: process.env.IEXCLOUND_KEY,

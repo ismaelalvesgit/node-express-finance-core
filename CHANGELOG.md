@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado nova rota /bcb
 - Adicionado novo job pra sincronização do balance
 - Adicionado nova rota /currency
 - Adicionado novo job para colhimento de valores de moedas
