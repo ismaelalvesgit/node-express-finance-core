@@ -28,6 +28,7 @@ exports.up = function (knex) {
         view.columns([
             "category",
             ...selectDefault,
+            "variationDayTotal",
             "priceAverage",
             "qnt",
             "tradingAmount",
@@ -40,6 +41,7 @@ exports.up = function (knex) {
                 ...selectDefault.map((select) => {
                     return `${TABLE_NAME}.${select}`;
                 }),
+                knex.raw(`TRUNCATE(SUM(transaction.qnt * ${TABLE_NAME}.variationDay), 2) as variationDayTotal`),
                 knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 2) as priceAverage"),
                 knex.raw("SUM(transaction.qnt) as qnt"),
                 knex.raw("TRUNCATE(SUM(transaction.profit), 2) as tradingAmount"),

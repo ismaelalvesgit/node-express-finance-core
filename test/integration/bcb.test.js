@@ -35,6 +35,38 @@ describe("Bcb Router", () => {
             expect(res.body).toHaveProperty("yearGoal");
         });
 
+        it("ibovespa", async() => {
+            const res = await request(app)
+            .get("/bcb/ibovespa")
+            .expect(StatusCodes.OK);
+            expect(res.body[0]).toHaveProperty("price");
+            expect(res.body[0]).toHaveProperty("date");
+        });
+        
+        it("ifix", async() => {
+            const res = await request(app)
+            .get("/bcb/ifix")
+            .expect(StatusCodes.OK);
+            expect(res.body[0]).toHaveProperty("price");
+            expect(res.body[0]).toHaveProperty("date");
+        });
+        
+        it("ipca", async() => {
+            const res = await request(app)
+            .get("/bcb/ipca")
+            .expect(StatusCodes.OK);
+            expect(res.body.monthly[0]).toHaveProperty("value");
+            expect(res.body.yearly[0]).toHaveProperty("value");
+        });
+
+        it("cdi", async() => {
+            const res = await request(app)
+            .get("/bcb/cdi")
+            .expect(StatusCodes.OK);
+            expect(res.body.monthly[0]).toHaveProperty("value");
+            expect(res.body.yearly[0]).toHaveProperty("value");
+        });
+
         it("news", async() => {
             const res = await request(app)
             .get("/bcb/news")
@@ -63,6 +95,34 @@ describe("Bcb Router", () => {
             bcbService.inflactionIndicator = jest.fn().mockRejectedValue("fail");
             await request(app)
             .get("/bcb/inflactionIndicator")
+            .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+
+        it("ibovespa", async() => {
+            bcbService.ibovespa = jest.fn().mockRejectedValue("fail");
+            await request(app)
+            .get("/bcb/ibovespa")
+            .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+
+        it("ifix", async() => {
+            bcbService.ifix = jest.fn().mockRejectedValue("fail");
+            await request(app)
+            .get("/bcb/ifix")
+            .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+
+        it("ipca", async() => {
+            bcbService.ipca = jest.fn().mockRejectedValue("fail");
+            await request(app)
+            .get("/bcb/ipca")
+            .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+
+        it("cdi", async() => {
+            bcbService.cdi = jest.fn().mockRejectedValue("fail");
+            await request(app)
+            .get("/bcb/cdi")
             .expect(StatusCodes.INTERNAL_SERVER_ERROR);
         });
 

@@ -941,7 +941,7 @@ paths:
     get:
       tags:
         - Bcb
-      summary: Retorna historio da taxa de inflação
+      summary: Retorna historicos da taxa de inflação
       parameters:
         - in: query
           name: dateStart
@@ -968,6 +968,78 @@ paths:
         200: # status code
           $ref: "#/components/responses/inflactionIndicator"
   
+  /bcb/ibovespa:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice ibovespa
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: -1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice"
+          
+  /bcb/ifix:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice ifix
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: -1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice"
+          
+  /bcb/ipca:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice ipca
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: 0=2022/2021, 1=5A, 2=10A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice2"
+          
+  /bcb/cdi:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice cdi
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: 0=2022/2021, 1=5A, 2=10A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice2"
+          
   /bcb/news:
     get:
       tags:
@@ -1254,6 +1326,10 @@ paths:
                   variationDay:
                     type: number
                     description: "Variação de preço do dia"
+                    example: -1170
+                  variationDayTotal:
+                    type: number
+                    description: "Variação de preço do dia vezes numero de ações"
                     example: -1170
                   priceDay:
                     type: number
@@ -1819,7 +1895,7 @@ components:
                       example: "2021-03-31 22:34:36.476"
     
     selic:
-      description: lista de dados gistoricos.
+      description: lista de dados historicos.
       content:
         application/json:
           schema:
@@ -1837,7 +1913,7 @@ components:
                   example: "11.75"
     
     inflactionIndicator:
-      description: lista de dados gistoricos.
+      description: lista de dados historicos.
       content:
         application/json:
           schema:
@@ -1868,6 +1944,64 @@ components:
                 description: Acumulado
                 example: 3.59
     
+    indice:
+      description: lista de dados historicos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                data:
+                  type: string
+                  description: Data da taxa
+                  example: "17/03/2022"
+                price:
+                  type: string
+                  description: valor do indice
+                  example: "111719.24"
+   
+    indice2:
+      description: lista de dados historicos.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              monthly:
+                type: array
+                items:
+                  properties:
+                    value:
+                      type: string
+                      example: 0.25
+                    date:
+                      type: string
+                      example: "01/21"
+                    year:
+                      type: string
+                      example: 2021
+                    month:
+                      type: string
+                      example: 1
+              yearly:
+                type: array
+                items:
+                  properties:
+                    value:
+                      type: string
+                      example: 0.25
+                    date:
+                      type: string
+                      example: "01/21"
+                    year:
+                      type: string
+                      example: 2021
+                    month:
+                      type: string
+                      example: 1
+                  
     bcbNews:
       description: 'destaques no momento'
       content:
@@ -1963,7 +2097,11 @@ components:
                 variationDay:
                   type: number
                   description: "Variação de preço do dia"
-                  example: -1170
+                  example: -11.70
+                variationDayTotal:
+                  type: number
+                  description: "Variação de preço do dia vezes numero de ações"
+                  example: -11.11
                 priceDay:
                   type: number
                   example: 4965

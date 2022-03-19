@@ -3,6 +3,7 @@ import R from "ramda";
 import { BcbApi } from "../utils/erro";
 import env from "../env";
 import { format, subYears } from "date-fns";
+import FormData from "form-data";
 
 /**
  * @typedef Bcb
@@ -20,8 +21,19 @@ import { format, subYears } from "date-fns";
  * @property {string} link
  */
 
+/**
+ * @typedef Indice
+ * @type {Object}
+ * @property {Date} data
+ * @property {number} price
+ */
+
 const http = new HttpAdapter({
     baseUrl: env.bcb
+});
+
+const http2 = new HttpAdapter({
+    baseUrl: env.yieldapi
 });
 
 /**
@@ -56,6 +68,49 @@ const _formatDataNews = (data) => {
             link: newUrl,
         };
     });
+};
+
+/**
+ * 
+ * @param {Object} data 
+ * @returns { Array<Indice> }
+ */
+const _formatDataIndice = (data) => {
+    return data[0].prices.map((e) => {
+        return e;
+    });
+};
+
+/**
+ * 
+ * @param {Object} data 
+ * @returns { Array<Indice> }
+ */
+const _formatDataIndice2 = (data) => {
+    return {
+        monthly: data.monthly.map((e) => {
+            const year = e.y;
+            const month = e.m;
+            delete e.y;
+            delete e.m;
+            return {
+                ...e,
+                year,
+                month
+            };
+        }),
+        yearly: data.yearly.map((e) => {
+            const year = e.y;
+            const month = e.m;
+            delete e.y;
+            delete e.m;
+            return {
+                ...e,
+                year,
+                month
+            };
+        }),
+    };
 };
 
 /**
@@ -187,6 +242,123 @@ export const news = async () => {
 
     } catch (error) {
         const defaultMessage = "Failed to get lastNews data";
+        const message = JSON.stringify(R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        ));
+        throw new BcbApi({ statusCode: error?.response?.status, message });
+    }
+};
+
+/**
+ * @param {-1 | 0 | 1 | 2 | 3 | 4} type 
+ * @returns {Promise<Bcb>}
+ */
+export const ibovespa = async (type = 0) => {
+    try {
+        const formData = new FormData();
+        formData.append("ticker", "ibovespa");
+        formData.append("type", type);
+        formData.append("currences[]", "1");
+        const { data } = await http2.send({
+            url: "/indice/tickerprice",
+            method: "POST",
+            data: formData,
+            headers: formData.getHeaders()
+        });
+
+        return _formatDataIndice(data);
+
+    } catch (error) {
+        const defaultMessage = "Failed to get ibovespa data";
+        const message = JSON.stringify(R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        ));
+        throw new BcbApi({ statusCode: error?.response?.status, message });
+    }
+};
+
+/**
+ * @param {-1 | 0 | 1 | 2 | 3 | 4} type
+ * @returns {Promise<Bcb>}
+ */
+export const ifix = async (type = 0) => {
+    try {
+        const formData = new FormData();
+        formData.append("ticker", "ifix");
+        formData.append("type", type);
+        formData.append("currences[]", "1");
+
+        const { data } = await http2.send({
+            url: "/indice/tickerprice",
+            method: "POST",
+            data: formData,
+            headers: formData.getHeaders()
+        });
+
+        return _formatDataIndice(data);
+        
+    } catch (error) {
+        const defaultMessage = "Failed to get ifix data";
+        const message = JSON.stringify(R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        ));
+        throw new BcbApi({ statusCode: error?.response?.status, message });
+    }
+};
+
+/**
+ * @param {0 | 1 | 2 } type
+ * @returns {Promise<Bcb>}
+ */
+export const ipca = async (type = 0) => {
+    try {
+        const { data } = await http2.send({
+            url: "/indexer/getvalue",
+            method: "GET",
+            params: {
+                name: "IPCA",
+                type
+            }
+        });
+
+        return _formatDataIndice2(data);
+
+    } catch (error) {
+        const defaultMessage = "Failed to get ipca data";
+        const message = JSON.stringify(R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        ));
+        throw new BcbApi({ statusCode: error?.response?.status, message });
+    }
+};
+
+/**
+ * @param {0 | 1 | 2 } type
+ * @returns {Promise<Bcb>}
+ */
+export const cdi = async (type = 0) => {
+    try {
+        const { data } = await http2.send({
+            url: "/indexer/getvalue",
+            method: "GET",
+            params: {
+                name: "CDI",
+                type
+            }
+        });
+
+        return _formatDataIndice2(data);
+
+    } catch (error) {
+        const defaultMessage = "Failed to get cdi data";
         const message = JSON.stringify(R.pathOr(
             defaultMessage,
             ["response", "data", "error"],
