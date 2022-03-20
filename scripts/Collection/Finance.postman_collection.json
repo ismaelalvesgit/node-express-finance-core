@@ -632,7 +632,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"investment\":\"SRET\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"ETF INTERNACIONAL\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2021-12-10T18:33:31.550Z\",\r\n    \"qnt\": 2,\r\n    \"price\": 885\r\n}",
+							"raw": "{\r\n    \"investment\":\"deva11\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"FUNDOS IMOBILIÁRIOS\",\r\n    \"type\": \"BUY\",\r\n    \"negotiationDate\": \"2022-03-09T18:33:31.550Z\",\r\n    \"qnt\": 3,\r\n    \"price\": 100\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -667,7 +667,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"investment\":\"HGCR11\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"FUNDOS IMOBILIÁRIOS\",\r\n    \"type\": \"SELL\",\r\n    \"negotiationDate\": \"2021-09-22T18:33:31.550Z\",\r\n    \"qnt\": 8,\r\n    \"price\": 10485\r\n}",
+							"raw": "{\r\n    \"investment\":\"HGCR11\",\r\n    \"broker\": \"RICO INVESTIMENTOS CCTVM S/A\",\r\n    \"category\": \"FUNDOS IMOBILIÁRIOS\",\r\n    \"type\": \"SELL\",\r\n    \"negotiationDate\": \"2021-09-22T18:33:31.550Z\",\r\n    \"qnt\": 8,\r\n    \"price\": 104.85\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -722,6 +722,494 @@
 								{
 									"key": "id",
 									"value": "88"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bcb",
+			"item": [
+				{
+					"name": "Bcb - Selic",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/selic",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"selic"
+							],
+							"query": [
+								{
+									"key": "dateStart",
+									"value": "2021-06-09T18:33:31.550Z",
+									"disabled": true
+								},
+								{
+									"key": "dateEnd",
+									"value": "2022-03-09T18:33:31.550Z",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - Inflaction",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/inflaction",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"inflaction"
+							],
+							"query": [
+								{
+									"key": "dateStart",
+									"value": "2021-06-09T18:33:31.550Z",
+									"disabled": true
+								},
+								{
+									"key": "dateEnd",
+									"value": "2022-03-09T18:33:31.550Z",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - Inflaction Indicator",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/inflactionIndicator",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"inflactionIndicator"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - News",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/news",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"news"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - Ibovespa",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/ibovespa",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"ibovespa"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "1",
+									"description": "-1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - Ifix",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/ifix",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"ifix"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "1",
+									"description": "-1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - Bdrx",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/bdrx",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"bdrx"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "1",
+									"description": "-1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - sp500",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/sp500",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"sp500"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "1",
+									"description": "1=30D, 2=60D, 3=1A, 4=5A",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - Ipca",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/ipca",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"ipca"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "0",
+									"description": "0=2022/2021, 1=5A, 2=10A",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - Cdi",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/cdi",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"cdi"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "1",
+									"description": "0=2022/2021, 1=5A, 2=10A",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - Bound List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/boundList",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"boundList"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bcb - Bound",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/bcb/bound/:code",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"bcb",
+								"bound",
+								":code"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "4",
+									"description": "1=30D, 2=60D, 3=1A, 4=5A",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "code",
+									"value": "tesouro-ipca-com-juros-semestrais-2026"
 								}
 							]
 						}
@@ -886,6 +1374,39 @@
 		{
 			"name": "Currency",
 			"item": [
+				{
+					"name": "Currency - Last",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept-language",
+								"value": "en-US",
+								"description": "' pt-BR ', ' en-US ' Default: 'pt-BR'",
+								"type": "text"
+							},
+							{
+								"key": "Cache-Control",
+								"value": "max-age=10",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/currency/last",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"currency",
+								"last"
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Currency - FindAll",
 					"request": {
@@ -1158,7 +1679,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"investmentId\":\"7\",\r\n    \"brokerId\":\"47\",\r\n    \"status\": \"PROVISIONED\",\r\n    \"type\": \"DIVIDEND\",\r\n    \"dateBasis\": \"2021-10-29T18:33:31.550Z\",\r\n    \"dueDate\": \"2021-11-16T18:33:31.550Z\",\r\n    \"qnt\": 1,\r\n    \"price\": 54\r\n}",
+							"raw": "{\r\n    \"investmentId\":\"7\",\r\n    \"brokerId\":\"47\",\r\n    \"status\": \"PROVISIONED\",\r\n    \"type\": \"DIVIDEND\",\r\n    \"dateBasis\": \"2021-10-29T18:33:31.550Z\",\r\n    \"dueDate\": \"2021-11-16T18:33:31.550Z\",\r\n    \"qnt\": 1,\r\n    \"price\": 0.54\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1193,7 +1714,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"investmentId\":\"7\",\r\n    \"brokerId\":\"47\",\r\n    \"status\": \"PROVISIONED\",\r\n    \"type\": \"DIVIDEND\",\r\n    \"dateBasis\": \"2021-10-29T18:33:31.550Z\",\r\n    \"dueDate\": \"2021-11-16T18:33:31.550Z\",\r\n    \"qnt\": 1,\r\n    \"price\": 54\r\n}",
+							"raw": "{\r\n    \"investmentId\":\"7\",\r\n    \"brokerId\":\"47\",\r\n    \"status\": \"PROVISIONED\",\r\n    \"type\": \"DIVIDEND\",\r\n    \"dateBasis\": \"2021-10-29T18:33:31.550Z\",\r\n    \"dueDate\": \"2021-11-16T18:33:31.550Z\",\r\n    \"qnt\": 1,\r\n    \"price\": 0.54\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
