@@ -2,6 +2,7 @@ import request from "supertest";
 import { StatusCodes } from "http-status-codes";
 import { app } from "../../src/app";
 import * as bcbService from "../../src/services/bcb.service";
+import * as boundService from "../../src/services/bound.service";
 
 /* eslint-disable no-import-assign */
 describe("Bcb Router", () => {
@@ -67,12 +68,39 @@ describe("Bcb Router", () => {
             expect(res.body.yearly[0]).toHaveProperty("value");
         });
 
-        it("news", async() => {
+        it("bdrx", async() => {
             const res = await request(app)
-            .get("/bcb/news")
+            .get("/bcb/bdrx")
             .expect(StatusCodes.OK);
-            expect(res.body[0]).toHaveProperty("title");
-            expect(res.body[0]).toHaveProperty("body");
+            expect(res.body[0]).toHaveProperty("price");
+            expect(res.body[0]).toHaveProperty("date");
+        });
+
+        it("sp500", async() => {
+            const res = await request(app)
+            .get("/bcb/sp500")
+            .expect(StatusCodes.OK);
+            expect(res.body[0]).toHaveProperty("price");
+            expect(res.body[0]).toHaveProperty("date");
+        });
+
+        it("boundList", async() => {
+            boundService.findAll = jest.fn().mockResolvedValue([{
+                code: "tesouro-ipca-com-juros-semestrais-2026"
+            }]);
+
+            const res = await request(app)
+            .get("/bcb/boundList")
+            .expect(StatusCodes.OK);
+            expect(res.body[0]).toHaveProperty("code");
+        });
+
+        it("bound", async() => {
+            const res = await request(app)
+            .get("/bcb/bound/tesouro-ipca-com-juros-semestrais-2026")
+            .expect(StatusCodes.OK);
+            expect(res.body[0]).toHaveProperty("sellprice");
+            expect(res.body[0]).toHaveProperty("date");
         });
     });
     
@@ -123,6 +151,34 @@ describe("Bcb Router", () => {
             bcbService.cdi = jest.fn().mockRejectedValue("fail");
             await request(app)
             .get("/bcb/cdi")
+            .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+
+        it("bdrx", async() => {
+            bcbService.bdrx = jest.fn().mockRejectedValue("fail");
+            await request(app)
+            .get("/bcb/bdrx")
+            .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+
+        it("sp500", async() => {
+            bcbService.sp500 = jest.fn().mockRejectedValue("fail");
+            await request(app)
+            .get("/bcb/sp500")
+            .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+
+        it("boundList", async() => {
+            boundService.findAll = jest.fn().mockRejectedValue("fail");
+            await request(app)
+            .get("/bcb/boundList")
+            .expect(StatusCodes.INTERNAL_SERVER_ERROR);
+        });
+
+        it("bound", async() => {
+            bcbService.bound = jest.fn().mockRejectedValue("fail");
+            await request(app)
+            .get("/bcb/bound/sp500")
             .expect(StatusCodes.INTERNAL_SERVER_ERROR);
         });
 

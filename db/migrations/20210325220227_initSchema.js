@@ -140,6 +140,13 @@ exports.up = async function (knex) {
     createdAt(knex, table);
     updatedAt(knex, table);
   });
+  
+  await knex.schema.createTable("boundList", (table) => {
+    table.bigIncrements("id").unsigned();
+    table.string("code").unique().notNullable();
+    createdAt(knex, table);
+    updatedAt(knex, table);
+  });
 
 };
 

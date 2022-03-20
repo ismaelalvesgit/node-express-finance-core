@@ -2,7 +2,7 @@ const prefix = "/bcb";
 import express from "express";
 const router = express.Router();
 import verify from "../middleware/verifiy.middleware";
-import { queryIndicador2Schema, queryIndicadorSchema, querySchema } from "../validations/bcb";
+import { indicadorSchema, querySchema } from "../validations/bcb";
 import { 
     selic, 
     inflaction, 
@@ -12,6 +12,10 @@ import {
     ifix,
     ipca,
     cdi,
+    bdrx,
+    sp500,
+    boundList,
+    bound,
 } from "../controllers/bcb.controller";
 
 
@@ -37,25 +41,49 @@ router.route("/inflactionIndicator")
  * GET - /bcb/ibovespa
  * */    
 router.route("/ibovespa")
-    .get(verify(queryIndicadorSchema), ibovespa);
+    .get(verify(indicadorSchema(["-1", "0", "1", "2", "3", "4"])), ibovespa);
 
 /**
  * GET - /bcb/ifix
  * */    
 router.route("/ifix")
-    .get(verify(queryIndicadorSchema), ifix);
+    .get(verify(indicadorSchema(["-1", "0", "1", "2", "3", "4"])), ifix);
+
+/**
+ * GET - /bcb/bdrx
+ * */    
+router.route("/bdrx")
+    .get(verify(indicadorSchema(["-1", "0", "1", "2", "3", "4"])), bdrx);
+
+/**
+ * GET - /bcb/sp500
+ * */    
+router.route("/sp500")
+    .get(verify(indicadorSchema(["1", "2", "3", "4"])), sp500);
+
+/**
+ * GET - /bcb/boundList
+ * */    
+router.route("/boundList")
+    .get(boundList);
+
+/**
+ * GET - /bcb/bound/:code
+ * */    
+router.route("/bound/:code")
+    .get(verify(indicadorSchema(["1", "2", "3", "4"])), bound);
 
 /**
  * GET - /bcb/ipca
  * */    
 router.route("/ipca")
-    .get(verify(queryIndicador2Schema), ipca);
+    .get(verify(indicadorSchema(["0", "1", "2"])), ipca);
 
 /**
  * GET - /bcb/cdi
  * */    
 router.route("/cdi")
-    .get(verify(queryIndicador2Schema), cdi);
+    .get(verify(indicadorSchema(["0", "1", "2"])), cdi);
 
 /**
  * GET - /bcb/news

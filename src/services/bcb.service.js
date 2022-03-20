@@ -313,6 +313,98 @@ export const ifix = async (type = 0) => {
 };
 
 /**
+ * @param {-1 | 0 | 1 | 2 | 3 | 4} type
+ * @returns {Promise<Bcb>}
+ */
+export const bdrx = async (type = 0) => {
+    try {
+        const formData = new FormData();
+        formData.append("ticker", "indice-de-bdrs-nao-patrocinados-global");
+        formData.append("type", type);
+        formData.append("currences[]", "1");
+
+        const { data } = await http2.send({
+            url: "/indice/tickerprice",
+            method: "POST",
+            data: formData,
+            headers: formData.getHeaders()
+        });
+
+        return _formatDataIndice(data);
+        
+    } catch (error) {
+        const defaultMessage = "Failed to get bdr data";
+        const message = JSON.stringify(R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        ));
+        throw new BcbApi({ statusCode: error?.response?.status, message });
+    }
+};
+
+/**
+ * @param {string} code
+ * @param {1 | 2 | 3 | 4} type
+ * @returns {Promise<Bcb>}
+ */
+ export const bound = async (code, type = 1) => {
+    try {
+        const formData = new FormData();
+        formData.append("ticker", code);
+        formData.append("type", type);
+ 
+        const { data } = await http2.send({
+            url: "/category/bondprice",
+            method: "POST",
+            data: formData,
+            headers: formData.getHeaders()
+        });
+
+        return data;
+        
+    } catch (error) {
+        const defaultMessage = "Failed to get bound data";
+        const message = JSON.stringify(R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        ));
+        throw new BcbApi({ statusCode: error?.response?.status, message });
+    }
+};
+
+/**
+ * @param { 1 | 2 | 3 | 4} type
+ * @returns {Promise<Bcb>}
+ */
+export const sp500 = async (type = 1) => {
+    try {
+        const formData = new FormData();
+        formData.append("ticker", "sp-500");
+        formData.append("type", type);
+
+        const { data } = await http2.send({
+            url: "/indiceexterior/tickerprice",
+            method: "POST",
+            data: formData,
+            headers: formData.getHeaders()
+        });
+
+        return data;
+        
+    } catch (error) {
+        const defaultMessage = "Failed to get sp500 data";
+        const message = JSON.stringify(R.pathOr(
+            defaultMessage,
+            ["response", "data", "error"],
+            error,
+        ));
+        throw new BcbApi({ statusCode: error?.response?.status, message });
+    }
+};
+
+/**
  * @param {0 | 1 | 2 } type
  * @returns {Promise<Bcb>}
  */

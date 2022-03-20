@@ -1,6 +1,11 @@
 import categoryType from "../enum/categoryType";
 import dividendsType from "../enum/dividendsType";
 import * as brapiService from "../services/brapi.service";
+import cheerio from "cheerio";
+import axios from "axios";
+import logger from "../logger";
+import env from "../env";
+import { boundService } from "../services";
 
 /**
  * 
@@ -162,3 +167,35 @@ export const jsonObjectArrayQuerySelect = (join, selects)=>{
 
     return "JSON_ARRAYAGG(JSON_OBJECT("+ data + `)) as ${join}`;
 };
+
+
+/**
+ * 
+ * @param {string} join 
+ * @param {Array<string>} selects
+ * @returns {Promise<void>} 
+ */
+export const syncBound = async()=>{
+    try {
+        const { data } = await axios.get(`${env.yieldapi}`);
+        if(data){
+            const $ = cheerio.load(data);
+            const check = $("[href*=\"/tesouro/\"]");
+            if(check.length > 0){
+                for (let i = 0; i < check.length; i++) {
+                    const code = check[i]["attribs"]["href"].replace("/tesouro/", "");
+                    try {
+                        await boundService.create({code});
+                    } catch (error) {
+                        if(error.code !== "ER_DUP_ENTRY"){
+                            logger.error(`Falied to sync bound ${error}`);
+                        }
+                    }
+                }
+            } 
+        }
+    } catch (error) {
+        logger.error(`Falied to sync bound ${error}`);
+    }
+};
+

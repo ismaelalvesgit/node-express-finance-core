@@ -1003,6 +1003,75 @@ paths:
       responses:
         200: # status code
           $ref: "#/components/responses/indice"
+  
+  /bcb/bdrx:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice bdrx
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: -1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice"
+  
+  /bcb/sp500:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice S&P500
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice"
+  
+  /bcb/boundList:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna lista de bound
+      responses:
+        200: # status code
+          $ref: "#/components/responses/boundList"
+
+  /bcb/bound/{code}:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do tesouro brasileiro
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+        - in: path
+          name: code
+          required: true
+          schema:
+            type: string
+            example: 'tesouro-ipca-com-juros-semestrais-2026'
+      responses:
+        200: # status code
+          $ref: "#/components/responses/bound"
           
   /bcb/ipca:
     get:
@@ -1943,6 +2012,50 @@ components:
                 type: string
                 description: Acumulado
                 example: 3.59
+    
+    bound:
+      description: lista de dados historicos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                data:
+                  type: string
+                  description: Data da taxa
+                  example: "17/03/2022"
+                sellprice:
+                  type: string
+                  description: valor de venda do tesouro
+                  example: "111719.24"
+                buyprice:
+                  type: string
+                  description: valor de compra do tesouro
+                  example: "111719.24"
+    
+    boundList:
+      description: lista de dados.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 1
+                code:
+                  type: string
+                  example: "tesouro-ipca-com-juros-semestrais-2026"
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
     
     indice:
       description: lista de dados historicos.

@@ -7,6 +7,7 @@ import * as newsService from "./news.service";
 import * as bcbService from "./bcb.service";
 import * as currencyApiService from "./currencyapi.service";
 import * as currencyService from "./currency.service";
+import * as boundService from "./bound.service";
 import * as transactionService from "./transaction.service";
 import * as investmentService from "./investment.service";
 import * as dividendsService from "./dividends.service";
@@ -21,6 +22,7 @@ export {
     iexcloundService,
     newsService,
     bcbService,
+    boundService,
     currencyService,
     currencyApiService,
     investmentService,

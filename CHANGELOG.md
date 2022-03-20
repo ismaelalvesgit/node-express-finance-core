@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado rotas /bcb/bdrx, /bcb/sp500, /bcb/boundList, /bcb/bound/:code
 - Adicionado rotas /bcb/ibovespa, /bcb/ifix, /bcb/ipca, /bcb/cdi
 - Adicionado nova rota /bcb
 - Adicionado novo job pra sincronização do balance
