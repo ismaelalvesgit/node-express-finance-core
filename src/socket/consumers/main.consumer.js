@@ -1,4 +1,4 @@
-import logger from "../../logger";
+import { Logger } from "../../logger";
 
 export class MainConsume{
     
@@ -12,14 +12,14 @@ export class MainConsume{
 
     _init(){
         this.socket.on("disconnect", ()=>{
-            logger.info("Disconnect Socket");
+            Logger.info("Disconnect Socket");
         });
         this.newClient();
     }
 
     newClient(){
         this.socket.on("/investment", (msg)=>{
-            logger.info(msg);
+            Logger.info(msg);
         });
     }
 }

@@ -1,5 +1,5 @@
 import { io } from "../../app";
-import logger from "../../logger";
+import { Logger } from "../../logger";
 const BASE = "investment";
 
 /**
@@ -9,6 +9,6 @@ const BASE = "investment";
  export const sendNotification = async (investment)=>{
     if(investment){
         io.emit(`/update-${BASE}`, investment);
-        logger.info(`Send updates to customers investment: ${investment.name}`);
+        Logger.info(`Send updates to customers investment: ${investment.name}`);
     }
 };
