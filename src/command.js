@@ -3,7 +3,7 @@ import { table } from "table";
 import { v4 } from "uuid";
 import commands from "./commands";
 import env from "./env";
-import logger from "./logger";
+import { Logger } from "./logger";
 
 const program = new commander.Command();
 
@@ -35,17 +35,17 @@ commands.map((command, key) => {
         const instance = `${uuid} ${command.name}`;
         let exitCode;
         try {
-          logger.info(`${instance} start`);
+          Logger.info(`${instance} start`);
           const message = await command.command();
-          logger.info(`${instance} end with message: ${message}`);
+          Logger.info(`${instance} end with message: ${message}`);
           exitCode = 0;
         } catch (ex) {
           exitCode = 1;
-          logger.error(ex);
+          Logger.error(ex);
         }
         process.exit(exitCode);
     }else{
-        logger.info("NODE_ENV is required production");
+        Logger.info("NODE_ENV is required production");
     }
   };
 
@@ -65,7 +65,7 @@ commands.map((command, key) => {
 program
   .command("*")
   .action((command) => {
-    logger.warn(`comando '${command}' não encontrado`);
+    Logger.warn(`comando '${command}' não encontrado`);
     process.exit(1);
   });
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import logger from "../logger";
+import { AxiosLogger } from "../logger";
 import { v4 as uuidv4 } from "uuid";
 
 export default class HttpAdapter {
@@ -20,14 +20,7 @@ export default class HttpAdapter {
             params
         });
 
-        this.instance.interceptors.request.use(resquest =>{
-            return resquest;
-        });
-        
-        this.instance.interceptors.response.use(response =>{
-            logger.axiosLogger.write(response);
-            return response;
-        });
+        AxiosLogger.attachInterceptor.bind(AxiosLogger)(this.instance);
     }
 
     /**

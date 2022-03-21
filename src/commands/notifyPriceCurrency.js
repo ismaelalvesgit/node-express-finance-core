@@ -1,6 +1,6 @@
 import { currencyApiService, currencyService } from "../services";
 import { coinService } from "../socket/services";
-import logger from "../logger";
+import { Logger } from "../logger";
 
 const name = "notify-currency";
 const group = "second";
@@ -13,10 +13,10 @@ const command = async () => {
         if (currency) {
             const data = await currencyApiService.getCurrency(currency);
             coinService.sendNotification(data);
-            logger.info("Notify price currency sucess");
+            Logger.info("Notify price currency sucess");
         }
     } catch (error) {
-        logger.error(`Failed Notify price currency ${error}`);
+        Logger.error(`Failed Notify price currency ${error}`);
     }
     return `Execute ${name} done`;
 };

@@ -1,6 +1,6 @@
 import apm from "elastic-apm-node";
 import env from "./env";
-import logger from "./logger";
+import { Logger } from "./logger";
 
 /** @type {import('elastic-apm-node')} */
 let elasticAgent;
@@ -13,9 +13,9 @@ if(env.apm.serverUrl){
     });
     
     if(!elasticAgent.isStarted()){
-        logger.info("Failed to start APM server");
+        Logger.info("Failed to start APM server");
     }else{
-        logger.info(`Registered service "${env.apm.serviceName}" in APM Server: ${env.apm.serverUrl}`);
+        Logger.info(`Registered service "${env.apm.serviceName}" in APM Server: ${env.apm.serverUrl}`);
     }
 }
 

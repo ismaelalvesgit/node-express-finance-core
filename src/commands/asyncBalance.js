@@ -1,5 +1,5 @@
 import { investmentService } from "../services";
-import logger from "../logger";
+import { Logger } from "../logger";
 
 const name = "async-balance";
 const group = "day";
@@ -17,10 +17,10 @@ const command = async () => {
                 }, {
                     balance: asyncBalance
                 });
-                logger.info(`Aync Balance Investment ${investment}`);
+                Logger.info(`Aync Balance Investment ${investment}`);
             }    
         } catch (error) {
-            logger.error(`Falied to async balance investment ${investment}, error: ${error}`);
+            Logger.error(`Falied to async balance investment ${investment}, error: ${error}`);
         }
     }));
     return `Execute ${name} done`;

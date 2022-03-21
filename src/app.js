@@ -6,7 +6,6 @@ import helmet from "helmet";
 import hidePoweredBy from "hide-powered-by";
 import hsts from "hsts";
 import xssFilter from "x-xss-protection";
-import morgan from "morgan";
 import swagger from "swagger-ui-express";
 import YAML from "yamljs";
 import { readdirSync } from "fs";
@@ -20,6 +19,7 @@ import responseTime from "response-time";
 import i18n from "./i18n";
 import { Server } from "socket.io";
 import ioRedis from "socket.io-redis";
+import { ExpressLogger } from "./logger";
 
 /** Instances */
 dotenv.config();
@@ -66,15 +66,8 @@ app.set("views", "./src/views");
 app.use("/static", express.static(path.join(__dirname, "/public")));
 
 /** Logger */
-morgan.token("id", (req)=>{
-    return req.id;
-});
-morgan.token("date", function() {
-    return new Date().toLocaleString("pt-BR");
-});
-morgan.token("body", (req) => JSON.stringify(req.body));
-
-app.use(morgan(":id :remote-addr - :remote-user [:date[clf]] \":method :url HTTP/:http-version\" :status :res[content-length] :body \":referrer\" \":user-agent\""));
+app.use(ExpressLogger.onSuccess.bind(ExpressLogger));
+app.use(ExpressLogger.onError.bind(ExpressLogger));
 
 /** Metric Endpoint */
 injectMetricsRoute(app);

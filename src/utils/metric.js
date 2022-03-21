@@ -1,6 +1,6 @@
 import { register, Counter, Summary, collectDefaultMetrics} from "prom-client";
 import ResponseTime from "response-time";
-import logger from "../logger";
+import { Logger } from "../logger";
 
 const excludeUrl = [
     "/",
@@ -44,7 +44,7 @@ export const requestCounters = (req, res, next)=>{
 
 export const startCollection = ()=>{
     collectDefaultMetrics();
-    logger.info("Registered service collect METRICS is ON");
+    Logger.info("Registered service collect METRICS is ON");
 };
 
 /**

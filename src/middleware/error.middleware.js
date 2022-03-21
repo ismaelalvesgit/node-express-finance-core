@@ -8,7 +8,7 @@ import {
     ValidadeSchema
 } from "../utils/erro";
 import { StatusCodes } from "http-status-codes";
-import logger from "../logger";
+import { Logger } from "../logger";
 import elasticAgent from "../apm";
 import env from "../env";
 
@@ -102,7 +102,7 @@ const _loadErrorMessage = (req, error) => {
 
 /* eslint-disable no-unused-vars*/
 export default function errorHandler(error, req, res, next) {
-    logger.warn(`${req.id} ${error.message}`);
+    Logger.warn(`${req.requestId} ${error.message}`);
     _loadErrorMessage(req, error);
     switch (error.constructor) {
         case ValidadeSchema: {
@@ -144,19 +144,19 @@ export default function errorHandler(error, req, res, next) {
                  */
                 let message = error.message || error.sqlMessage;
                 if(env.env !== "development"){
-                    message = `Contact the developer and give me your ID ${req.id}, we're sorry this happened 😞`;
+                    message = `Contact the developer and give me your ID ${req.requestId}, we're sorry this happened 😞`;
                 }
                 res.status(StatusCodes.NOT_ACCEPTABLE).json([{ message }]);
             } else {
                 if (elasticAgent) {
                     elasticAgent.captureError(error, () => {
-                        logger.error(`ID - ${req.id}, Send APM: ${error.message}`);
+                        Logger.error(`ID - ${req.requestId}, Send APM: ${error.message}`);
                     });
                 } else {
-                    logger.error(`ID - ${req.id}, Error: ${error.message}`);
+                    Logger.error(`ID - ${req.requestId}, Error: ${error.message}`);
                 }
                 res.status(StatusCodes.INTERNAL_SERVER_ERROR).json([{
-                    message: `Contact the developer and give me your ID ${req.id}, we're sorry this happened 😞`
+                    message: `Contact the developer and give me your ID ${req.requestId}, we're sorry this happened 😞`
                 }]);
             }
         }

@@ -1,5 +1,5 @@
 import { investmentService } from "../services";
-import logger from "../logger";
+import { Logger } from "../logger";
 import { send } from "../utils/mail";
 import env from "../env";
 
@@ -21,7 +21,7 @@ const command = async () => {
             priceLow
         },
     });
-    logger.info("Notify price day sucess");
+    Logger.info("Notify price day sucess");
     return `Execute ${name} done`;
 };
 

@@ -3,7 +3,7 @@ import dividendsType from "../enum/dividendsType";
 import * as brapiService from "../services/brapi.service";
 import cheerio from "cheerio";
 import axios from "axios";
-import logger from "../logger";
+import { Logger } from "../logger";
 import env from "../env";
 import { boundService } from "../services";
 
@@ -188,14 +188,14 @@ export const syncBound = async()=>{
                         await boundService.create({code});
                     } catch (error) {
                         if(error.code !== "ER_DUP_ENTRY"){
-                            logger.error(`Falied to sync bound ${error}`);
+                            Logger.error(`Falied to sync bound ${error}`);
                         }
                     }
                 }
             } 
         }
     } catch (error) {
-        logger.error(`Falied to sync bound ${error}`);
+        Logger.error(`Falied to sync bound ${error}`);
     }
 };
 

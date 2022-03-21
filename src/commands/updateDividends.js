@@ -1,7 +1,7 @@
 import { dividendsService, transactionService } from "../services";
 import { format } from "date-fns";
 import knex from "../db";
-import logger from "../logger";
+import { Logger } from "../logger";
 import dividendsStatus from "../enum/dividendsStatus";
 
 const name = "update-divideds";
@@ -23,9 +23,9 @@ const command = async () => {
                         price: dy.price,
                     }, trx);
                 }));
-                logger.info(`Auto PAID dividend, investment: ${dy.investment.name}`);
+                Logger.info(`Auto PAID dividend, investment: ${dy.investment.name}`);
             } catch (error) {
-                logger.error(`Faill to update dividend - error: ${error}`);
+                Logger.error(`Faill to update dividend - error: ${error}`);
             }
         }));
     });

@@ -1,7 +1,7 @@
 import env from "./src/env";
 import { httpServer, app } from "./src/app";
 import errorHandler from "./src/middleware/error.middleware";
-import logger from "./src/logger";
+import { Logger } from "./src/logger";
 import { startCollection } from "./src/utils/metric";
 import { syncBound } from "./src/utils";
 import { currencyService } from "./src/services";
@@ -18,10 +18,10 @@ setImmediate(() => {
                     await currencyService.updateCache();
                     await syncBound();
                 } catch (e) {
-                    logger.warning(e);
+                    Logger.warning(e);
                 }
             });
-            logger.info(`Server on http://localhost:${env.server.port}`);
+            Logger.info(`Server on http://localhost:${env.server.port}`);
         });
     }
 });

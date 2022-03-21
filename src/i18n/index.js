@@ -1,6 +1,6 @@
 import path from "path";
 import { I18n } from "i18n";
-import logger from "../logger";
+import { Logger } from "../logger";
 import elasticAgent from "../apm";
 import env from "../env";
 
@@ -26,7 +26,7 @@ i18n.configure({
         if(elasticAgent){
             elasticAgent.captureError(msg);
         }
-        logger.error(msg);
+        Logger.error(msg);
     }
 });
 export default i18n;

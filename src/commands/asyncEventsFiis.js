@@ -3,7 +3,7 @@ import cheerio from "cheerio";
 import { investmentService, eventsService } from "../services";
 import knex from "../db";
 import categoryType from "../enum/categoryType";
-import logger from "../logger";
+import { Logger } from "../logger";
 import env from "../env";
 import { format } from "date-fns";
 import { stringToDate } from "../utils";
@@ -19,7 +19,7 @@ const command = async () => {
         await knex.transaction(async (trx) => {
             await Promise.all(investments.map(async(investment)=>{
                 try {
-                    const { data } = await axios.default.get(`${env.yieldapi}/fundos-imobiliarios/${investment.name.toLowerCase()}`);
+                    const { data } = await axios.get(`${env.yieldapi}/fundos-imobiliarios/${investment.name.toLowerCase()}`);
                     if(data){
                         const $ = cheerio.load(data);
                         const events = JSON.parse($(".documents > .list").attr()["data-page"]);
@@ -42,10 +42,10 @@ const command = async () => {
                                         link: event.link,
                                         description: event.description,
                                     }, trx);
-                                    logger.info(`Auto created event, investment: ${investment.name}`);
+                                    Logger.info(`Auto created event, investment: ${investment.name}`);
                                 } catch (error) {
                                     if(error.code !== "ER_DUP_ENTRY"){
-                                        logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
+                                        Logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
                                     }   
                                 }
                             }
@@ -53,7 +53,7 @@ const command = async () => {
                     }
                 } catch (error) {
                     if(error.code !== "ER_DUP_ENTRY"){
-                        logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
+                        Logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
                     }    
                 }
             }));

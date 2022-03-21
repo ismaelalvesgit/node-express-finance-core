@@ -2,7 +2,7 @@ import axios from "axios";
 import { investmentService, eventsService } from "../services";
 import knex from "../db";
 import categoryType from "../enum/categoryType";
-import logger from "../logger";
+import { Logger } from "../logger";
 import env from "../env";
 import FormData from "form-data";
 
@@ -41,18 +41,18 @@ const command = async () => {
                                         link: event.linkPdf,
                                         description: event.assunto || event.tipo,
                                     }, trx);
-                                    logger.info(`Auto created event, investment: ${investment.name}`);
+                                    Logger.info(`Auto created event, investment: ${investment.name}`);
                                 }
                             } catch (error) {
                                 if(error.code !== "ER_DUP_ENTRY"){
-                                    logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
+                                    Logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
                                 }   
                             }
                          }));
                     }
                 } catch (error) {
                     if(error.code !== "ER_DUP_ENTRY"){
-                        logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
+                        Logger.error(`Faill to async event investment: ${investment.name} - error: ${error}`); 
                     }    
                 }
             }));

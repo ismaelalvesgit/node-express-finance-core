@@ -3,7 +3,7 @@ import cheerio from "cheerio";
 import { dividendsService, investmentService, transactionService } from "../services";
 import knex from "../db";
 import categoryType from "../enum/categoryType";
-import logger from "../logger";
+import { Logger } from "../logger";
 import { stringToDate, formatAmount, parseStringToDividendType } from "../utils";
 import { format } from "date-fns";
 import env from "../env";
@@ -19,7 +19,7 @@ const command = async () => {
         await knex.transaction(async (trx) => {
             await Promise.all(investments.map(async(investment)=>{
                 try {
-                    const { data } = await axios.default.get(`${env.yieldapi}/acoes/${investment.name.toLowerCase()}`);
+                    const { data } = await axios.get(`${env.yieldapi}/acoes/${investment.name.toLowerCase()}`);
                     if(data){
                         const $ = cheerio.load(data);
                         for (let i = 0; i < 4; i++) {
@@ -52,13 +52,13 @@ const command = async () => {
                                         dueDate: extract.dueDate,
                                         type: extract.type, 
                                     });
-                                    logger.info(`Auto created dividend, investment: ${investment.name}, broker: ${transaction.broker.name}`);
+                                    Logger.info(`Auto created dividend, investment: ${investment.name}, broker: ${transaction.broker.name}`);
                                 }));
                             }
                         }  
                     }
                 } catch (error) {
-                    logger.error(`Faill to async dividend investment: ${investment.name} - error: ${error}`); 
+                    Logger.error(`Faill to async dividend investment: ${investment.name} - error: ${error}`); 
                 }
             }));
         });

@@ -1,6 +1,6 @@
 import { dividendsService, investmentService, transactionService,  iexcloundService} from "../services";
 import knex from "../db";
-import logger from "../logger";
+import { Logger } from "../logger";
 import env from "../env";
 import { parsePercent } from "../utils";
 
@@ -41,13 +41,13 @@ const command = async () => {
                                         dueDate: dividend.dueDate,
                                         type: dividend.type,
                                     });
-                                    logger.info(`Auto created dividend, investment: ${investment.name}, broker: ${transaction.broker.name}`);
+                                    Logger.info(`Auto created dividend, investment: ${investment.name}, broker: ${transaction.broker.name}`);
                                 }));
                             }
                         }));
                     }
                 } catch (error) {
-                    logger.error(`Faill to async dividend investment: ${investment.name} - error: ${error}`); 
+                    Logger.error(`Faill to async dividend investment: ${investment.name} - error: ${error}`); 
                 }
             }));
         });

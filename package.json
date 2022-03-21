@@ -28,6 +28,7 @@
     },
     "dependencies": {
         "@hapi/joi": "^17.1.1",
+        "@somosphi/logger": "^1.6.0",
         "axios": "^0.21.4",
         "cheerio": "^1.0.0-rc.10",
         "commander": "^9.0.0",
@@ -47,7 +48,6 @@
         "i18n": "^0.13.4",
         "ioredis": "^4.28.3",
         "knex": "^0.95.15",
-        "morgan": "^1.10.0",
         "mysql2": "^2.3.3",
         "mysqldump": "^3.2.0",
         "node-cache": "^5.1.2",
@@ -62,8 +62,6 @@
         "swagger-ui-express": "^4.3.0",
         "table": "^6.8.0",
         "uuid": "^8.3.2",
-        "winston": "^3.4.0",
-        "winston-daily-rotate-file": "^4.5.5",
         "x-xss-protection": "^2.0.0",
         "xml-js": "^1.6.11",
         "yamljs": "^0.3.0"

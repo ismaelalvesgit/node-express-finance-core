@@ -1,5 +1,5 @@
 import { io } from "../app";
-import logger from "../logger";
+import { Logger } from "../logger";
 import { MainConsume } from "./consumers/main.consumer";
 import realIp from "./middlewares/realIpMiddleware";
 
@@ -15,4 +15,4 @@ io.on("connection", socket =>{
     });
 });
 
-logger.info("Registered service SOCKET is ON");
+Logger.info("Registered service SOCKET is ON");

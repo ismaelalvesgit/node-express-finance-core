@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import logger from "../logger";
+import { Logger } from "../logger";
 import mysqldump from "mysqldump";
 import env from "../env";
 import { mkdirSync, existsSync } from "fs";
@@ -43,8 +43,8 @@ const command = async () => {
                         }
                     ]
                 });
-                logger.info(`Backup sucess ${date}`);
-            }).catch((e) => logger.error(e));
+                Logger.info(`Backup sucess ${date}`);
+            }).catch((e) => Logger.error(e));
         }
     }
 
