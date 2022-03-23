@@ -21,6 +21,7 @@ const command = async () => {
 
                 if (isAfter(parseISO(qoute.regularMarketTime), parseISO(invest.updatedAt))) {
                     Logger.info(`Updating values investment: ${invest.name}`);
+                    const currency = qoute.currency;
                     const priceAverage = invest.priceAverage ?? 0;
                     const longName = invest.category.name === categoryType.CRIPTOMOEDA ? qoute.coinName : qoute.longName;
                     const logoUrl = invest.category.name === categoryType.CRIPTOMOEDA ? qoute.coinImageUrl : qoute.logourl;
@@ -44,7 +45,8 @@ const command = async () => {
                         previousClosePrice,
                         variationDay,
                         changePercentTotal,
-                        variationTotal
+                        variationTotal,
+                        currency
                     }, trx);
                     await investService.sendNotification(Object.assign(invest, {
                         longName,
@@ -57,6 +59,7 @@ const command = async () => {
                         variationDay,
                         changePercentTotal,
                         variationTotal,
+                        currency,
                         updatedAt: new Date()
                     }));
                 }

@@ -32,5 +32,6 @@ export const createDividendsSchema = joi.object({
         qnt: joi.number().unsafe().positive().min(1).required(),
         price: joi.number().unsafe().positive().min(1).required(),
         fees: joi.number().unsafe().min(0),
+        currency: joi.string(),
     }).required(),
 });

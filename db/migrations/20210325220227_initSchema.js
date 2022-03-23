@@ -36,6 +36,7 @@ exports.up = async function (knex) {
     table.string("longName").nullable();
     table.text("logoUrl").nullable();
     table.string("sector").notNullable().defaultTo("ChangeMe");
+    table.string("currency", 6).nullable();
     table.decimal("balance").defaultTo(0).notNullable();
     table.decimal("priceDay", 10, 7).defaultTo(0).nullable();
     table.decimal("priceDayHigh", 10, 7).defaultTo(0).nullable();
@@ -111,6 +112,7 @@ exports.up = async function (knex) {
     table.decimal("price").notNullable();
     table.decimal("total").notNullable();
     table.decimal("fees").nullable().defaultTo(0);
+    table.string("currency", 6).nullable().defaultTo("BRL");
     createdAt(knex, table);
     updatedAt(knex, table);
   });

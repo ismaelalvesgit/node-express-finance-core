@@ -9,7 +9,7 @@ const up = async () => {
     try {
         await Promise.all([
             await executeSql(`CREATE DATABASE IF NOT EXISTS test_${env.db.database}`),
-            await conn.migrate.up(),
+            await conn.migrate.latest(),
         ]);
     } catch (error) {logger.info(error);}
 };

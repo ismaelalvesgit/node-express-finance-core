@@ -11,6 +11,7 @@ exports.up = function (knex) {
         "name",
         "longName",
         "balance",
+        "currency",
         "sector",
         "volumeDay",
         "previousClosePrice",

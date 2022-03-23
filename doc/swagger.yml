@@ -803,6 +803,10 @@ paths:
                     type: number
                     description: "Formatação de valores Ex: R$ 00,10 === 10"
                     example: 10
+                  currency:
+                    type: string
+                    example: USD
+                    description: "Moeda utilizada no ativo"
                   createdAt:
                     type: string
                     example: "2021-03-31 22:34:36.476"
@@ -1376,6 +1380,10 @@ paths:
                     type: number
                     example: 1
                     description: "Quantidade de cotas"
+                  currency:
+                    type: string
+                    example: USD
+                    description: "Moeda utilizada no ativo"
                   sector:
                     type: string
                     example: LAJE
@@ -1477,6 +1485,10 @@ paths:
                 sector:
                   type: string
                   example: "Ismael Alves"
+                currency:
+                  type: string
+                  example: USD
+                  description: "Moeda utilizada no ativo"
       responses:
         200: # status code
           description: Retorna status.
@@ -1837,6 +1849,10 @@ components:
                   type: number
                   description: "Formatação de valores Ex: R$ 00,10 === 10"
                   example: 10
+                currency:
+                  type: string
+                  example: USD
+                  description: "Moeda utilizada no ativo"
                 createdAt:
                   type: string
                   example: "2021-03-31 22:34:36.476"
@@ -2183,6 +2199,10 @@ components:
                   type: string
                   example: Vinci Corporate Fundo De Investimento Imobiliario
                   description: "Nome completo do ativo"
+                currency:
+                  type: string
+                  example: USD
+                  description: "Moeda utilizada no ativo"
                 balance:
                   type: number
                   example: 1
@@ -2385,6 +2405,10 @@ components:
           type: number
           description: "Formatação de valores Ex: R$ 00,10 === 10"
           example: 10
+        currency:
+          type: string
+          example: USD
+          description: "Moeda utilizada no ativo"
     
     investment:
       type: object
@@ -2405,3 +2429,7 @@ components:
         sector:
           type: string
           example: "Ismael Alves"
+        currency:
+          type: string
+          example: USD
+          description: "Moeda utilizada no ativo"

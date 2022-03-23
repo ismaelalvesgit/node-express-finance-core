@@ -33,7 +33,8 @@ const command = async () => {
                                         qnt,
                                         type: dividend.type,
                                         total,
-                                        fees: parsePercent(env.system.fees.outsidePercent, total)
+                                        fees: parsePercent(env.system.fees.outsidePercent, total),
+                                        currency: dividend.currency
                                     }, trx, {
                                         investmentId: investment.id,
                                         brokerId,

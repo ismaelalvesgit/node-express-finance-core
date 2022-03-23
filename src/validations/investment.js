@@ -32,6 +32,7 @@ export const createInvestmentSchema = joi.object({
         categoryId: joi.number().integer().unsafe().required(),
         name: joi.string().required().uppercase(),
         longName: joi.string(),
+        currency: joi.string(),
         sector: joi.string().required().uppercase(),
     }).required(),
 });
@@ -40,6 +41,7 @@ export const updateInvestmentSchema = joi.object({
     body: joi.object({
         categoryId: joi.number().integer().unsafe(),
         longName: joi.string(),
+        currency: joi.string(),
         sector: joi.string().uppercase(),
     }).min(1),
 });

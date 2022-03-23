@@ -12,6 +12,7 @@ export const selectDefault = [
     "name",
     "longName",
     "balance",
+    "currency",
     "sector",
     "volumeDay",
     "previousClosePrice",
