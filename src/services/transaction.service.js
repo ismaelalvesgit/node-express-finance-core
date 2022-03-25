@@ -90,6 +90,9 @@ export const create = async (data) => {
             price: data.price,
             total,
             profit,
+            fees: data.fees,
+            taxes: data.taxes,
+            brokerage: data.brokerage,
         }, trx);
 
         return investmentService.updateBalance(investment, trx);
@@ -152,6 +155,9 @@ export const update = (where, data) => {
             price: data.price,
             total,
             profit,
+            fees: data.fees,
+            taxes: data.taxes,
+            brokerage: data.brokerage,
         }, trx);
 
         return investmentService.updateBalance(investment, trx);

@@ -121,10 +121,10 @@ export const update = (where, data) =>{
  * @returns {import('knex').Knex.QueryBuilder}
  */
  export const updateBalance = async(where, trx) =>{
-    const { balance } = await investmentModel.getBalance(where.id, trx);
+    const data = await investmentModel.getBalance(where.id, trx);
 
     return investmentModel.update({id: where.id}, {
-        balance: Number(balance)
+        balance: Number(data.balance || 0)
     }, trx);
 };
 

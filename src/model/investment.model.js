@@ -161,7 +161,6 @@ export const getBalance = (id, trx) => {
         .first()
         .select(knex.raw("TRUNCATE(SUM(transaction.total), 2) as balance"))
         .innerJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
-        .groupBy(`${TABLE_NAME}.id`)
         .where({
             [`${TABLE_NAME}.id`]: id
         });

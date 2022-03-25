@@ -81,7 +81,7 @@ exports.up = async function (knex) {
     table.decimal("fees", 10, 7).defaultTo(0).nullable();
     table.decimal("taxes", 10, 7).defaultTo(0).nullable();
     table.decimal("profit", 10, 7).defaultTo(0).nullable();
-    table.float("qnt").notNullable();
+    table.decimal("qnt", 10, 7).notNullable();
     table.decimal("price", 10, 7).notNullable();
     table.decimal("total", 10, 7).notNullable();
     createdAt(knex, table);

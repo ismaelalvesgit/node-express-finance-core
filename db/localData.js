@@ -49,4 +49,5 @@ export const broker = [
     "WARREN CCTVM S/A",
     "PASSFOLIO",
     "AVENUE",
+    "MERCADO BITCOIN"
 ];

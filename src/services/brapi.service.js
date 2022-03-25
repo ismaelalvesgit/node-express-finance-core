@@ -11,6 +11,7 @@ import env from "../env";
  * @property {String} logourl
  * @property {String} longName
  * @property {String} currency
+ * @property {number} currencyRateFromUSD
  * @property {Number} regularMarketPrice
  * @property {String} regularMarketDayHigh
  * @property {String} regularMarketDayLow
@@ -36,35 +37,43 @@ import env from "../env";
  * @property {String} twoHundredDayAverageChangePercent
  */
 
-/**
- * @typedef QuoteCoin
- * @type {Object}
- * @property {string} coin
- * @property {String} coinName
- * @property {String} coinImageUrl
- * @property {String} currency
- * @property {number} currencyRateFromUSD
- * @property {Number} regularMarketPrice
- * @property {String} regularMarketDayHigh
- * @property {String} regularMarketDayLow
- * @property {String} regularMarketDayRange
- * @property {Number} regularMarketChange
- * @property {String} regularMarketChangePercent
- * @property {String} regularMarketTime
- * @property {String} marketCap
- * @property {Number} regularMarketVolume
- */
-
 const http = new HttpAdapter({
     baseUrl: env.brapi
 });
+
+
+/**
+ * 
+ * @param {Array<Object>} data 
+ * @returns { Array<Quote> }
+ */
+const _formatDataCoin = (data) => {
+    return data.map((coin)=>{
+        return {
+            symbol: coin.coin,
+            longName: coin.coinName,
+            logourl: coin.coinImageUrl,
+            currency: coin.currency,
+            currencyRateFromUSD: coin.currencyRateFromUSD,
+            regularMarketPrice: coin.regularMarketPrice,
+            regularMarketDayHigh: coin.regularMarketDayHigh,
+            regularMarketDayLow: coin.regularMarketDayLow,
+            regularMarketDayRange: coin.regularMarketDayRange,
+            regularMarketChange: coin.regularMarketChange,
+            regularMarketChangePercent: coin.regularMarketChangePercent,
+            regularMarketTime: new Date(Number(coin.regularMarketTime) * 1000).toISOString(),
+            marketCap: coin.marketCap,
+            regularMarketVolume: coin.regularMarketVolume,
+        };
+    });
+};
 
 /**
  * 
  * @param {string} name 
  * @returns {Promise<Quote>}
  */
-export const findQoute = async (name)=>{
+export const findQoute = async (name) => {
     try {
         const { data } = await http.send({
             url: `/quote/${name.toLocaleUpperCase()}?fundamental=true`,
@@ -78,7 +87,7 @@ export const findQoute = async (name)=>{
             ["response", "data", "error"],
             error,
         );
-        throw new Brapi({statusCode: error?.response?.status, message});
+        throw new Brapi({ statusCode: error?.response?.status, message });
     }
 };
 
@@ -87,12 +96,12 @@ export const findQoute = async (name)=>{
  * @param {string} name 
  * @returns {Promise<Quote>}
  */
-export const searchQoute = async (name)=>{
+export const searchQoute = async (name) => {
     try {
         const { data } = await http.send({
             url: "/available",
             method: "GET",
-            params:{
+            params: {
                 search: name
             }
         });
@@ -104,7 +113,7 @@ export const searchQoute = async (name)=>{
             ["response", "data", "error"],
             error,
         );
-        throw new Brapi({statusCode: error?.response?.status, message});
+        throw new Brapi({ statusCode: error?.response?.status, message });
     }
 };
 
@@ -113,7 +122,7 @@ export const searchQoute = async (name)=>{
  * @param {string} name 
  * @returns {Promise<QuoteCoin>}
  */
-export const findQouteCoin = async (name)=>{
+export const findQouteCoin = async (name) => {
     try {
         const { data } = await http.send({
             url: "v2/crypto",
@@ -123,7 +132,7 @@ export const findQouteCoin = async (name)=>{
                 currency: "BRL"
             }
         });
-        return data.coins[0];
+        return  _formatDataCoin(data.coins)[0];
     } catch (error) {
         const defaultMessage = "Failed to get quote coin brapi";
         const message = R.pathOr(
@@ -131,7 +140,7 @@ export const findQouteCoin = async (name)=>{
             ["response", "data", "error"],
             error,
         );
-        throw new Brapi({statusCode: error?.response?.status, message});
+        throw new Brapi({ statusCode: error?.response?.status, message });
     }
 };
 
@@ -140,7 +149,7 @@ export const findQouteCoin = async (name)=>{
  * @param {string} name 
  * @returns {Promise<[string]>}
  */
-export const searchQouteCoin = async (name)=>{
+export const searchQouteCoin = async (name) => {
     try {
         const { data } = await http.send({
             url: "v2/crypto/available",
@@ -157,6 +166,6 @@ export const searchQouteCoin = async (name)=>{
             ["response", "data", "error"],
             error,
         );
-        throw new Brapi({statusCode: error?.response?.status, message});
+        throw new Brapi({ statusCode: error?.response?.status, message });
     }
 };

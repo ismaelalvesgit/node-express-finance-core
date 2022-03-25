@@ -4,7 +4,6 @@ import { isAfter, parseISO } from "date-fns";
 import knex from "../db";
 import { Logger } from "../logger";
 import { categoryIsBR, diffPercent, findBrapiQoute, parsePercent } from "../utils";
-import categoryType from "../enum/categoryType";
 
 const name = "update-investment";
 const group = "minute";
@@ -23,8 +22,8 @@ const command = async () => {
                     Logger.info(`Updating values investment: ${invest.name}`);
                     const currency = qoute.currency;
                     const priceAverage = invest.priceAverage ?? 0;
-                    const longName = invest.category.name === categoryType.CRIPTOMOEDA ? qoute.coinName : qoute.longName;
-                    const logoUrl = invest.category.name === categoryType.CRIPTOMOEDA ? qoute.coinImageUrl : qoute.logourl;
+                    const longName = qoute.longName;
+                    const logoUrl = qoute.logourl;
                     const priceDay = qoute.regularMarketPrice;
                     const priceDayHigh = qoute.regularMarketDayHigh;
                     const priceDayLow = qoute.regularMarketDayLow;
