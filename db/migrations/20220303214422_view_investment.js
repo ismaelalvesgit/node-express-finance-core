@@ -10,6 +10,7 @@ exports.up = function (knex) {
         "id",
         "name",
         "longName",
+        "logoUrl",
         "balance",
         "currency",
         "sector",

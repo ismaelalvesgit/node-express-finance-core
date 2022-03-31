@@ -5,7 +5,6 @@ import * as iexcloundService from "./iexclound.service";
 import knex from "../db";
 import { BadRequest, Brapi, NotFound } from "../utils/erro";
 import { categoryIsBR, findBrapiQoute, searchBrapiQoute } from "../utils";
-import env from "../env";
 
 /**
  * @param {import("../model/investment.model").Investment} where 
@@ -89,7 +88,7 @@ export const update = (where, data) =>{
         }
 
         if(data.logoUrl && data.logoUrl.endsWith("favicon.svg")){
-            data.logoUrl = `${env.server.url}/static/uploads/system/default.png`;
+            data.logoUrl = `https://raw.githubusercontent.com/ismaelalvesgit/node-express-finance/master/src/public/uploads/system/default.png`;
         }
 
         return investmentModel.update(where, data, trx);

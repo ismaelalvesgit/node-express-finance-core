@@ -11,6 +11,7 @@ export const selectDefault = [
     "id",
     "name",
     "longName",
+    "logoUrl",
     "balance",
     "currency",
     "sector",
