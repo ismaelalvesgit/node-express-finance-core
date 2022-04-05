@@ -29,8 +29,8 @@ script:
   - npm run lint
   - npm test
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - docker build -t express-example .
-  - docker tag express-example $DOCKER_USERNAME/express-example
-  - docker push $DOCKER_USERNAME/express-example
+  - docker build -t express-finance .
+  - docker tag express-finance $DOCKER_USERNAME/express-finance
+  - docker push $DOCKER_USERNAME/express-finance
 
 after_success: npm run test:coverage:coveralls

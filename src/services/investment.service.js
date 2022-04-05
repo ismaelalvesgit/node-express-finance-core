@@ -88,7 +88,7 @@ export const update = (where, data) =>{
         }
 
         if(data.logoUrl && data.logoUrl.endsWith("favicon.svg")){
-            data.logoUrl = `https://raw.githubusercontent.com/ismaelalvesgit/node-express-finance/master/src/public/uploads/system/default.png`;
+            data.logoUrl = "https://raw.githubusercontent.com/ismaelalvesgit/node-express-finance/master/src/public/uploads/system/default.png";
         }
 
         return investmentModel.update(where, data, trx);

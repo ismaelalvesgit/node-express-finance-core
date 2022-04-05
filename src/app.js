@@ -10,6 +10,7 @@ import swagger from "swagger-ui-express";
 import YAML from "yamljs";
 import { readdirSync } from "fs";
 const swaggerDocument = YAML.load("./doc/swagger.yml");
+import errorHandler from "./middleware/error.middleware";
 import uuidMiddleware from "./middleware/uuid.middleware";
 import changeLocaleMiddleware from "./middleware/changeLocale.middleware";
 import env from "./env";
@@ -92,5 +93,7 @@ readdirSync("./src/routes/").forEach((file)=>{
 app.all("*", (req, res)=>{
     res.status(404).json([{message: "Rota Não Encontrada"}]);
 });
+
+app.use(errorHandler);
 
 export { io, app, httpServer };
