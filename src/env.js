@@ -6,6 +6,7 @@ export default {
     env: process.env.NODE_ENV || "development",
     timezone: process.env.TIME_ZONE || "America/Fortaleza",
     brapi: process.env.BRAPI_URL,
+    mercadoBitCoin: process.env.MERCADO_BITCOIN_URL,
     curreyncyApi: process.env.CURRENCY_URL,
     yahoo: process.env.YAHOO_FINANCE_URL,
     yahooKey: process.env.YAHOO_FINANCE_KEY,

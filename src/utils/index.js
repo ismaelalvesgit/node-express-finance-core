@@ -12,10 +12,15 @@ import { boundService } from "../services";
  * @param {import('../enum/categoryType')} type 
  * @param {string} name 
  */
- export const findBrapiQoute = (type, name) =>{
+ export const findBrapiQoute = async(type, name) =>{
     switch (type) {
         case categoryType.CRIPTOMOEDA:
-            return brapiService.findQouteCoin(name);
+            try {
+                const qoute = await brapiService.findQouteCoin(name);
+                return qoute;
+            } catch (error) {
+                return brapiService.findQouteCoin2(name);
+            }
         default:
             return brapiService.findQoute(name);
     }
@@ -72,6 +77,19 @@ import { boundService } from "../services";
  */
  export const diffPercent = (value1, value2) =>{
     const val = ((value1 - value2) / value2) * 100;
+    if(isNaN(val) || val === Infinity){
+        return 0;
+    }
+    return val;
+};
+
+/**
+ * 
+ * @param {number} value1 
+ * @param {number} value2 
+ */
+ export const getPercent = (value1, value2) =>{
+    const val = (value1 / value2) * 100;
     if(isNaN(val) || val === Infinity){
         return 0;
     }

@@ -9,6 +9,7 @@ import * as asyncBalance from "./asyncBalance";
 import * as backupData from "./backupData";
 import * as notifyPriceDay from "./notifyPriceDay";
 import * as notifyPriceCurrency from "./notifyPriceCurrency";
+import * as updateCrypto from "./updateCrypto";
 
 /**
  * @typedef Commands
@@ -34,5 +35,6 @@ commands.push(asyncBalance);
 commands.push(backupData);
 commands.push(notifyPriceDay);
 commands.push(notifyPriceCurrency);
+commands.push(updateCrypto);
 
 export default commands;

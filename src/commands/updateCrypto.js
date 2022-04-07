@@ -1,64 +1,56 @@
-import { investmentService, iexcloundService } from "../services";
+import { investmentService, brapiService } from "../services";
 import { investService } from "../socket/services";
 import { isAfter, parseISO } from "date-fns";
 import knex from "../db";
 import { Logger } from "../logger";
-import { categoryIsBR, diffPercent, findBrapiQoute, parsePercent } from "../utils";
+import { diffPercent, getPercent, parsePercent } from "../utils";
+import categoryType from "../enum/categoryType";
 
-const name = "update-investment";
-const group = "minute";
-const schedule = "*/10 9-20 * * 1-5";
+const name = "update-crypto-price";
+const group = "second";
+const schedule = "*/30 * * * * *";
 const deadline = 180;
 
 const command = async () => {
-    const investments = await investmentService.findAll();
+    const investments = await investmentService.findAll({'category.name': categoryType.CRIPTOMOEDA});
     await knex.transaction(async (trx) => {
         await Promise.all(investments.map(async (invest) => {
             try {
-                const qoute = categoryIsBR(invest.category.name) ? await findBrapiQoute(invest.category.name, invest.name) : 
-                    await iexcloundService.findQoute(invest.name);
+                const qoute = await brapiService.findQouteCoin2(invest.name);
 
                 if (isAfter(parseISO(qoute.regularMarketTime), parseISO(invest.updatedAt))) {
                     Logger.info(`Updating values investment: ${invest.name}`);
-                    const currency = qoute.currency;
                     const priceAverage = invest.priceAverage ?? 0;
-                    const longName = qoute.longName;
-                    const logoUrl = qoute.logourl;
-                    const priceDay = qoute.regularMarketPrice;
+                    const priceDay =  Number(qoute.regularMarketPrice || 0);
                     const priceDayHigh = qoute.regularMarketDayHigh;
                     const priceDayLow = qoute.regularMarketDayLow;
-                    const changePercentDay = qoute.regularMarketChangePercent;
                     const volumeDay = qoute.regularMarketVolume;
-                    const previousClosePrice = qoute.regularMarketPreviousClose;
-                    const variationDay = qoute.regularMarketChange?.toFixed(2);
+                    const previousClosePrice = Number(qoute.regularMarketPreviousClose || 0);
+                    const variationDay = previousClosePrice - priceDay;
+                    const changePercentDay = getPercent(variationDay, priceDay);
                     const changePercentTotal = diffPercent(priceDay, priceAverage); 
                     const variationTotal = parsePercent(changePercentTotal, priceAverage) * Number(invest.qnt ?? 0);
                     await investmentService.update({ id: invest.id }, {
-                        logoUrl,
-                        longName,
                         priceDay,
                         priceDayHigh,
                         priceDayLow,
-                        changePercentDay,
                         volumeDay,
                         previousClosePrice,
                         variationDay,
+                        changePercentDay,
                         changePercentTotal,
-                        variationTotal,
-                        currency
+                        variationTotal
                     }, trx);
                     await investService.sendNotification(Object.assign(invest, {
-                        longName,
                         priceDay,
                         priceDayHigh,
                         priceDayLow,
-                        changePercentDay,
                         volumeDay,
                         previousClosePrice,
                         variationDay,
+                        changePercentDay,
                         changePercentTotal,
                         variationTotal,
-                        currency,
                         updatedAt: new Date()
                     }));
                 }

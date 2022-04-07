@@ -41,6 +41,9 @@ const http = new HttpAdapter({
     baseUrl: env.brapi
 });
 
+const http2 = new HttpAdapter({
+    baseUrl: env.mercadoBitCoin
+});
 
 /**
  * 
@@ -69,6 +72,24 @@ const _formatDataCoin = (data) => {
 };
 
 /**
+ * @param {string} name 
+ * @param {Object} data 
+ * @returns { Quote }
+ */
+const _formatDataCoin2 = (name, data) => {
+    return {
+        symbol: name,
+        currency: 'BRL',
+        regularMarketPrice: data.buy,
+        regularMarketDayHigh: data.high,
+        regularMarketDayLow: data.low,
+        regularMarketPreviousClose: data.last,
+        regularMarketTime: new Date(Number(data.date) * 1000).toISOString(),
+        regularMarketVolume: data.vol
+    };
+};
+
+/**
  * 
  * @param {string} name 
  * @returns {Promise<Quote>}
@@ -84,7 +105,7 @@ export const findQoute = async (name) => {
         const defaultMessage = "Failed to get quote brapi";
         const message = R.pathOr(
             defaultMessage,
-            ["response", "data", "error"],
+            ["response", "data", "message"],
             error,
         );
         throw new Brapi({ statusCode: error?.response?.status, message });
@@ -110,7 +131,7 @@ export const searchQoute = async (name) => {
         const defaultMessage = "Failed to search quote brapi";
         const message = R.pathOr(
             defaultMessage,
-            ["response", "data", "error"],
+            ["response", "data", "message"],
             error,
         );
         throw new Brapi({ statusCode: error?.response?.status, message });
@@ -137,7 +158,30 @@ export const findQouteCoin = async (name) => {
         const defaultMessage = "Failed to get quote coin brapi";
         const message = R.pathOr(
             defaultMessage,
-            ["response", "data", "error"],
+            ["response", "data", "message"],
+            error,
+        );
+        throw new Brapi({ statusCode: error?.response?.status, message });
+    }
+};
+
+/**
+ * 
+ * @param {string} name 
+ * @returns {Promise<QuoteCoin>}
+ */
+export const findQouteCoin2 = async (name) => {
+    try {
+        const { data } = await http2.send({
+            url: `/api/${name}/ticker/`,
+            method: "GET",
+        });
+        return  _formatDataCoin2(name, data.ticker);
+    } catch (error) {
+        const defaultMessage = "Failed to get quote coin mercado bitcoin";
+        const message = R.pathOr(
+            defaultMessage,
+            ["response", "data", "message"],
             error,
         );
         throw new Brapi({ statusCode: error?.response?.status, message });
@@ -163,7 +207,7 @@ export const searchQouteCoin = async (name) => {
         const defaultMessage = "Failed to search quote coin brapi";
         const message = R.pathOr(
             defaultMessage,
-            ["response", "data", "error"],
+            ["response", "data", "message"],
             error,
         );
         throw new Brapi({ statusCode: error?.response?.status, message });

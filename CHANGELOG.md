@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado novo job pra pegar preço de cripto ativos
 - Adicionado o campo "currency" em investment, dividends
 - Melhorado sistema de logger
 - Adicionado rotas /bcb/bdrx, /bcb/sp500, /bcb/boundList, /bcb/bound/:code

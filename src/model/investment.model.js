@@ -127,7 +127,11 @@ export const findAll = (options, trx) => {
         const value = Object.values(options?.where)[0];
         if(key.startsWith("category")){
             const e = key.split(".")[1];
-            query.whereRaw(`category->"$.${e}" = ?`, [value]);
+            if(Array.isArray(value)){
+                query.whereRaw(`category->"$.${e}" IN (?)`, [value.split(',')]);
+            }else{
+                query.whereRaw(`category->"$.${e}" = ?`, [value]);
+            }
         }else{
             query.where(`${key}`, "like", `%${value}%`);
         }
@@ -138,7 +142,7 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
-  
+    console.log(query.toQuery().toString())
     return transacting(query, trx);
 };
 
