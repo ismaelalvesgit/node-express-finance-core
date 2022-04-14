@@ -1,5 +1,5 @@
 import { dividendsService, transactionService } from "../services";
-import { format } from "date-fns";
+import { daysToWeeks, format } from "date-fns";
 import knex from "../db";
 import { Logger } from "../logger";
 import dividendsStatus from "../enum/dividendsStatus";
@@ -14,7 +14,7 @@ const command = async () => {
     await knex.transaction(async (trx) => {
         await Promise.all(dividends.map(async (dy) => {
             try {
-                const transactions = await transactionService.findAllDividensByMonth({investmentId: dy.investment.id}, dy.dateBasis, trx);
+                const transactions = await transactionService.findAllDividensByMonth({investmentId: dy.investment.id, brokerId: dy.broker.id}, dy.dateBasis, trx);
                 await Promise.all(transactions.map((transaction)=>{
                     const { qnt } = transaction;
                     return dividendsService.update({id: dy.id}, {
