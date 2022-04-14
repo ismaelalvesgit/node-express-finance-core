@@ -1,5 +1,5 @@
 import { dividendsService, transactionService } from "../services";
-import { daysToWeeks, format } from "date-fns";
+import { format } from "date-fns";
 import knex from "../db";
 import { Logger } from "../logger";
 import dividendsStatus from "../enum/dividendsStatus";
