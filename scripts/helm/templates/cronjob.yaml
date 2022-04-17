@@ -1,5 +1,5 @@
 {{- range .Values.jobs }}
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: "{{ $.Release.Name }}-{{ .name }}-job"
@@ -12,6 +12,9 @@ metadata:
     {{- if .labels.jobgroup }}
     jobgroup: {{ .labels.jobgroup }}
     {{- end }}
+    app.kubernetes.io/managed-by: {{ $.Release.Service }}
+  annotations:
+    meta.helm.sh/release-name: {{ $.Chart.Name }}
 spec:
   schedule: {{ .schedule | quote }}
   concurrencyPolicy: Forbid

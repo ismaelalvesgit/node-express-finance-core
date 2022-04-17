@@ -36,4 +36,9 @@ Common labels
 {{- define "service.labels" -}}
 app: {{ template "service.name" . }}
 version: v1
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{- define "service.annotations" -}}
+meta.helm.sh/release-name: {{ .Chart.Name }}
 {{- end }}

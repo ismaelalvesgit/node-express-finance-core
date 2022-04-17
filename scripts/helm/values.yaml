@@ -1,11 +1,9 @@
-namespace: 
-
-replicaCount: 1
+replicaCount: 2
 
 image:
-  repository: smaelalvesdoc/express-finance
+  repository: ismaelalvesdoc/express-finance
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
 
 service:
   enabled: true
@@ -22,7 +20,7 @@ env:
   DB_USERNAME: root
   DB_DATABASE: finance
   DB_DEBUG: false
-  REDIS_HOST: localhost
+  REDIS_HOST: kubernetes.docker.internal
   REDIS_PORT: 6379
   REDIS_PREFIX: finance
   APM_SERVER_URL: http://kubernetes.docker.internal:8200
@@ -35,11 +33,11 @@ secret:
 
 resources:
   requests:
-    memory: "128Mi"
-    cpu: 100m
+    memory: "700Mi"
+    cpu: 400m
   limits:
-    memory: "500Mi"
-    cpu: 200m
+    memory: "1Gi"
+    cpu: 800m
 
 jobs:
   - name: update-investment
@@ -124,4 +122,4 @@ autoscaling:
   - type: Resource
     resource:
       name: memory
-      targetAverageUtilization: 60
+      targetAverageUtilization: 70

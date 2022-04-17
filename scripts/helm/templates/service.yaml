@@ -6,6 +6,8 @@ metadata:
   {{- if or .Values.namespace .Release.Namespace }}
   namespace: {{ or .Values.namespace .Release.Namespace }}
   {{- end}}
+  annotations:
+  {{ include "service.annotations" . | nindent 4 }}
 spec:
   selector: {{ include "service.labels" . | nindent 4 }}
   ports:

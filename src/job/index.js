@@ -12,5 +12,12 @@ if(env.env === "development"){
     });
     Logger.info(`Running ${commands.length} jobs`);
 }else{
-    Logger.info(`Not Registered service JOB batch is OFF NODE_ENV is not development is ${env.env}`);
+    commands.forEach((job)=>{
+        new CronJob(job.schedule, async ()=>{
+            if(job.group === "second"){
+                await job.command();
+            }
+        }, null, true, env.timezone);
+    });
+    Logger.info(`Not Registered ALL service JOB batch is OFF NODE_ENV is not development is ${env.env} registered jobs group "second"`);
 }

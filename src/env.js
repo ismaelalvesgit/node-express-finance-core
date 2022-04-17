@@ -1,5 +1,11 @@
 import dotenv from "dotenv";
-dotenv.config();
+import path from "path";
+
+if(process.env.NODE_ENV === 'production'){
+    dotenv.config({path: path.join(__dirname, '../.env.production')});
+}else{
+    dotenv.config();
+}
 
 const url = process.env.SERVER_URL || "http://localhost:3000";
 export default {

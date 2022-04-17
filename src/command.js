@@ -46,6 +46,7 @@ commands.map((command, key) => {
         process.exit(exitCode);
     }else{
         Logger.info("NODE_ENV is required production");
+        process.exit(0);
     }
   };
 
