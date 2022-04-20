@@ -9,9 +9,13 @@ service:
   enabled: true
   type: NodePort
 
+ingress:
+  enabled: true
+  host: ingress.local
+
 env:
   NODE_ENV: production
-  TIME_ZONE: America/Fortaleza
+  TZ: America/Fortaleza
   SERVER_ACTIVE: true
   SERVER_PORT: 3000
   SERVER_BODY_LIMIT: 500kb

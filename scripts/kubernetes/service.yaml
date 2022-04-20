@@ -5,10 +5,13 @@ kind: Service
 metadata:
   name: finance
   namespace: default
+  annotations:
+    meta.helm.sh/release-name: finance
 spec:
   selector: 
     app: finance
     version: v1
+    app.kubernetes.io/managed-by: Helm
   ports:
   - port: 3000
     targetPort: http

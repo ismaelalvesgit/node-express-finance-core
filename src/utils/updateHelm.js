@@ -8,7 +8,7 @@ setImmediate(()=>{
     const env = {}
     const envSecret = {}
     Object.keys(process.env).forEach((key)=>{
-        if(!new RegExp(/\d|vscode|npm|temp|tmp|git|profile/gi).test(key) && (key === key.toLocaleUpperCase()) && process.env[key].length > 0){
+        if(!new RegExp(/\d|vscode|npm|temp|tmp|git|profile|home|processor|nvm/gi).test(key) && (key === key.toLocaleUpperCase()) && process.env[key].length > 0){
             if(key.match(/pass|secret|key/gi)){
                 Object.assign(envSecret, {
                     [key]: process.env[key]

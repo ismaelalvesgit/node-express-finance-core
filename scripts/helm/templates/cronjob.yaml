@@ -31,7 +31,24 @@ spec:
             - name: "{{ .name }}-job"
               image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
               imagePullPolicy: Always
+              env:
+                {{- range $key, $value := $.Values.env }}
+                {{- if $value }}
+                - name: {{ $key | upper }}
+                  value: {{ $value | quote }}
+                {{- end }}
+                {{- end }}
+                {{- range $key, $value := $.Values.secret }}
+                {{- if $value }}
+                - name: {{ $key | upper }}
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ include "service.fullname" $ }}
+                      key: {{ $key | upper }}
+                {{- end }}
+                {{- end }}
               command:
+                - npx
                 - babel-node
                 - cron
                 - {{ .command }}

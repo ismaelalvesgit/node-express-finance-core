@@ -7,7 +7,10 @@ metadata:
   labels: 
      app: finance
      version: v1
+     app.kubernetes.io/managed-by: Helm
   namespace: default
+  annotations:
+    meta.helm.sh/release-name: finance
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
@@ -21,6 +24,6 @@ spec:
     type: Resource
   - resource:
       name: memory
-      targetAverageUtilization: 60
+      targetAverageUtilization: 70
     type: Resource
   minReplicas: 1

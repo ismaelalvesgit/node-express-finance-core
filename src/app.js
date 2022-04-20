@@ -75,7 +75,7 @@ injectMetricsRoute(app);
 
 /** Routers */
 app.get("/", (req, res)=>{
-    res.render("index");
+    res.render("index", {url: env.server.url});
 });
 app.get("/favicon.ico", (req, res)=>{
     res.sendStatus(200);

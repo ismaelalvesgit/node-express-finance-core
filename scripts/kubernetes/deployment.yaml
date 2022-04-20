@@ -7,9 +7,12 @@ metadata:
   labels: 
     app: finance
     version: v1
+    app.kubernetes.io/managed-by: Helm
   namespace: default
+  annotations:
+    meta.helm.sh/release-name: finance
 spec:
-  replicas: 1
+  replicas: 2
   minReadySeconds: 100
   strategy:
     rollingUpdate:
@@ -20,11 +23,13 @@ spec:
     matchLabels: 
       app: finance
       version: v1
+      app.kubernetes.io/managed-by: Helm
   template:
     metadata:
       labels: 
         app: finance
         version: v1
+        app.kubernetes.io/managed-by: Helm
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
@@ -35,18 +40,46 @@ spec:
             value: "http://kubernetes.docker.internal:8200"
           - name: APM_SERVICE_NAME
             value: "finance"
+          - name: BACKUP_DB
+            value: "false"
+          - name: BCB_URL
+            value: "https://www.bcb.gov.br"
+          - name: BRAPI_URL
+            value: "https://brapi.ga/api"
+          - name: CURRENCY_URL
+            value: "https://economia.awesomeapi.com.br"
           - name: DB_DATABASE
             value: "finance"
+          - name: DB_DEBUG
+            value: "false"
           - name: DB_HOST
             value: "kubernetes.docker.internal"
           - name: DB_PORT
             value: "3306"
           - name: DB_USERNAME
             value: "root"
-          - name: NODE_ENV
-            value: "production"
+          - name: ELASTIC_VERSION
+            value: "7.12.1"
+          - name: EMAIL_HOST
+            value: "smtp.gmail.com"
+          - name: EMAIL_PORT
+            value: "465"
+          - name: EMAIL_SECURE
+            value: "true"
+          - name: EMAIL_TYPE
+            value: "gmail"
+          - name: EMAIL_USER
+            value: ""
+          - name: IEXCLOUND_LIMIT_USAGE
+            value: "50000"
+          - name: IEXCLOUND_URL
+            value: "https://cloud.iexapis.com/stable"
+          - name: MERCADO_BITCOIN_URL
+            value: "https://www.mercadobitcoin.net"
+          - name: NEWS_URL
+            value: "http://api.mediastack.com"
           - name: REDIS_HOST
-            value: "localhost"
+            value: "kubernetes.docker.internal"
           - name: REDIS_PORT
             value: "6379"
           - name: REDIS_PREFIX
@@ -57,38 +90,99 @@ spec:
             value: "500kb"
           - name: SERVER_PORT
             value: "3000"
+          - name: SERVER_URL
+            value: "http://ingress.local/finance"
           - name: TIME_ZONE
             value: "America/Fortaleza"
+          - name: TZ
+            value: "America/Fortaleza"
+          - name: YAHOO_FINANCE_URL
+            value: "https://yfapi.net"
+          - name: YIELD_URL
+            value: "https://statusinvest.com.br"
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: finance
                 key: DB_PASSWORD
-        image: "smaelalvesdoc/express-finance:latest"
+          - name: EMAIL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: EMAIL_PASSWORD
+          - name: IEXCLOUND_KEY
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: IEXCLOUND_KEY
+          - name: IEXCLOUND_KEY_ADMIN
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: IEXCLOUND_KEY_ADMIN
+          - name: NEWS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: NEWS_KEY
+          - name: YAHOO_FINANCE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: YAHOO_FINANCE_KEY
+        image: "ismaelalvesdoc/express-finance:latest"
         imagePullPolicy: Always
         command: ["/bin/sh"]
         args: ["-c", "npm run migrate:up"]
       containers:
       - name: finance
-        image: "smaelalvesdoc/express-finance:latest"
-        imagePullPolicy: IfNotPresent
+        image: "ismaelalvesdoc/express-finance:latest"
+        imagePullPolicy: Always
         env:
           - name: APM_SERVER_URL
             value: "http://kubernetes.docker.internal:8200"
           - name: APM_SERVICE_NAME
             value: "finance"
+          - name: BACKUP_DB
+            value: "false"
+          - name: BCB_URL
+            value: "https://www.bcb.gov.br"
+          - name: BRAPI_URL
+            value: "https://brapi.ga/api"
+          - name: CURRENCY_URL
+            value: "https://economia.awesomeapi.com.br"
           - name: DB_DATABASE
             value: "finance"
+          - name: DB_DEBUG
+            value: "false"
           - name: DB_HOST
             value: "kubernetes.docker.internal"
           - name: DB_PORT
             value: "3306"
           - name: DB_USERNAME
             value: "root"
-          - name: NODE_ENV
-            value: "production"
+          - name: ELASTIC_VERSION
+            value: "7.12.1"
+          - name: EMAIL_HOST
+            value: "smtp.gmail.com"
+          - name: EMAIL_PORT
+            value: "465"
+          - name: EMAIL_SECURE
+            value: "true"
+          - name: EMAIL_TYPE
+            value: "gmail"
+          - name: EMAIL_USER
+            value: ""
+          - name: IEXCLOUND_LIMIT_USAGE
+            value: "50000"
+          - name: IEXCLOUND_URL
+            value: "https://cloud.iexapis.com/stable"
+          - name: MERCADO_BITCOIN_URL
+            value: "https://www.mercadobitcoin.net"
+          - name: NEWS_URL
+            value: "http://api.mediastack.com"
           - name: REDIS_HOST
-            value: "localhost"
+            value: "kubernetes.docker.internal"
           - name: REDIS_PORT
             value: "6379"
           - name: REDIS_PREFIX
@@ -99,13 +193,46 @@ spec:
             value: "500kb"
           - name: SERVER_PORT
             value: "3000"
+          - name: SERVER_URL
+            value: "http://ingress.local/finance"
           - name: TIME_ZONE
             value: "America/Fortaleza"
+          - name: TZ
+            value: "America/Fortaleza"
+          - name: YAHOO_FINANCE_URL
+            value: "https://yfapi.net"
+          - name: YIELD_URL
+            value: "https://statusinvest.com.br"
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: finance
                 key: DB_PASSWORD
+          - name: EMAIL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: EMAIL_PASSWORD
+          - name: IEXCLOUND_KEY
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: IEXCLOUND_KEY
+          - name: IEXCLOUND_KEY_ADMIN
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: IEXCLOUND_KEY_ADMIN
+          - name: NEWS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: NEWS_KEY
+          - name: YAHOO_FINANCE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: finance
+                key: YAHOO_FINANCE_KEY
         ports:
           - name: http
             containerPort: 3000
@@ -118,11 +245,11 @@ spec:
           failureThreshold: 5
         resources:
           requests:
-            memory: "128Mi"
-            cpu: 100m
+            memory: "700Mi"
+            cpu: 400m
           limits:
-            memory: "500Mi"
-            cpu: 200m
+            memory: "1Gi"
+            cpu: 800m
         securityContext:
           allowPrivilegeEscalation: false
           capabilities: {}

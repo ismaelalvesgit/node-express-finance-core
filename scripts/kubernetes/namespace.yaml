@@ -1,9 +1,0 @@
----
-# Source: finance/templates/namespace.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: default
-  labels: 
-    app: finance
-    version: v1

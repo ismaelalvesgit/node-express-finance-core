@@ -1,0 +1,24 @@
+---
+# Source: finance/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress 
+metadata:
+  name: finance-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: 'false'
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    meta.helm.sh/release-name: finance
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: ingress.local
+    http:
+      paths:
+      - path: /finance(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name:  finance
+            port: 
+              number: 3000

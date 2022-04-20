@@ -1,5 +1,9 @@
 FROM node:14-slim
 
+RUN apt-get install tzdata
+ENV TZ="America/Fortaleza"
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 LABEL maintainer="Ismael Alves <cearaismael1997@gmail.com>"
 WORKDIR /app
 COPY package*.json ./

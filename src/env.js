@@ -10,7 +10,7 @@ if(process.env.NODE_ENV === 'production'){
 const url = process.env.SERVER_URL || "http://localhost:3000";
 export default {
     env: process.env.NODE_ENV || "development",
-    timezone: process.env.TIME_ZONE || "America/Fortaleza",
+    timezone: process.env.TZ || "America/Fortaleza",
     brapi: process.env.BRAPI_URL,
     mercadoBitCoin: process.env.MERCADO_BITCOIN_URL,
     curreyncyApi: process.env.CURRENCY_URL,

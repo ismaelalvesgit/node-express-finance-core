@@ -1,6 +1,9 @@
 
 echo desativando statup
 
+echo Desativando ingress
+kubectl delete -f ingress.yaml
+
 echo Desativando os services 
 kubectl delete -f service.yaml
 
