@@ -123,12 +123,17 @@ export const findStokeAll = (options, trx) => {
 export const findAll = (options, trx) => {
     const query = knex(VIEW);
     if (options?.where) {
+        if(typeof options?.where === "string"){
+            Object.assign(options, {
+                where: JSON.parse(options?.where)
+            });
+        }
         const key = Object.keys(options?.where)[0];
         const value = Object.values(options?.where)[0];
         if(key.startsWith("category")){
             const e = key.split(".")[1];
             if(Array.isArray(value)){
-                query.whereRaw(`category->"$.${e}" IN (?)`, [value.split(',')]);
+                query.whereRaw(`category->"$.${e}" IN (?)`, [value.split(",")]);
             }else{
                 query.whereRaw(`category->"$.${e}" = ?`, [value]);
             }
@@ -142,7 +147,7 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
-    console.log(query.toQuery().toString())
+
     return transacting(query, trx);
 };
 

@@ -148,7 +148,7 @@ export default function errorHandler(error, req, res, next) {
                 }
                 res.status(StatusCodes.NOT_ACCEPTABLE).json([{ message }]);
             } else {
-                if (elasticAgent) {
+                if (elasticAgent && elasticAgent.isStarted()) {
                     elasticAgent.captureError(error, () => {
                         Logger.error(`ID - ${req.requestId}, Send APM: ${error.message}`);
                     });

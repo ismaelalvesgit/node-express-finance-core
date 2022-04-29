@@ -1,11 +1,8 @@
 import dotenv from "dotenv";
 import path from "path";
 
-if(process.env.NODE_ENV === 'production'){
-    dotenv.config({path: path.join(__dirname, '../.env.production')});
-}else{
-    dotenv.config();
-}
+const env = process.env.NODE_ENV ? `../.env.${process.env.NODE_ENV}` : "../.env";
+dotenv.config({path: path.join(__dirname, env)});
 
 const url = process.env.SERVER_URL || "http://localhost:3000";
 export default {
@@ -26,7 +23,6 @@ export default {
     yieldapi: process.env.YIELD_URL,
     server:{
         url,
-        active: process.env.SERVER_ACTIVE === "true",
         port: parseInt(process.env.SERVER_PORT || "3000"),
         bodyLimit: process.env.SERVER_BODY_LIMIT || "500kb"
     },

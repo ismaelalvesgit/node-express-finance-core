@@ -1,6 +1,6 @@
 import { investmentService, brapiService } from "../services";
 import { investService } from "../socket/services";
-import { isAfter, parseISO } from "date-fns";
+import { isAfter, parseISO, subMinutes } from "date-fns";
 import knex from "../db";
 import { Logger } from "../logger";
 import { diffPercent, getPercent, parsePercent } from "../utils";
@@ -12,7 +12,7 @@ const schedule = "*/30 * * * * *";
 const deadline = 180;
 
 const command = async () => {
-    const investments = await investmentService.findAll({'category.name': categoryType.CRIPTOMOEDA});
+    const investments = await investmentService.findAll({"category.name": categoryType.CRIPTOMOEDA});
     await knex.transaction(async (trx) => {
         await Promise.all(investments.map(async (invest) => {
             try {
@@ -30,17 +30,19 @@ const command = async () => {
                     const changePercentDay = getPercent(variationDay, priceDay);
                     const changePercentTotal = diffPercent(priceDay, priceAverage); 
                     const variationTotal = parsePercent(changePercentTotal, priceAverage) * Number(invest.qnt ?? 0);
-                    await investmentService.update({ id: invest.id }, {
-                        priceDay,
-                        priceDayHigh,
-                        priceDayLow,
-                        volumeDay,
-                        previousClosePrice,
-                        variationDay,
-                        changePercentDay,
-                        changePercentTotal,
-                        variationTotal
-                    }, trx);
+                    if(isAfter(subMinutes(parseISO(qoute.regularMarketTime), 2), parseISO(invest.updatedAt))){
+                        await investmentService.update({ id: invest.id }, {
+                            priceDay,
+                            priceDayHigh,
+                            priceDayLow,
+                            volumeDay,
+                            previousClosePrice,
+                            variationDay,
+                            changePercentDay,
+                            changePercentTotal,
+                            variationTotal
+                        }, trx);
+                    }
                     await investService.sendNotification(Object.assign(invest, {
                         priceDay,
                         priceDayHigh,

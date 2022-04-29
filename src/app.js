@@ -89,11 +89,12 @@ readdirSync("./src/routes/").forEach((file)=>{
     app.use(prefix, router);
 });
 
-//** Default Router */
+/** Default Router */
 app.all("*", (req, res)=>{
     res.status(404).json([{message: "Rota Não Encontrada"}]);
 });
 
+/** Error Middleware */
 app.use(errorHandler);
 
 export { io, app, httpServer };

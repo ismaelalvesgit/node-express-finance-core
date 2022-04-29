@@ -79,7 +79,7 @@ const _formatDataCoin = (data) => {
 const _formatDataCoin2 = (name, data) => {
     return {
         symbol: name,
-        currency: 'BRL',
+        currency: "BRL",
         regularMarketPrice: data.buy,
         regularMarketDayHigh: data.high,
         regularMarketDayLow: data.low,

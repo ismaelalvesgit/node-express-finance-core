@@ -6,20 +6,18 @@ import { syncBound } from "./src/utils";
 import { currencyService } from "./src/services";
 
 setImmediate(() => {
-    if (env.server.active) {
-        httpServer.listen(env.server.port, () => {
-            import("./src/socket");
-            import("./src/job");
-            startCollection();
-            process.nextTick(async () => {
-                try {
-                    await currencyService.updateCache();
-                    await syncBound();
-                } catch (e) {
-                    Logger.warning(e);
-                }
-            });
-            Logger.info(`Server on http://localhost:${env.server.port}`);
+    httpServer.listen(env.server.port, () => {
+        import("./src/socket");
+        import("./src/job");
+        startCollection();
+        process.nextTick(async () => {
+            try {
+                await currencyService.updateCache();
+                await syncBound();
+            } catch (e) {
+                Logger.warning(e);
+            }
         });
-    }
+        Logger.info(`Server on http://localhost:${env.server.port}`);
+    });
 });

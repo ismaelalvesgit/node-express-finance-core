@@ -14,7 +14,7 @@ export const findOne = catchAsync(async (req, res) =>{
 });
 
 export const find = catchAsync(async (req, res) =>{
-    const where = JSON.parse(req.query.search);
+    const where = req.query.search;
     const sortBy = req.query.sortBy;
     const orderBy = req.query.orderBy;
     const limit = req.query.limit;

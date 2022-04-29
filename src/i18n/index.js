@@ -23,7 +23,7 @@ i18n.configure({
     queryParameter: "lang",
     header: "accept-language",
     logErrorFn: (msg)=>{
-        if(elasticAgent){
+        if(elasticAgent && elasticAgent.isStarted()){
             elasticAgent.captureError(msg);
         }
         Logger.error(msg);
