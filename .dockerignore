@@ -58,6 +58,7 @@ docker-compose.prod.yml
 jest.config.js
 jest.setup.js
 app.png
+*.rego
 .eslintrc.json
 .eslintignore
 .env.example

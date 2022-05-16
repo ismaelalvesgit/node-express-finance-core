@@ -271,7 +271,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT sum(variationTotal) as \"Total\"\nFROM finance.investment",
+          "rawSql": "SELECT sum(variationTotal) as \"Total\"\nFROM finance.investment\nwhere priceDay is not null",
           "refId": "A",
           "select": [
             [
@@ -382,7 +382,7 @@
           "hide": false,
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT (\n(select sum(total) from finance.dividends where status = \"PAID\") + \nsum(variationTotal) + \n(select sum(profit) from finance.transaction)\n) AS \"Total\"\nFROM finance.investment",
+          "rawSql": "SELECT (\n(select sum(total) from finance.dividends where status = \"PAID\") + \nsum(variationTotal) + \n(select sum(profit) from finance.transaction)\n) AS \"Total\"\nFROM finance.investment\nwhere priceDay is not null",
           "refId": "A",
           "select": [
             [
@@ -618,7 +618,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT \n(SUM(variationTotal) / SUM(balance)) * 100 as \"Percentual\"\nFROM finance.investment",
+          "rawSql": "SELECT \n(SUM(variationTotal) / SUM(balance)) * 100 as \"Percentual\"\nFROM finance.investment\nwhere priceDay is not null",
           "refId": "A",
           "select": [
             [
@@ -743,6 +743,60 @@
                 "value": "currencyUSD"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Preço SPG"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Preço DX"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Preço PFF"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
           }
         ]
       },
@@ -836,7 +890,7 @@
           "color": {
             "mode": "thresholds"
           },
-          "decimals": 2,
+          "decimals": 4,
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -1171,8 +1225,8 @@
         "showHeader": true,
         "sortBy": [
           {
-            "desc": true,
-            "displayName": "Total de Aportes"
+            "desc": false,
+            "displayName": "Lucro/Prejuízo"
           }
         ]
       },
@@ -1355,7 +1409,7 @@
           "hide": false,
           "metricColumn": "balance",
           "rawQuery": true,
-          "rawSql": "SELECT\n  dy.updatedAt AS \"time\",\n  sum(dy.total - dy.fees) as \"Dividendo\",\n  inv.name as Nome,\n  CONCAT('R$ ', FORMAT(sum(dy.total - dy.fees), 2)) as \"Valor\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\nwhere dy.status = \"PROVISIONED\" and inv.balance > 0\ngroup by inv.id\nORDER BY dy.updatedAt",
+          "rawSql": "SELECT\n  dy.updatedAt AS \"time\",\n  sum(dy.total - dy.fees) as \"Dividendo\",\n  inv.name as Nome,\n  CONCAT('R$ ', FORMAT(sum(dy.total - dy.fees), 2)) as \"Valor\",\n  DATE_FORMAT(dy.dueDate, '%d-%b') as 'Dt Pag'\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\nwhere dy.status = \"PROVISIONED\" and inv.balance > 0\ngroup by inv.id\nORDER BY dy.updatedAt",
           "refId": "A",
           "select": [
             [
@@ -1436,7 +1490,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\nsum(tran.qnt * dy.price) as \"Dividendo\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.transaction tran on inv.id = tran.investmentId\nwhere dy.dueDate > last_day(now() - INTERVAL 1 MONTH) and dy.status = \"PAID\" and inv.balance > 0\n\n",
+          "rawSql": "SELECT\nsum(tran.qnt * dy.price) as \"Dividendo\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.transaction tran on inv.id = tran.investmentId\nwhere dy.dueDate > last_day(now() - INTERVAL 2 MONTH) and dy.dueDate < last_day(now() - INTERVAL 1 MONTH) and dy.status = \"PAID\" and inv.balance > 0\n\n",
           "refId": "A",
           "select": [
             [
@@ -2539,7 +2593,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$.USD.bid",
+              "jsonPath": "$.USDBRL.bid",
               "type": "number"
             }
           ],
@@ -2612,7 +2666,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$.EUR.bid",
+              "jsonPath": "$.EURBRL.bid",
               "type": "number"
             }
           ],
@@ -2681,7 +2735,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$.CHF.bid",
+              "jsonPath": "$.CHFBRL.bid",
               "type": "number"
             }
           ],
@@ -2750,7 +2804,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$.CAD.bid",
+              "jsonPath": "$.CADBRL.bid",
               "type": "number"
             }
           ],
@@ -2820,7 +2874,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$.LTC.bid",
+              "jsonPath": "$.LTCBRL.bid",
               "type": "number"
             }
           ],
@@ -2894,7 +2948,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$.DOGE.bid",
+              "jsonPath": "$.DOGEBRL.bid",
               "type": "number"
             }
           ],
@@ -2964,7 +3018,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$.BTC.bid",
+              "jsonPath": "$.BTCBRL.bid",
               "type": "number"
             }
           ],
@@ -3034,7 +3088,7 @@
           },
           "fields": [
             {
-              "jsonPath": "$.ETH.bid",
+              "jsonPath": "$.ETHBRL.bid",
               "type": "number"
             }
           ],
@@ -3063,6 +3117,6 @@
   "timezone": "",
   "title": "Finance",
   "uid": "u6pvSDYnk",
-  "version": 51,
+  "version": 62,
   "weekStart": ""
 }

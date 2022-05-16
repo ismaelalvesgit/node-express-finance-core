@@ -25,7 +25,8 @@
         "seed:create": "knex seed:make --env local %NAME%",
         "seed:run": "knex seed:run --env local",
         "setup:up": "npm run migrate:up && npm run seed:run",
-        "update:helm": "cross-env NODE_ENV=production babel-node src/utils/updateHelm.js"
+        "update:helm": "cross-env NODE_ENV=production babel-node src/utils/updateHelm.js",
+        "conftest": "docker run --rm -v ${PWD}:/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile"
     },
     "dependencies": {
         "@hapi/joi": "^17.1.1",

@@ -17,6 +17,9 @@ import { boundService } from "../services";
         case categoryType.CRIPTOMOEDA:
             try {
                 const qoute = await brapiService.findQouteCoin(name);
+                if(!qoute.regularMarketPrice){
+                    throw new Error('fail')
+                }
                 return qoute;
             } catch (error) {
                 return brapiService.findQouteCoin2(name);

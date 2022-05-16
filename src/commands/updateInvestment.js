@@ -29,7 +29,7 @@ const command = async () => {
                     const priceDayLow = qoute.regularMarketDayLow;
                     const changePercentDay = qoute.regularMarketChangePercent;
                     const volumeDay = qoute.regularMarketVolume;
-                    const previousClosePrice = qoute.regularMarketPreviousClose;
+                    const previousClosePrice = qoute.regularMarketPreviousClose ?? invest.previousClosePrice;
                     const variationDay = qoute.regularMarketChange?.toFixed(2);
                     const changePercentTotal = diffPercent(priceDay, priceAverage); 
                     const variationTotal = parsePercent(changePercentTotal, priceAverage) * Number(invest.qnt ?? 0);

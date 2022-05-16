@@ -1,4 +1,5 @@
 import * as updateInvestment from "./updateInvestment";
+import * as updateLastPrice from "./updateLastPrice";
 import * as updateDividends from "./updateDividends";
 import * as asyncDividendsFiis from "./asyncDividendsFiis";
 import * as asyncDividendsAcao from "./asyncDividendsAcao";
@@ -9,7 +10,7 @@ import * as asyncBalance from "./asyncBalance";
 import * as backupData from "./backupData";
 import * as notifyPriceDay from "./notifyPriceDay";
 import * as notifyPriceCurrency from "./notifyPriceCurrency";
-import * as updateCrypto from "./updateCrypto";
+import * as notifyCrypto from "./notifyCrypto";
 
 /**
  * @typedef Commands
@@ -25,6 +26,7 @@ import * as updateCrypto from "./updateCrypto";
 const commands = [];
 
 commands.push(updateInvestment);
+commands.push(updateLastPrice);
 commands.push(updateDividends);
 commands.push(asyncDividendsFiis);
 commands.push(asyncDividendsAcao);
@@ -35,6 +37,6 @@ commands.push(asyncBalance);
 commands.push(backupData);
 commands.push(notifyPriceDay);
 commands.push(notifyPriceCurrency);
-commands.push(updateCrypto);
+commands.push(notifyCrypto);
 
 export default commands;
