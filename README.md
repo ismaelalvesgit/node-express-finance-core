@@ -21,41 +21,35 @@ npm i
 ```
 Obs: E necessario que o [NodeJs](https://nodejs.org/en/) já esteja instalado em sua máquina
 
-#### 2) Data base
+#### 2) Setup Data base and Initial Data
+``` sh
+npm run setup:up
+```
+
+#### 3) Iniciar Projeto
+``` sh
+npm run dev
+
+# verificar a url http://localhost:3000 ou http://localhost:${customPort}
+```
+#### 2) Iniciar projeto no docker
 ``` sh
 docker-compose up -d 
 ```
 Obs: Deixei uma aquivo de [DockerCompose](https://docs.docker.com/compose/) para que a utilização deste 
 projeto seja mais simples
 
-#### 3) Setup Data base and Initial Data
-``` sh
-npm run setup:up
-```
-
-#### 4) Iniciar Projeto
-``` sh
-npm run dev
-
-# verificar a url http://localhost:3000 ou http://localhost:${customPort}
-```
-
-#### 5) Uso
-Faça 2 request na rota http://localhost:3000 ou http://localhost:${customPort} e verifique o seu 
-console de execução
-
 ## EXTRA
 #### 1) Base de dados
 Antes de iniciar qual ambiente sejá ele `LOCAL | DOCKERIZADO` deve ser criado uma base de dados no [mysql](https://www.mysql.com/) uma para o 
-ambiente de DEV. Para mais informações veirifique `./src/env.js` para as variaveis de ambiente verifirifique `.env.example`
+ambiente de DEV. Para mais informações verifique o arquivo `./src/env.js` para as variaveis de ambiente verifique `.env.example`
 
 Database Name | User Database | Password Database
 --------------|---------------|------------------
 finance       |    `root`     | admin
 
 #### 2) Documentação
-O projeto possui uma documentação das rotas da API basta navegar para `http://localhost:3000/api-doc`, tambem deixei um arquivo localicado 
-`./docker-compose.prod.yml` para facilitar os teste teste projeto.
+O projeto possui uma documentação das rotas da API basta navegar para `http://localhost:3000/api-doc`.
 
 #### 3) Criar nova migrate
 Rode o comando
@@ -70,6 +64,9 @@ os proximos passo [link](https://dev.to/chandrapantachhetri/sending-emails-secur
 
 #### 5) Collection Postman
 Estarei deixando uma collection da ferramenta [Postman](https://www.postman.com/) para facilitação de testes manuais. 😁😁😁
+
+#### 5) Helm
+Deixei configurado o [helm](https://helm.sh/) para que sejá possivel trabalhar com [kubernetes](https://kubernetes.io/pt-br/).
 
 ## Contato
 Desenvolvido por: [Ismael Alves](https://github.com/ismaelalvesgit) 🤓🤓🤓

@@ -10,6 +10,7 @@ services:
       - 3001:3000
     environment:
       NODE_ENV: development
+      TZ: America/Fortaleza
       DB_HOST: mysql
       DB_PASSWORD: ${DB_PASSWORD}
       DB_USERNAME: root
@@ -17,7 +18,6 @@ services:
       APM_SERVER_URL: http://apm-server:8200
       APM_SERVICE_NAME: finance
       REDIS_HOST: redis
-      BACKUP_DB: fasle
       NEWS_URL: http://api.mediastack.com
       NEWS_KEY: 
       BRAPI_URL: https://brapi.ga/api
@@ -28,6 +28,7 @@ services:
       YAHOO_FINANCE_URL: https://yfapi.net
       YAHOO_FINANCE_KEY: 
       CURRENCY_URL: https://economia.awesomeapi.com.br
+      BCB_URL: https://www.bcb.gov.br
       EMAIL_TYPE: ${EMAIL_TYPE}
       EMAIL_HOST: ${EMAIL_HOST}
       EMAIL_PORT: ${EMAIL_PORT}
