@@ -1,5 +1,5 @@
 {{- if .Values.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "service.fullname" . }}
@@ -8,7 +8,7 @@ metadata:
   namespace: {{ or .Values.namespace .Release.Namespace }}
   {{- end}}
   annotations:
-  {{ include "service.annotations" . | nindent 4 }}
+  {{ include "service.annotations" . | indent 3 }}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1

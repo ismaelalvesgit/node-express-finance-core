@@ -1,6 +1,7 @@
 FROM node:14-slim
 
-RUN addgroup -S SERVICE && adduser -S finance -G SERVICE
+RUN groupadd --gid 10001 app && \
+    useradd --gid 10001 --uid 10001 --home-dir /app app
 RUN apt-get install tzdata
 ENV TZ="America/Fortaleza"
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -17,5 +18,5 @@ EXPOSE 3000
 # Healthcheck
 HEALTHCHECK --interval=60s --timeout=20s CMD curl --fail http://localhost:3000/system/healthcheck || exit 1
 
-USER finance
+USER 10001:10001
 CMD [ "npm", "start" ]

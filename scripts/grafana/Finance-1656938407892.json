@@ -382,7 +382,7 @@
           "hide": false,
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT (\n(select sum(total) from finance.dividends where status = \"PAID\") + \nsum(variationTotal) + \n(select sum(profit) from finance.transaction)\n) AS \"Total\"\nFROM finance.investment\nwhere priceDay is not null",
+          "rawSql": "SELECT (\n(select sum(total) from finance.dividends where status = \"PAID\") + \nsum(variationTotal) + \n(select sum(profit) from finance.transaction)\n) AS \"Total\"\nFROM finance.investment\nwhere priceDay is not null and balance > 0",
           "refId": "A",
           "select": [
             [
@@ -462,12 +462,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 5,
         "w": 6,
         "x": 18,
         "y": 0
       },
-      "id": 20,
+      "id": 39,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -494,7 +494,7 @@
           "hide": false,
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT sum(variationDayTotal) AS \"Total\"\nFROM finance.view_investment",
+          "rawSql": "SELECT sum((priceDay - previousClosePrice) * qnt) AS \"Total\" from finance.view_investment\nwhere priceDay is not null and previousClosePrice is not null and balance > 0",
           "refId": "A",
           "select": [
             [
@@ -543,7 +543,7 @@
           "where": []
         }
       ],
-      "title": "Lucros/Prejuizo Do Dia",
+      "title": "Lucro / Prejuizo do dia",
       "transformations": [],
       "type": "stat"
     },
@@ -671,6 +671,118 @@
       "type": "stat"
     },
     {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "currencyBRL"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 5
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "${DS_MYSQL}"
+          },
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "priceDay",
+          "rawQuery": true,
+          "rawSql": "SELECT sum(variationDayTotal) AS \"Total\"\nFROM finance.view_investment",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "priceDay"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "priceDay"
+                ],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": [
+                  "name"
+                ],
+                "type": "column"
+              },
+              {
+                "params": [
+                  "avg"
+                ],
+                "type": "aggregate"
+              },
+              {
+                "params": [
+                  "priceDay"
+                ],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "finance.investment",
+          "timeColumn": "sum(balance)",
+          "where": []
+        }
+      ],
+      "title": "Variação Total",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -784,6 +896,24 @@
             "matcher": {
               "id": "byName",
               "options": "Preço PFF"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyUSD"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Preço PGX"
             },
             "properties": [
               {
@@ -1290,7 +1420,20 @@
           },
           "unit": "currencyBRL"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Qnt"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "string"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 10,
@@ -1326,7 +1469,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\ninv.name as \"Código\",\ntran.price as \"Preço\",\nDATE_FORMAT(tran.negotiationDate, \"%d/%m/%y\") as \"Data\"\nFROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\nwhere tran.id in (SELECT max(id) from finance.transaction group by investmentId) and \nnegotiationDate > last_day(now() - INTERVAL 1 MONTH)\ngroup by inv.id\n",
+          "rawSql": "SELECT\ninv.name as \"Código\",\ntran.price as \"Preço\",\nsum(tran.qnt) as \"Qnt\",\ntran.total as \"Total\",\nDATE_FORMAT(tran.negotiationDate, \"%d/%m/%y\") as \"Data\"\nFROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\nwhere tran.id in (SELECT max(id) from finance.transaction group by investmentId) and \nnegotiationDate > last_day(now() - INTERVAL 1 MONTH)\ngroup by inv.id\n",
           "refId": "A",
           "select": [
             [
@@ -1371,7 +1514,7 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 6,
+        "w": 7,
         "x": 0,
         "y": 28
       },
@@ -1460,8 +1603,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 6,
+        "w": 5,
+        "x": 7,
         "y": 28
       },
       "id": 37,
@@ -1490,7 +1633,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\nsum(tran.qnt * dy.price) as \"Dividendo\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.transaction tran on inv.id = tran.investmentId\nwhere dy.dueDate > last_day(now() - INTERVAL 2 MONTH) and dy.dueDate < last_day(now() - INTERVAL 1 MONTH) and dy.status = \"PAID\" and inv.balance > 0\n\n",
+          "rawSql": "select sum(inv.qnt * dy.price) from finance.dividends dy\ninner join finance.view_investment inv on inv.id = dy.investmentId\nwhere dy.id in (select max(tmp.id) from finance.dividends tmp group by tmp.investmentId);",
           "refId": "A",
           "select": [
             [
@@ -1859,25 +2002,12 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "green",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "axisSoftMin": 0,
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "scaleDistribution": {
-              "log": 2,
-              "type": "log"
-            }
+            "align": "center",
+            "displayMode": "lcd-gauge",
+            "filterable": false
           },
           "decimals": 2,
           "mappings": [],
@@ -1885,14 +2015,55 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "yellow",
+                "color": "green",
                 "value": null
               }
             ]
           },
-          "unit": "currencyBRL"
+          "unit": "percent"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Ùltimo dividendo"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 2
+              },
+              {
+                "id": "unit",
+                "value": "currencyBRL"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Nome"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Categoria"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -1900,25 +2071,22 @@
         "x": 12,
         "y": 36
       },
-      "id": 19,
+      "id": 40,
       "options": {
-        "barRadius": 0,
-        "barWidth": 0.97,
-        "groupWidth": 0.7,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
         },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        },
-        "xTickLabelRotation": 0,
-        "xTickLabelSpacing": 0
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Rendimento (%PM) 12M"
+          }
+        ]
       },
       "pluginVersion": "8.4.3",
       "targets": [
@@ -1929,34 +2097,32 @@
           },
           "format": "table",
           "group": [],
-          "hide": false,
-          "metricColumn": "total",
+          "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\n   DATE_FORMAT(t.negotiationDate, \"%m/%y\") as \"Date\",\n    (select sum(t2.total) from finance.transaction t2 where t2.negotiationDate <= LAST_DAY(t.negotiationDate)) as \"Total Compra\"\nfrom finance.transaction t\ngroup by DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by t.negotiationDate asc\nLIMIT 12;",
+          "rawSql": "select \ninv.name as \"Nome\",\nreplace(inv.category -> \"$.name\", '\"', '') as \"Categoria\",\ndy.price as \"Ùltimo dividendo\", \n((dy.price / inv.priceAverage) * 100) as \"Rendimento (%PM)\", \n((dy.price / inv.priceAverage) * 100) * 12 as \"Rendimento (%PM) 12M\"\nfrom finance.dividends dy\ninner join finance.view_investment inv on inv.id = dy.investmentId\nwhere dy.id in (select max(tmp.id) from finance.dividends tmp group by tmp.investmentId) and inv.balance > 0\ngroup by dy.investmentId;",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "total"
+                  "value"
                 ],
                 "type": "column"
               }
             ]
           ],
-          "table": "finance.transaction",
-          "timeColumn": "negotiationDate",
-          "where": []
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
         }
       ],
-      "title": "Patrimônio (Evolução)",
-      "transformations": [
-        {
-          "id": "merge",
-          "options": {}
-        }
-      ],
-      "type": "barchart"
+      "title": "Renda Média Estimada",
+      "type": "table"
     },
     {
       "fieldConfig": {
@@ -2336,7 +2502,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT\n  sum(total - fees) AS \"Dividendo\",\n  DATE_FORMAT(dueDate, \"%m/%y\") as \"Date\"\nFROM finance.dividends\nwhere status = \"PAID\"\nGROUP BY DATE_FORMAT(dueDate, \"%m/%y\")\norder by dueDate asc\nLIMIT 12",
+          "rawSql": "SELECT\n  sum(total - fees) AS \"Dividendo\",\n  DATE_FORMAT(dueDate, \"%m/%y\") as \"Date\"\nFROM finance.dividends\nwhere status = \"PAID\" AND dueDate >= last_day(now() - INTERVAL 2 YEAR)\nGROUP BY DATE_FORMAT(dueDate, \"%m/%y\")\norder by dueDate asc",
           "refId": "A",
           "select": [
             [
@@ -2386,6 +2552,109 @@
         }
       ],
       "title": "Total de Dividendos pagos por MÊS",
+      "type": "barchart"
+    },
+    {
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMin": 0,
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 1,
+            "scaleDistribution": {
+              "log": 2,
+              "type": "log"
+            }
+          },
+          "decimals": 2,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": null
+              }
+            ]
+          },
+          "unit": "currencyBRL"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 61
+      },
+      "id": 19,
+      "options": {
+        "barRadius": 0,
+        "barWidth": 0.97,
+        "groupWidth": 0.7,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        },
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 0
+      },
+      "pluginVersion": "8.4.3",
+      "targets": [
+        {
+          "datasource": {
+            "type": "mysql",
+            "uid": "${DS_MYSQL}"
+          },
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "total",
+          "rawQuery": true,
+          "rawSql": "SELECT\n   DATE_FORMAT(t.negotiationDate, \"%m/%y\") as \"Date\",\n    (select sum(t2.total) from finance.transaction t2 where t2.negotiationDate <= LAST_DAY(t.negotiationDate)) as \"Total Compra\"\nfrom finance.transaction t\nwhere t.negotiationDate >= last_day(now() - INTERVAL 2 YEAR)\ngroup by DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by t.negotiationDate asc;",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "total"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "finance.transaction",
+          "timeColumn": "negotiationDate",
+          "where": []
+        }
+      ],
+      "title": "Patrimônio (Evolução)",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        }
+      ],
       "type": "barchart"
     },
     {
@@ -2447,7 +2716,7 @@
         "h": 6,
         "w": 24,
         "x": 0,
-        "y": 61
+        "y": 70
       },
       "id": 18,
       "options": {
@@ -2481,7 +2750,7 @@
           "hide": false,
           "metricColumn": "total",
           "rawQuery": true,
-          "rawSql": "SELECT\n   DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n  sum(total) AS \"Total Compra\"\nFROM finance.transaction\nwhere `type` = \"BUY\"\nGROUP BY  DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by negotiationDate asc\nLIMIT 12",
+          "rawSql": "SELECT\n   DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n  sum(total) AS \"Total Compra\"\nFROM finance.transaction\nwhere `type` = \"BUY\" AND negotiationDate >= last_day(now() - INTERVAL 2 YEAR)\nGROUP BY  DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by negotiationDate asc",
           "refId": "A",
           "select": [
             [
@@ -2507,7 +2776,7 @@
           "hide": false,
           "metricColumn": "total",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n  sum(ABS(qnt) * price) AS \"Total Venda\"\nFROM finance.transaction\nwhere `type` = \"SELL\"\nGROUP BY DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by negotiationDate asc\nLIMIT 12",
+          "rawSql": "SELECT\n  DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n  sum(ABS(qnt) * price) AS \"Total Venda\"\nFROM finance.transaction\nwhere `type` = \"SELL\" AND negotiationDate >= last_day(now() - INTERVAL 2 YEAR)\nGROUP BY DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by negotiationDate asc",
           "refId": "B",
           "select": [
             [
@@ -2565,7 +2834,7 @@
         "h": 6,
         "w": 3,
         "x": 0,
-        "y": 67
+        "y": 76
       },
       "id": 29,
       "interval": "30s",
@@ -2638,7 +2907,7 @@
         "h": 6,
         "w": 3,
         "x": 3,
-        "y": 67
+        "y": 76
       },
       "id": 30,
       "interval": "30s",
@@ -2707,7 +2976,7 @@
         "h": 6,
         "w": 3,
         "x": 6,
-        "y": 67
+        "y": 76
       },
       "id": 34,
       "interval": "30s",
@@ -2776,7 +3045,7 @@
         "h": 6,
         "w": 3,
         "x": 9,
-        "y": 67
+        "y": 76
       },
       "id": 36,
       "interval": "30s",
@@ -2846,7 +3115,7 @@
         "h": 6,
         "w": 3,
         "x": 12,
-        "y": 67
+        "y": 76
       },
       "id": 32,
       "interval": "30s",
@@ -2920,7 +3189,7 @@
         "h": 6,
         "w": 3,
         "x": 15,
-        "y": 67
+        "y": 76
       },
       "id": 31,
       "interval": "30s",
@@ -2990,7 +3259,7 @@
         "h": 6,
         "w": 3,
         "x": 18,
-        "y": 67
+        "y": 76
       },
       "id": 35,
       "interval": "30s",
@@ -3060,7 +3329,7 @@
         "h": 6,
         "w": 3,
         "x": 21,
-        "y": 67
+        "y": 76
       },
       "id": 33,
       "interval": "30s",
@@ -3110,13 +3379,13 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
-    "to": "now"
+    "from": "2022-03-02T19:36:59.941Z",
+    "to": "2022-03-03T00:56:59.941Z"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Finance",
   "uid": "u6pvSDYnk",
-  "version": 62,
+  "version": 83,
   "weekStart": ""
 }

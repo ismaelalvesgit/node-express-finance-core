@@ -10,6 +10,7 @@ if(env.apm.serverUrl){
         secretToken: env.apm.secretToken,
         apiKey: env.apm.apiKey,
         serverUrl: env.apm.serverUrl,
+        cloudProvider: env.apm.cloudProvider
     });
     
     if(!elasticAgent.isStarted()){

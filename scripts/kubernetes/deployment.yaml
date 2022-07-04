@@ -251,9 +251,12 @@ spec:
             memory: "1Gi"
             cpu: 800m
         securityContext:
+          capabilities: 
+            drop:
+              - NET_RAW
           allowPrivilegeEscalation: false
-          capabilities: {}
           privileged: false
           procMount: Default
           readOnlyRootFilesystem: false
+          runAsUser: 100
           runAsNonRoot: false

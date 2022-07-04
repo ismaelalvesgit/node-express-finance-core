@@ -7,12 +7,12 @@ metadata:
   namespace: {{ or .Values.namespace .Release.Namespace }}
   {{- end}}
   annotations:
-  {{ include "service.annotations" . | nindent 4 }}
+  {{ include "service.annotations" . | indent 3 }}
 spec:
   selector: {{ include "service.labels" . | nindent 4 }}
   ports:
   - port: {{ .Values.env.SERVER_PORT }}
-    targetPort: http
+    name: http
     protocol: TCP
   type: {{ .Values.service.type }}
 {{- end }}

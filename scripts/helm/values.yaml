@@ -4,6 +4,7 @@ image:
   repository: ismaelalvesdoc/express-finance
   tag: latest
   pullPolicy: Always
+  livenessPath: /system/healthcheck
 
 service:
   enabled: true
@@ -12,13 +13,17 @@ service:
 ingress:
   enabled: true
   host: ingress.local
+  rewrite: /
+  sslRedirect: false
+  sslPassthrough: false
+  forceSslRedirect: false
+  proxySendTimeout: 3600
+  proxyRendTimeout: 3600
 
 env:
   NODE_ENV: production
   TZ: America/Fortaleza
-  SERVER_ACTIVE: true
   SERVER_PORT: 3000
-  SERVER_BODY_LIMIT: 500kb
   DB_HOST: kubernetes.docker.internal
   DB_PORT: 3306
   DB_USERNAME: root
@@ -29,11 +34,36 @@ env:
   REDIS_PREFIX: finance
   APM_SERVER_URL: http://kubernetes.docker.internal:8200
   APM_SERVICE_NAME: finance
-  APM_API_KEY: 
-  APM_SECRET_TOKEN: 
+  BRAPI_URL: https://brapi.ga/api
+  MERCADO_BITCOIN_URL: https://www.mercadobitcoin.net
+  YAHOO_FINANCE_URL: https://yfapi.net
+  NEWS_URL: http://api.mediastack.com
+  IEXCLOUND_URL: https://cloud.iexapis.com/stable
+  IEXCLOUND_LIMIT_USAGE: 50000
+  YIELD_URL: https://statusinvest.com.br
+  CURRENCY_URL: https://economia.awesomeapi.com.br
+  BCB_URL: https://www.bcb.gov.br
+  EMAIL_TYPE: OAuth2
+  EMAIL_USER: devmaelquel@gmail.com
+  EMAIL_OAUTH2_REDIRECT_URI: https://developers.google.com/oauthplayground
+  AMQP_PROTOCOL: amqp
+  AMQP_HOSTNAME: kubernetes.docker.internal
+  AMQP_PORT: 5672
+  AMQP_USERNAME: finance
+  AMQP_VHOST: /
 
 secret:
-  DB_PASSWORD: admin
+  DB_PASSWORD: <admin>
+  YAHOO_FINANCE_KEY: <key>
+  AMQP_PASSWORD: <finance>
+  EMAIL_OAUTH2_CLIENTID: <key>
+  EMAIL_OAUTH2_CLIENTSECRET: <key>
+  EMAIL_OAUTH2_REFRESHTOKEN: <key>
+  IEXCLOUND_KEY: <pk_>
+  IEXCLOUND_KEY_ADMIN: <sk_>
+  NEWS_KEY: <key>
+  APM_API_KEY: 
+  APM_SECRET_TOKEN: 
 
 resources:
   requests:
@@ -43,77 +73,6 @@ resources:
     memory: "1Gi"
     cpu: 800m
 
-jobs:
-  - name: update-investment
-    schedule: "*/10 9-20 * * 1-5"
-    namespace:
-    labels: 
-      jobgroup: "minute"  
-    command: update-divideds
-
-  - name: notify-currency
-    schedule: "*/30 * * * * *"
-    namespace:
-    labels: 
-      jobgroup: "second"  
-    command: notify-currency
-
-  - name: update-divideds
-    schedule: "0 10 * * 1-5"
-    namespace:
-    labels: 
-      jobgroup: "minute"  
-    command: update-divideds
-
-  - name: async-divideds-fiis
-    schedule: "0 10 * * 1-5"
-    namespace:
-    labels: 
-      jobgroup: "day"  
-    command: async-divideds-fiis
-
-  - name: async-divideds-acao
-    schedule: "0 10 * * 1-5"
-    namespace:
-    labels: 
-      jobgroup: "day"  
-    command: async-divideds-acao
-
-  - name: async-divideds-stoke
-    schedule: "0 10 * * 1-5"
-    namespace:
-    labels: 
-      jobgroup: "day"  
-    command: async-divideds-stoke
-
-  - name: async-events-fiis
-    schedule: "0 10 * * 1-5"
-    namespace:
-    labels: 
-      jobgroup: "day"  
-    command: async-events-fiis
-
-  - name: async-events-acao
-    schedule: "0 10 * * 1-5"
-    namespace:
-    labels: 
-      jobgroup: "day"  
-    command: async-events-acao
-
-  - name: backup-data
-    schedule: "0 20 * * *"
-    namespace:
-    labels: 
-      jobgroup: "day"  
-    command: backup-data
-
-  - name: notify-price-day
-    schedule: "10 18 * * 1-5"
-    namespace:
-    labels: 
-      jobgroup: "day"  
-    command: notify-price-day
-
 autoscaling:
   enabled: true
   minReplicas: 1
@@ -122,8 +81,12 @@ autoscaling:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: 60
+      target:
+        type: Utilization
+        averageUtilization: 60
   - type: Resource
     resource:
       name: memory
-      targetAverageUtilization: 70
+      target:
+        type: Utilization
+        averageUtilization: 70

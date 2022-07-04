@@ -40,12 +40,6 @@ pipeline {
                     steps {
                         sh 'npm run test:coverage'
                     }
-
-                    post {
-                        always {
-                            step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/cobertura-coverage.xml'])
-                        }
-                    }
                 }
             }
         }
@@ -78,16 +72,16 @@ pipeline {
                     sh 'docker push $DOCKER_REPO && docker push $DOCKER_REPO:0.1.0'
                 }
             }
-			
-			post {
-                always {
-                    sh 'docker rmi --force $(docker images -q --filter "dangling=true") > /dev/null 2>&1'
-                }
-            }
         }
     }
 
     post {
+
+        always {
+            sh 'docker rmi --force $(docker images -q --filter "dangling=true") > /dev/null 2>&1'
+            step([$class: 'CoberturaPublisher', coberturaReportFile: 'coverage/cobertura-coverage.xml'])
+        }
+
         success {
             emailext body: 'ALTERATIONS: ${CHANGES}', 
             recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],

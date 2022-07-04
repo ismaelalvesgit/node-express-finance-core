@@ -7,6 +7,7 @@ dotenv.config({path: path.join(__dirname, env)});
 const url = process.env.SERVER_URL || "http://localhost:3000";
 export default {
     env: process.env.NODE_ENV || "development",
+    isProd: process.env.NODE_ENV === 'production',
     timezone: process.env.TZ || "America/Fortaleza",
     brapi: process.env.BRAPI_URL,
     mercadoBitCoin: process.env.MERCADO_BITCOIN_URL,
@@ -44,6 +45,7 @@ export default {
         serviceName: process.env.APM_SERVICE_NAME,
         apiKey: process.env.APM_API_KEY,
         secretToken: process.env.APM_SECRET_TOKEN,
+        cloudProvider: process.env.APM_CLOUND_PROVIDER || 'none'
     },
     email:{
         type: process.env.EMAIL_TYPE || "OAuth2",
@@ -59,8 +61,14 @@ export default {
           redirectUri: process.env.EMAIL_OAUTH2_REDIRECT_URI || "https://developers.google.com/oauthplayground"
         },
     },
-    jobs:{
-        autoBackup: process.env.BACKUP_DB === "true"
+    amqp:{
+        active: process.env.AMQP_ACTIVE === "true",
+        protocol: process.env.AMQP_PROTOCOL,
+        host: process.env.AMQP_HOSTNAME,
+        port: parseInt(process.env.AMQP_PORT || "5672"),
+        user: process.env.AMQP_USERNAME,
+        password: process.env.AMQP_PASSWORD,
+        vhost: process.env.AMQP_VHOST,
     },
     system:{
         fees: {

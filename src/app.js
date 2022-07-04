@@ -44,7 +44,9 @@ if(env.redis.host){
 app.use(cors());
 app.use(express.json({limit: env.server.bodyLimit}));
 app.use(express.urlencoded({extended: true}));
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: env.isProd,
+}));
 app.use(hsts({
     maxAge: 31536000,
     includeSubDomains: true, 

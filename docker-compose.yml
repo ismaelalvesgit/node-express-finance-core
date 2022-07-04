@@ -34,6 +34,13 @@ services:
       EMAIL_SECURE: ${EMAIL_SECURE}
       EMAIL_USER: ${EMAIL_USER}
       EMAIL_PASSWORD: ${EMAIL_PASSWORD}
+      AMQP_ACTIVE: ${AMQP_ACTIVE}
+      AMQP_PROTOCOL: ${AMQP_PROTOCOL}
+      AMQP_HOSTNAME: ${AMQP_HOSTNAME}
+      AMQP_PORT: ${AMQP_PORT}
+      AMQP_USERNAME: ${AMQP_USERNAME}
+      AMQP_PASSWORD: ${AMQP_PASSWORD}
+      AMQP_VHOST: ${AMQP_VHOST}
     depends_on:
       - mysql
       - apm-server

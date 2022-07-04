@@ -1,35 +1,11 @@
 # Ambiente de EXEMPLO para express.js
-[![Build Status](https://app.travis-ci.com/ismaelalvesgit/node-express-example.svg?branch=master)](https://app.travis-ci.com/ismaelalvesgit/node-express-example)
+[![Build Status](https://app.travis-ci.com/ismaelalvesgit/node-express-finance-core.svg?branch=master)](https://app.travis-ci.com/ismaelalvesgit/node-express-finance-core)
 
 Este projeto foi criado para motivos acadêmicos para minha aprendizagem pessoal
-utilizando [Node.js](https://nodejs.org/en/) e [Express](https://expressjs.com/pt-br/).
+utilizando [Node.js](https://nodejs.org/en/) e [Express](https://expressjs.com/pt-br/). 
 
-Feramentas Utilizadas:
-* [NodeJs](https://nodejs.org/en/)
-* [Express](https://expressjs.com/pt-br/)
-* [knex](http://knexjs.org/)
-* [mysql2](https://www.npmjs.com/package/mysql2)
-* [dotenv](https://www.npmjs.com/package/dotenv)
-* [cors](https://www.npmjs.com/package/cors)
-* [joi](https://www.npmjs.com/package/@hapi/joi)
-* [date-fns](https://www.npmjs.com/package/date-fns)
-* [date-fns-tz](https://www.npmjs.com/package/date-fns-tz)
-* [helmet](https://www.npmjs.com/package/helmet)
-* [hide-powered-by](https://www.npmjs.com/package/hide-powered-by)
-* [http-status-codes](https://www.npmjs.com/package/http-status-codes)
-* [morgan](https://www.npmjs.com/package/morgan)
-* [swagger-jsdoc](https://www.npmjs.com/package/swagger-jsdoc)
-* [swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express)
-* [uuid](https://www.npmjs.com/package/uuid)
-* [winston](https://www.npmjs.com/package/winston)
-* [winston-daily-rotate-file](https://www.npmjs.com/package/winston-daily-rotate-file)
-* [x-xss-protection](https://www.npmjs.com/package/x-xss-protection)
-* [yamljs](https://www.npmjs.com/package/yamljs)
-* [ioredis](https://www.npmjs.com/package/ioredis)
-* [ramda](https://www.npmjs.com/package/ramda)
-* [i18n](https://www.npmjs.com/package/i18n)
-* [socket.io](https://socket.io/)
-* [nodemon](https://nodemon.io/)
+Depedencia operacional?
+- [jobs](https://github.com/ismaelalvesgit/node-express-finance-job)
 
 ## Screenshots
 App view:
@@ -90,7 +66,7 @@ set NAME=teste && npm run migrate:create
 #### 4) Email Config
 Estarei deixando o link do [appMenosSeguro](https://myaccount.google.com/u/2/lesssecureapps) que necessita estar 
 habilitado para utilização do serviço de envio de email padrão. Para utilizar os serviços de email com OAuth2 siga 
-os proximos passo [link](https://alexb72.medium.com/how-to-send-emails-using-a-nodemailer-gmail-and-oauth2-fe19d66451f9).
+os proximos passo [link](https://dev.to/chandrapantachhetri/sending-emails-securely-using-node-js-nodemailer-smtp-gmail-and-oauth2-g3a).
 
 #### 5) Collection Postman
 Estarei deixando uma collection da ferramenta [Postman](https://www.postman.com/) para facilitação de testes manuais. 😁😁😁
