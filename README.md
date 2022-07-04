@@ -4,7 +4,7 @@
 Este projeto foi criado para motivos acadêmicos para minha aprendizagem pessoal
 utilizando [Node.js](https://nodejs.org/en/) e [Express](https://expressjs.com/pt-br/). 
 
-Depedencia operacional?
+Depedencia operacional:
 - [jobs](https://github.com/ismaelalvesgit/node-express-finance-job)
 
 ## Screenshots
