@@ -18,18 +18,3 @@ export const findAllCategorySchema = joi.object({
         limit: joi.number().integer().positive().min(1),
     }),
 });
-
-/** @deprecated */
-export const createCategorySchema = joi.object({
-    body: joi.object({
-        name: joi.string().required(),
-    }).required(),
-});
-
-
-/** @deprecated */
-export const updateCategorySchema = joi.object({
-    body: joi.object({
-        name: joi.string().required(),
-    }),
-});
