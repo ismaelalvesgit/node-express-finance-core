@@ -1,6 +1,8 @@
 import env from "../env";
 import redisClient from "../redis";
 
+export const TIME_DAY = 86400
+
 /**
  * 
  * @param {import('ioredis').KeyType} key 
@@ -8,7 +10,7 @@ import redisClient from "../redis";
  * @param {number} timeExp 
  * @returns {Promise<"OK">}
  */
-export const setCache = (key, value, timeExp = 86400) => {
+export const setCache = (key, value, timeExp = TIME_DAY) => {
     if (env.redis.host) {
         return redisClient.set(env.redis.prefix.concat(key), value, "EX", timeExp);
     }
@@ -21,7 +23,7 @@ export const setCache = (key, value, timeExp = 86400) => {
  */
 export const getCache = async (key) => {
     if (env.redis.host) {
-        const data = await redisClient.get(key);
+        const data = await redisClient.get(env.redis.prefix.concat(key));
         try {
             return JSON.parse(data);
         } catch (error) {
@@ -40,7 +42,9 @@ export const delCache = (req, key) => {
     if (env.redis.host) {
         const prossed = [];
         if (req) {
-            prossed.push(redisClient.del(req.originalUrl || req.url));
+            const ip = (req.headers["x-forwarded-for"] || req.socket.remoteAddress).replace(":", "").replace(".", "-");
+            const key = (req.originalUrl || req.url).replace("/", ":").substring(1).concat(ip);
+            prossed.push(redisClient.del(env.redis.prefix.concat(key)));
         }
 
         if(key){
@@ -60,9 +64,18 @@ export const delCache = (req, key) => {
  */
 export const delPrefixCache = async (prefix) => {
     if (env.redis.host) {
-        const keys = (await redisClient.keys(`${env.redis.prefix}${prefix}:*`)).map((key) => {
-            key.replace(env.redis.prefix, "");
-        });
+        const keys = await redisClient.keys(`${env.redis.prefix}${prefix}:*`);
         return keys.length > 0 ? redisClient.del(keys) : null;
+    }
+};
+
+/**
+ * 
+ * @param {string[]} keys
+ * @returns {void}
+ */
+export const delKeysCache = async (keys) => {
+    if (env.redis.host) {
+        return Promise.all(keys.map((key)=> delPrefixCache(key)))
     }
 };

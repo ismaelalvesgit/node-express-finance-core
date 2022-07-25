@@ -5,6 +5,7 @@ import verify from "../middleware/verifiy.middleware";
 import { findAllEventsSchema } from "../validations/events";
 import { findOne, find } from "../controllers/events.controller";
 import cachedMiddleware from "../middleware/cached.middleware";
+import { TIME_DAY } from "../utils/cache";
 
 /**
  * GET - /events/:id
@@ -16,7 +17,7 @@ router.route("/:id")
  * GET - /events
  * */    
 router.route("/")
-    .get(verify(findAllEventsSchema), cachedMiddleware(), find);
+    .get(verify(findAllEventsSchema), cachedMiddleware({path: 'events', timeExp: TIME_DAY}), find);
 
 export {
     prefix,

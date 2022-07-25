@@ -27,7 +27,7 @@ router.route("/:id")
  * POST - /investment
  * */    
 router.route("/")
-    .get(verify(findAllInvestmentSchema), cachedMiddleware(300), find)
+    .get(verify(findAllInvestmentSchema), cachedMiddleware({path: 'investment'}), find)
     .post(verify(createInvestmentSchema), create);
 
 export {
