@@ -8,7 +8,7 @@ pipeline {
         DB_USERNAME = "root"
         DB_PASSWORD = "admin"
         DB_DATABASE = "finance"
-        DOCKER_REPO = "ismaelalvesdoc/express-finance"
+        DOCKER_REPO = "ismaelalvesdoc/express-finance-core"
     }
 
     stages {

@@ -32,5 +32,3 @@ script:
   - docker build -t express-finance .
   - docker tag express-finance $DOCKER_USERNAME/express-finance
   - docker push $DOCKER_USERNAME/express-finance
-
-after_success: npm run test:coverage:coveralls
