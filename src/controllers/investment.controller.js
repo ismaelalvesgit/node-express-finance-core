@@ -2,7 +2,9 @@ import { investmentService } from "../services";
 import { InternalServer, NotFound } from "../utils/erro";
 import catchAsync from "../utils/catchAsync";
 import { StatusCodes } from "http-status-codes";
-import { delCache } from "../utils/cache";
+import { delKeysCache } from "../utils/cache";
+
+const clearCachePath = ['investment', 'transaction', 'dividends']
 
 export const findOne = catchAsync(async (req, res) =>{
     const where = {id: req.params.id};
@@ -33,7 +35,7 @@ export const create = catchAsync((req, res, next) =>{
     const data = req.body;
     investmentService.create(data).then((result)=>{
         if(result.length){
-            delCache(req);
+           delKeysCache(clearCachePath);
             res.status(StatusCodes.CREATED).json(req.__("Investment.create"));
         }else{
             throw new InternalServer({code: "Investment"});
@@ -48,7 +50,7 @@ export const update = catchAsync((req, res, next) =>{
         if(result != 1){
             throw new NotFound({code: "Investment"});
         }
-        delCache(req);
+       delKeysCache(clearCachePath);
         res.status(StatusCodes.OK).json(req.__("Investment.update"));
     }).catch(next);
 });
@@ -59,7 +61,7 @@ export const del = catchAsync(async (req, res, next) =>{
         if(result != 1){
             throw new NotFound({code: "Investment"});
         }
-        delCache(req);
+       delKeysCache(clearCachePath);
         res.sendStatus(StatusCodes.NO_CONTENT);
     }).catch(next);
 });

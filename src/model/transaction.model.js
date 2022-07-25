@@ -40,6 +40,22 @@ export const selectDefault = [
  * @property {String} updatedAt
  */
 
+
+const querySelect = ()=>{
+    return knex(TABLE_NAME)
+    .select([
+        knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
+        knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
+        knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
+        ...selectDefault.map((select) => {
+            return `${TABLE_NAME}.${select}`;
+        })
+    ])
+    .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
+    .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
+    .innerJoin("category", "category.id", "=", "investment.categoryId");
+}
+
 /**
  * @param {Object} options 
  * @param {Transaction} options.where 
@@ -50,18 +66,7 @@ export const selectDefault = [
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findAll = (options, trx) => {
-    const query = knex(TABLE_NAME)
-        .select([
-            knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
-            knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
-            knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
-            ...selectDefault.map((select) => {
-                return `${TABLE_NAME}.${select}`;
-            })
-        ])
-        .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
-        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
-        .innerJoin("category", "category.id", "=", "investment.categoryId");
+    const query = querySelect()
     if (options?.where) {
         let tableName;
         let value;
@@ -86,44 +91,12 @@ export const findAll = (options, trx) => {
 
 /**
  * @param {Transaction} where 
- * @param {Array<string>} join 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {Promise<Transaction>}
  */
-export const findOne = (where, join = [], trx) => {
-    const query = knex(TABLE_NAME)
+export const findOne = (where, trx) => {
+    const query = querySelect()
         .first()
-        .select(selectDefault.map((select) => {
-            return `${TABLE_NAME}.${select}`;
-        }));
-
-    if(join){
-        join.forEach((e)=>{
-            switch (e) {
-                case "broker":
-                    query.innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`);
-                    query.select([
-                        knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
-                    ]);
-                    break;
-                case "investment":
-                    query.innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`);
-                    query.select([
-                        knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
-                    ]);
-                    break;
-                case "category":
-                    query.innerJoin("category", "category.id", "=", "investment.categoryId");
-                    query.select([
-                        knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
-                    ]);
-                    break;
-        
-                default:
-                    break;
-            }
-        });
-    }
 
     Object.keys(where).forEach((key) => {
         query.where(`${TABLE_NAME}.${key}`, "=", where[key]);
