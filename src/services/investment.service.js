@@ -10,16 +10,16 @@ import { categoryIsBR, findBrapiQoute, searchBrapiQoute } from "../utils";
  * @param {import("../model/investment.model").Investment} where 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findStokeAll = (where, sortBy, orderBy, limit) =>{
-    return investmentModel.findStokeAll({where, sortBy, orderBy, limit});
+export const findStokeAll = (where, sortBy, orderBy, limit) => {
+    return investmentModel.findStokeAll({ where, sortBy, orderBy, limit });
 };
 
 /**
  * @param {import("../model/investment.model").Investment} where 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findAll = (where, sortBy, orderBy, limit) =>{
-    return investmentModel.findAll({where, sortBy, orderBy, limit});
+export const findAll = (where, sortBy, orderBy, limit) => {
+    return investmentModel.findAll({ where, sortBy, orderBy, limit });
 };
 
 /**
@@ -27,7 +27,7 @@ export const findAll = (where, sortBy, orderBy, limit) =>{
  * @param {import('knex').Knex.Transaction} trx   
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findOne = (where, trx) =>{
+export const findOne = (where, trx) => {
     return investmentModel.findOne(where, trx);
 };
 
@@ -36,7 +36,7 @@ export const findOne = (where, trx) =>{
  * @param {string} search 
  * @param {import('../enum/categoryType')} category 
  */
-export const findAvailable = (search, category) =>{
+export const findAvailable = (search, category) => {
     return categoryIsBR(category) ? searchBrapiQoute(category, search) : new Error("Not Implemented");
 };
 
@@ -44,16 +44,16 @@ export const findAvailable = (search, category) =>{
  * @param {import("../model/investment.model").Investment} data 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const create = async(data) =>{
-    return knex.transaction(async(trx)=>{
+export const create = async (data) => {
+    return knex.transaction(async (trx) => {
 
-        const category = await categoryModel.findAll({where: {id: data.categoryId}}, trx);
-        
-        if(!category.length > 0){
-            throw new NotFound({code: "Category"});
+        const category = await categoryModel.findAll({ where: { id: data.categoryId } }, trx);
+
+        if (!category.length > 0) {
+            throw new NotFound({ code: "Category" });
         }
 
-        const qoute = categoryIsBR(category[0].name) ? await findBrapiQoute(category[0].name, data.name) : 
+        const qoute = categoryIsBR(category[0].name) ? await findBrapiQoute(category[0].name, data.name) :
             await iexcloundService.findQoute(data.name);
 
         if (!qoute) {
@@ -69,7 +69,7 @@ export const create = async(data) =>{
  * @param {import('knex').Knex.Transaction} trx  
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findOrCreate = (data, trx) =>{
+export const findOrCreate = (data, trx) => {
     return investmentModel.findOrCreate(data, trx);
 };
 
@@ -78,16 +78,16 @@ export const findOrCreate = (data, trx) =>{
  * @param {import("../model/investment.model").Investment} data 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const update = (where, data) =>{
-    return knex.transaction(async(trx)=>{
-        if(data.categoryId){
-            const category = await categoryModel.findAll({where: {id: data.categoryId}}, trx);
-            if(category.length === 0){
-                throw new NotFound({code: "Category"});
+export const update = (where, data) => {
+    return knex.transaction(async (trx) => {
+        if (data.categoryId) {
+            const category = await categoryModel.findAll({ where: { id: data.categoryId } }, trx);
+            if (category.length === 0) {
+                throw new NotFound({ code: "Category" });
             }
         }
 
-        if(data.logoUrl && data.logoUrl.endsWith("favicon.svg")){
+        if (data.logoUrl && data.logoUrl.endsWith("favicon.svg")) {
             data.logoUrl = "https://raw.githubusercontent.com/ismaelalvesgit/node-express-finance/master/src/public/uploads/system/default.png";
         }
 
@@ -100,7 +100,7 @@ export const update = (where, data) =>{
  * @param {import('knex').Knex.Transaction} trx   
  * @returns {import('knex').Knex.QueryBuilder}
  */
- export const getBalance = async(id, trx) =>{
+export const getBalance = async (id, trx) => {
     return investmentModel.getBalance(id, trx);
 };
 
@@ -109,7 +109,7 @@ export const update = (where, data) =>{
  * @param {import('knex').Knex.Transaction} trx   
  * @returns {import('knex').Knex.QueryBuilder}
  */
- export const syncBalance = async(trx) =>{
+export const syncBalance = async (trx) => {
     return investmentModel.syncBalance(trx);
 };
 
@@ -119,10 +119,10 @@ export const update = (where, data) =>{
  * @param {import('knex').Knex.Transaction} trx   
  * @returns {import('knex').Knex.QueryBuilder}
  */
- export const updateBalance = async(where, trx) =>{
+export const updateBalance = async (where, trx) => {
     const data = await investmentModel.getBalance(where.id, trx);
 
-    return investmentModel.update({id: where.id}, {
+    return investmentModel.update({ id: where.id }, {
         balance: Number(data.balance || 0)
     }, trx);
 };
@@ -131,11 +131,11 @@ export const update = (where, data) =>{
  * @param {import("../model/investment.model").Investment} where 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const del = (where) =>{
-    return knex.transaction(async(trx)=>{
-        const transaction  = await transactionModel.findOne({ investmentId: where.id }, null, trx);
-        if(transaction){
-            throw new BadRequest({message: "Unable to remove because investment has transactions"});
+export const del = (where) => {
+    return knex.transaction(async (trx) => {
+        const transaction = await transactionModel.findOne({ investmentId: where.id }, null, trx);
+        if (transaction) {
+            throw new BadRequest({ message: "Unable to remove because investment has transactions" });
         }
         return investmentModel.del(where, trx);
     });

@@ -20,6 +20,6 @@ setImmediate(() => {
     });
 
     if(env.amqp.active){
-        connect()
+        connect();
     }
 });

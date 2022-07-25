@@ -80,6 +80,6 @@ export class NotfyPriceConsumer {
      */
     async notify(msg){
         const { key, data } = msg.content;
-        await sendNotification(key, data)
+        await sendNotification(key, data);
     }
 }

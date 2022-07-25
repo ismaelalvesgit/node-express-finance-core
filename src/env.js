@@ -7,7 +7,7 @@ dotenv.config({path: path.join(__dirname, env)});
 const url = process.env.SERVER_URL || "http://localhost:3000";
 export default {
     env: process.env.NODE_ENV || "development",
-    isProd: process.env.NODE_ENV === 'production',
+    isProd: process.env.NODE_ENV === "production",
     timezone: process.env.TZ || "America/Fortaleza",
     brapi: process.env.BRAPI_URL,
     mercadoBitCoin: process.env.MERCADO_BITCOIN_URL,
@@ -38,14 +38,14 @@ export default {
     redis:{
         host: process.env.REDIS_HOST,
         port: parseInt(process.env.REDIS_PORT || "6379"),
-        prefix: process.env.REDIS_PREFIX || "finance" 
+        prefix: process.env.REDIS_PREFIX || "finance-core:" 
     },
     apm:{
         serverUrl: process.env.APM_SERVER_URL,
         serviceName: process.env.APM_SERVICE_NAME,
         apiKey: process.env.APM_API_KEY,
         secretToken: process.env.APM_SECRET_TOKEN,
-        cloudProvider: process.env.APM_CLOUND_PROVIDER || 'none'
+        cloudProvider: process.env.APM_CLOUND_PROVIDER || "none"
     },
     email:{
         type: process.env.EMAIL_TYPE || "OAuth2",

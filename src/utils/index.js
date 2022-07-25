@@ -18,7 +18,7 @@ import { boundService } from "../services";
             try {
                 const qoute = await brapiService.findQouteCoin(name);
                 if(!qoute.regularMarketPrice){
-                    throw new Error('fail')
+                    throw new Error("fail");
                 }
                 return qoute;
             } catch (error) {

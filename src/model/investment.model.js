@@ -147,7 +147,6 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
-
     return transacting(query, trx);
 };
 
