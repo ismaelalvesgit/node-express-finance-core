@@ -18,7 +18,7 @@ export const find = catchAsync(async (req, res) =>{
     const sortBy = req.query.sortBy;
     const orderBy = req.query.orderBy;
     const limit = req.query.limit;
-    const data = await investmentService.findAll(where, null, sortBy, orderBy, limit);
+    const data = await investmentService.findAll(where, sortBy, orderBy, limit);
     res.json(data);
 });
 

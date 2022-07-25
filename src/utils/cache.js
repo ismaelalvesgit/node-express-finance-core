@@ -10,7 +10,7 @@ import redisClient from "../redis";
  */
 export const setCache = (key, value, timeExp = 86400) => {
     if (env.redis.host) {
-        return redisClient.set(key, value, "EX", timeExp);
+        return redisClient.set(env.redis.prefix.concat(key), value, "EX", timeExp);
     }
 };
 
