@@ -21,7 +21,7 @@ router.route("/:id")
  * POST - /broker
  * */    
 router.route("/")
-    .get(verify(findAllBrokerSchema), cachedMiddleware({path: 'broker', timeExp: 300}), find)
+    .get(verify(findAllBrokerSchema), cachedMiddleware({path: "broker", timeExp: 300}), find)
     .post(verify(createBrokerSchema), create);
 
 export {

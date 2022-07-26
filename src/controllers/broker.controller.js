@@ -4,7 +4,7 @@ import catchAsync from "../utils/catchAsync";
 import { StatusCodes } from "http-status-codes";
 import { delKeysCache } from "../utils/cache";
 
-const clearCachePath = ['broker', 'transaction', 'dividends']
+const clearCachePath = ["broker", "transaction", "dividends"];
 
 export const findOne = catchAsync(async (req, res) => {
     const where = { id: req.params.id };
@@ -28,7 +28,7 @@ export const create = catchAsync((req, res, next) => {
     const data = req.body;
     brokerService.create(data).then((result) => {
         if (result.length) {
-            delKeysCache(clearCachePath)
+            delKeysCache(clearCachePath);
             res.status(StatusCodes.CREATED).json(req.__("Broker.create"));
         } else {
             throw new InternalServer({ code: "Broker" });
@@ -43,7 +43,7 @@ export const update = catchAsync((req, res, next) => {
         if (result != 1) {
             throw new NotFound({ code: "Broker" });
         }
-        delKeysCache(clearCachePath)
+        delKeysCache(clearCachePath);
         res.status(StatusCodes.OK).json(req.__("Broker.update"));
     }).catch(next);
 });
@@ -54,7 +54,7 @@ export const del = catchAsync(async (req, res, next) => {
         if (result != 1) {
             throw new NotFound({ code: "Broker" });
         }
-        delKeysCache(clearCachePath)
+        delKeysCache(clearCachePath);
         res.sendStatus(StatusCodes.NO_CONTENT);
     }).catch(next);
 });

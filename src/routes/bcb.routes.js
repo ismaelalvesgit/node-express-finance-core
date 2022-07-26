@@ -20,7 +20,7 @@ import {
 import { TIME_DAY } from "../utils/cache";
 import cachedMiddleware from "../middleware/cached.middleware";
 
-router.use(cachedMiddleware({path: 'bcb', timeExp: TIME_DAY}))
+router.use(cachedMiddleware({path: "bcb", timeExp: TIME_DAY}));
 
 /**
  * GET - /bcb/selic

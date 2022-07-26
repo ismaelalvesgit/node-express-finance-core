@@ -76,23 +76,22 @@ export const findOrCreate = (data, trx) => {
 /**
  * @param {import("../model/investment.model").Investment} where 
  * @param {import("../model/investment.model").Investment} data 
+ * @param {import('knex').Knex.Transaction} trx  
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const update = (where, data) => {
-    return knex.transaction(async (trx) => {
-        if (data.categoryId) {
-            const category = await categoryModel.findAll({ where: { id: data.categoryId } }, trx);
-            if (category.length === 0) {
-                throw new NotFound({ code: "Category" });
-            }
+export const update = async(where, data, trx) => {
+    if (data.categoryId) {
+        const category = await categoryModel.findAll({ where: { id: data.categoryId } }, trx);
+        if (category.length === 0) {
+            throw new NotFound({ code: "Category" });
         }
+    }
 
-        if (data.logoUrl && data.logoUrl.endsWith("favicon.svg")) {
-            data.logoUrl = "https://raw.githubusercontent.com/ismaelalvesgit/node-express-finance/master/src/public/uploads/system/default.png";
-        }
+    if (data.logoUrl && data.logoUrl.endsWith("favicon.svg")) {
+        data.logoUrl = "https://raw.githubusercontent.com/ismaelalvesgit/node-express-finance/master/src/public/uploads/system/default.png";
+    }
 
-        return investmentModel.update(where, data, trx);
-    });
+    return investmentModel.update(where, data, trx);
 };
 
 /**

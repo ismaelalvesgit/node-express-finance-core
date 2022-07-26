@@ -4,7 +4,7 @@ import catchAsync from "../utils/catchAsync";
 import { StatusCodes } from "http-status-codes";
 import { delKeysCache } from "../utils/cache";
 
-const clearCachePath = ['investment', 'transaction', 'dividends']
+const clearCachePath = ["investment", "transaction", "dividends"];
 
 export const findOne = catchAsync(async (req, res) =>{
     const where = {id: req.params.id};
@@ -35,7 +35,7 @@ export const create = catchAsync((req, res, next) =>{
     const data = req.body;
     investmentService.create(data).then((result)=>{
         if(result.length){
-           delKeysCache(clearCachePath);
+            delKeysCache(clearCachePath);
             res.status(StatusCodes.CREATED).json(req.__("Investment.create"));
         }else{
             throw new InternalServer({code: "Investment"});

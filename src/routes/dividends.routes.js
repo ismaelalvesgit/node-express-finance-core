@@ -22,7 +22,7 @@ router.route("/:id")
  * POST - /dividends
  * */    
 router.route("/")
-    .get(verify(findAllDividendsSchema), cachedMiddleware({path: 'dividends', timeExp: TIME_DAY}), find)
+    .get(verify(findAllDividendsSchema), cachedMiddleware({path: "dividends", timeExp: TIME_DAY}), find)
     .post(verify(createDividendsSchema), create);
 
 export {

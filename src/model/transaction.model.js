@@ -54,7 +54,7 @@ const querySelect = ()=>{
     .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
     .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
     .innerJoin("category", "category.id", "=", "investment.categoryId");
-}
+};
 
 /**
  * @param {Object} options 
@@ -66,7 +66,7 @@ const querySelect = ()=>{
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findAll = (options, trx) => {
-    const query = querySelect()
+    const query = querySelect();
     if (options?.where) {
         let tableName;
         let value;
@@ -96,7 +96,7 @@ export const findAll = (options, trx) => {
  */
 export const findOne = (where, trx) => {
     const query = querySelect()
-        .first()
+        .first();
 
     Object.keys(where).forEach((key) => {
         query.where(`${TABLE_NAME}.${key}`, "=", where[key]);

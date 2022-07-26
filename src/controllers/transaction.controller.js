@@ -4,7 +4,7 @@ import catchAsync from "../utils/catchAsync";
 import { StatusCodes } from "http-status-codes";
 import { delKeysCache } from "../utils/cache";
 
-const clearCachePath = ['transaction', 'investment']
+const clearCachePath = ["transaction", "investment"];
 
 export const findOne = catchAsync(async (req, res) =>{
     const where = {id: req.params.id};
@@ -30,7 +30,7 @@ export const create = catchAsync((req, res, next) =>{
         if(result != 1){
             throw new InternalServer({code: "Transaction"});
         }
-        delKeysCache(clearCachePath)
+        delKeysCache(clearCachePath);
         res.status(StatusCodes.CREATED).json(req.__("Transaction.create"));
     }).catch(next);
 });
@@ -42,7 +42,7 @@ export const update = catchAsync((req, res, next) =>{
         if(result != 1){
             throw new NotFound({code: "Transaction"});
         }
-        delKeysCache(clearCachePath)
+        delKeysCache(clearCachePath);
         res.status(StatusCodes.OK).json(req.__("Transaction.update"));
     }).catch(next);
 });
@@ -53,7 +53,7 @@ export const del = catchAsync(async (req, res, next) =>{
         if(result != 1){
             throw new NotFound({code: "Transaction"});
         }
-        delKeysCache(clearCachePath)
+        delKeysCache(clearCachePath);
         res.sendStatus(StatusCodes.NO_CONTENT);
     }).catch(next);
 });

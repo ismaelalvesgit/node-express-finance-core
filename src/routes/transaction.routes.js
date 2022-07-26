@@ -21,7 +21,7 @@ router.route("/:id")
  * POST - /transaction
  * */    
 router.route("/")
-    .get(verify(findAllTransactionSchema), cachedMiddleware({path: 'transaction'}), find)
+    .get(verify(findAllTransactionSchema), cachedMiddleware({path: "transaction"}), find)
     .post(verify(createTransactionSchema), create);
 
 export {

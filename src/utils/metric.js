@@ -1,4 +1,4 @@
-import { register, Counter, Summary, collectDefaultMetrics} from "prom-client";
+import { register, Counter, Summary, collectDefaultMetrics } from "prom-client";
 import ResponseTime from "response-time";
 import { Logger } from "../logger";
 

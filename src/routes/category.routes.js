@@ -11,13 +11,13 @@ import { TIME_DAY } from "../utils/cache";
  * GET - /category/:id
  */
 router.route("/:id")
-    .get(findOne)
+    .get(findOne);
 
 /**
  * GET - /category
  * */    
 router.route("/")
-    .get(verify(findAllCategorySchema), cachedMiddleware({path: 'category', timeExp: 360 * TIME_DAY}), find)
+    .get(verify(findAllCategorySchema), cachedMiddleware({path: "category", timeExp: 360 * TIME_DAY}), find);
 
 export {
     prefix,

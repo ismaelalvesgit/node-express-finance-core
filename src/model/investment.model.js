@@ -133,7 +133,7 @@ export const findAll = (options, trx) => {
         if(key.startsWith("category")){
             const e = key.split(".")[1];
             if(Array.isArray(value)){
-                query.whereRaw(`category->"$.${e}" IN (?)`, [value.split(",")]);
+                query.whereRaw(`category->"$.${e}" IN (?)`, [value.toString().split(",")]);
             }else{
                 query.whereRaw(`category->"$.${e}" = ?`, [value]);
             }

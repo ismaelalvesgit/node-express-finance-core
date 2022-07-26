@@ -17,7 +17,7 @@ router.route("/:id")
  * GET - /events
  * */    
 router.route("/")
-    .get(verify(findAllEventsSchema), cachedMiddleware({path: 'events', timeExp: TIME_DAY}), find);
+    .get(verify(findAllEventsSchema), cachedMiddleware({path: "events", timeExp: TIME_DAY}), find);
 
 export {
     prefix,
