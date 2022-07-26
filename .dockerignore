@@ -61,6 +61,6 @@ app.png
 *.rego
 .eslintrc.json
 .eslintignore
-.env.example
+.env.*
 CHANGELOG.md
 README.md
