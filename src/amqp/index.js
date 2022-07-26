@@ -1,12 +1,12 @@
 import { getChannel } from "../amqpClient";
 import { Logger } from "../logger";
-import { NotfyPriceConsumer } from "./consumers/nofityPrice.consumer";
+import { MainConsumer } from "./consumers/main.consumer";
 import onConsume from "./middlewares/onConsume";
 
 const _connectConsumers = async ()=>{
     const channel = await getChannel();
     [
-        new NotfyPriceConsumer(onConsume)
+        new MainConsumer(onConsume)
     ].forEach((consumer)=>{
         consumer.assertQueue(channel);
     });
