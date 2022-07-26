@@ -31,7 +31,6 @@ env:
   DB_DEBUG: false
   REDIS_HOST: kubernetes.docker.internal
   REDIS_PORT: 6379
-  REDIS_PREFIX: finance
   APM_SERVER_URL: http://kubernetes.docker.internal:8200
   APM_SERVICE_NAME: finance
   BRAPI_URL: https://brapi.ga/api
