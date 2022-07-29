@@ -95,6 +95,20 @@ export const update = async(where, data, trx) => {
 };
 
 /**
+ * @param {import("../model/investment.model").Investment[]} data 
+ * @returns {Promise<import("../model/investment.model").Investment[]>}
+ */
+export const batch = async(data) => {
+    return knex.transaction(async (trx) => {
+        return Promise.all(data.map(async(investment)=>{
+            const { id } = investment
+            await update({id}, investment, trx)
+            return findOne({id}, trx);
+        }))
+    })
+};
+
+/**
  * @param {number} id 
  * @param {import('knex').Knex.Transaction} trx   
  * @returns {import('knex').Knex.QueryBuilder}

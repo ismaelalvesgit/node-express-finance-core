@@ -34,17 +34,20 @@ export const selectDefault = [
  * @property {Number} id
  * @property {String} name
  * @property {String} longName
- * @property {Number} balance
+ * @property {String} logoUrl
  * @property {String} sector
- * @property {Number} volumeDay
- * @property {Number} previousClosePrice
- * @property {Number} changePercentDay
- * @property {Number} variationDay
- * @property {Number} changePercentTotal
- * @property {Number} variationTotal
+ * @property {Number} balance
+ * @property {String} currency
  * @property {Number} priceDay
  * @property {Number} priceDayHigh
  * @property {Number} priceDayLow
+ * @property {Number} changePercentDay
+ * @property {Number} variationDay
+ * @property {Number} variationDayTotal
+ * @property {Number} changePercentTotal
+ * @property {Number} variationTotal
+ * @property {Number} volumeDay
+ * @property {Number} previousClosePrice
  * @property {Number} categoryId
  * @property {import("./category.model").Category} category
  * @property {String} createdAt
