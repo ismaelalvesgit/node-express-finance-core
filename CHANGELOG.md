@@ -6,6 +6,7 @@ e este projeto adere a [Semantic Versioning](http://semver.org/).
 
 ## Ongoing changes
 ### Added
+- Adicionado nova rota /investment/batch
 - Job`s foi movido para outro micro-serviço
 - Adicionado novo job pra pegar preço de cripto ativos
 - Adicionado o campo "currency" em investment, dividends
