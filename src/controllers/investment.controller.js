@@ -1,5 +1,5 @@
 import { investmentService } from "../services";
-import { InternalServer, NotFound } from "../utils/erro";
+import { NotFound } from "../utils/erro";
 import catchAsync from "../utils/catchAsync";
 import { StatusCodes } from "http-status-codes";
 import { delKeysCache } from "../utils/cache";
@@ -32,18 +32,6 @@ export const findAvailable = catchAsync(async (req, res) => {
     res.json(data);
 });
 
-export const create = catchAsync((req, res, next) => {
-    const data = req.body;
-    investmentService.create(data).then((result) => {
-        if (result.length) {
-            delKeysCache(clearCachePath);
-            res.status(StatusCodes.CREATED).json(req.__("Investment.create"));
-        } else {
-            throw new InternalServer({ code: "Investment" });
-        }
-    }).catch(next);
-});
-
 export const update = catchAsync((req, res, next) => {
     const data = req.body;
     const id = req.params.id;
@@ -58,12 +46,12 @@ export const update = catchAsync((req, res, next) => {
 
 export const batch = catchAsync((req, res, next) => {
     const data = req.body;
-    const { notify } = req.query
+    const { notify } = req.query;
     investmentService.batch(data).then((result) => {
         if(notify){
             result.forEach((investment)=>{
-                sendNotification('/update-investment', investment)
-            })
+                sendNotification("/update-investment", investment);
+            });
         }
         delKeysCache(clearCachePath);
         res.status(StatusCodes.OK).json(req.__("Investment.update"));

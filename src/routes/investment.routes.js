@@ -2,8 +2,8 @@ const prefix = "/investment";
 import express from "express";
 const router = express.Router();
 import verify from "../middleware/verifiy.middleware";
-import { updateInvestmentSchema, createInvestmentSchema, findAllInvestmentSchema, findAvailableInvestmentSchema, batchInvestmentSchema } from "../validations/investment";
-import { findOne, find, create, update, del, findAvailable, batch } from "../controllers/investment.controller";
+import { updateInvestmentSchema, findAllInvestmentSchema, findAvailableInvestmentSchema, batchInvestmentSchema } from "../validations/investment";
+import { findOne, find, update, del, findAvailable, batch } from "../controllers/investment.controller";
 import cachedMiddleware from "../middleware/cached.middleware";
 
 /**
@@ -30,11 +30,9 @@ router.route("/:id")
 
 /**
  * GET - /investment
- * POST - /investment
  * */    
 router.route("/")
-    .get(verify(findAllInvestmentSchema), cachedMiddleware({path: "investment"}), find)
-    .post(verify(createInvestmentSchema), create);
+    .get(verify(findAllInvestmentSchema), cachedMiddleware({path: "investment"}), find);
 
 export {
     prefix,

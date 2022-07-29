@@ -101,11 +101,11 @@ export const update = async(where, data, trx) => {
 export const batch = async(data) => {
     return knex.transaction(async (trx) => {
         return Promise.all(data.map(async(investment)=>{
-            const { id } = investment
-            await update({id}, investment, trx)
+            const { id } = investment;
+            await update({id}, investment, trx);
             return findOne({id}, trx);
-        }))
-    })
+        }));
+    });
 };
 
 /**

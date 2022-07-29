@@ -63,26 +63,6 @@ describe("Investment Router", () => {
             expect(res.body[0]).toHaveProperty("name");
             expect(res.body[0]).toHaveProperty("id");
         });
-        
-        it("create", async() => {
-            brapiService.findQoute = jest.fn().mockResolvedValue({
-                symbol: "VINO11",
-            });
-
-            const [ categoryId ] = await knex("category").insert({
-                name: categoryType.ACAO
-            });
-            
-            const res = await request(app)
-            .post("/investment")
-            .send({
-                name: "VINO11",
-                categoryId,
-                sector: "TESTE"
-            })
-            .expect(StatusCodes.CREATED);
-            expect(res.body).toBeDefined();
-        });
        
         it("update", async() => {
             const [ categoryId ] = await knex("category").insert({
@@ -133,13 +113,6 @@ describe("Investment Router", () => {
             .expect(StatusCodes.NOT_FOUND);
         });
         
-        it("create", async() => {
-            const res = await request(app)
-            .post("/investment")
-            .expect(StatusCodes.BAD_REQUEST);
-            expect(res.body).toBeDefined();
-        });
-
         it("not create not found investment", async() => {
             brapiService.findQoute = jest.fn().mockResolvedValue(null);
             categoryModel.findAll = jest.fn().mockResolvedValue([]);

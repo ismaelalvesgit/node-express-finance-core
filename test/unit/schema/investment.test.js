@@ -1,5 +1,5 @@
 import { Chance } from "chance";
-import { createInvestmentSchema, findAllInvestmentSchema } from "../../../src/validations/investment";
+import { findAllInvestmentSchema, batchInvestmentSchema } from "../../../src/validations/investment";
 import { validateSchema } from "../../utils";
 
 const chance = new Chance();
@@ -20,21 +20,18 @@ describe("Investment Schemas", () => {
             expect(res).toBeDefined();
             expect(res).toHaveProperty("query");
         });
-        
-        it("createInvestmentSchema", ()=>{
+
+        it("batchInvestmentSchema", ()=>{
             const params = {
-                body:{
-                    categoryId: 1,
-                    name: "VINO11",
-                    longName: "FIIS",
-                    sector: "FIIS",
-                }
+                body: [{
+                    id: chance.integer({max: 10, min: 1}),
+                }]
             };
-            const res = validateSchema(createInvestmentSchema, params);
+            const res = validateSchema(batchInvestmentSchema, params);
             expect(res).toBeDefined();
             expect(res).toHaveProperty("body");
+            expect(res.body.length).toBe(1);
         });
-
     });
 
     describe("error", ()=>{
@@ -67,13 +64,13 @@ describe("Investment Schemas", () => {
 
             expect(() => validateSchema(findAllInvestmentSchema, params)).toThrowError("Must have one attribute");
         });
-        
-        it("createInvestmentSchema - required", ()=>{
+
+        it("batchInvestmentSchema - Must have one attribute", ()=>{
             const params = {
-                body:{}
+                body: []
             };
 
-            expect(() => validateSchema(createInvestmentSchema, params)).toThrowError("\"body.categoryId is required\"");
+            expect(() => validateSchema(batchInvestmentSchema, params)).toThrowError("body must contain at least 1 items");
         });
 
     });
