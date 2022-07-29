@@ -1,5 +1,5 @@
 import { Chance } from "chance";
-import { createCategorySchema, findAllCategorySchema, updateCategorySchema } from "../../../src/validations/category";
+import { findAllCategorySchema } from "../../../src/validations/category";
 import { validateSchema } from "../../utils";
 
 const chance = new Chance();
@@ -20,28 +20,6 @@ describe("Category Schemas", () => {
             const res = validateSchema(findAllCategorySchema, params);
             expect(res).toBeDefined();
             expect(res).toHaveProperty("query");
-        });
-        
-        it("createCategorySchema", ()=>{
-            const params = {
-                body:{
-                    name: chance.name()
-                }
-            };
-            const res = validateSchema(createCategorySchema, params);
-            expect(res).toBeDefined();
-            expect(res).toHaveProperty("body");
-        });
-
-        it("updateCategorySchema", ()=>{
-            const params = {
-                body:{
-                    name: chance.name()
-                }
-            };
-            const res = validateSchema(updateCategorySchema, params);
-            expect(res).toBeDefined();
-            expect(res).toHaveProperty("body");
         });
     });
 
@@ -74,22 +52,6 @@ describe("Category Schemas", () => {
             };
 
             expect(() => validateSchema(findAllCategorySchema, params)).toThrowError("Must have one attribute");
-        });
-        
-        it("createCategorySchema - required", ()=>{
-            const params = {
-                body:{}
-            };
-
-            expect(() => validateSchema(createCategorySchema, params)).toThrowError("\"body.name is required\"");
-        });
-
-        it("updateCategorySchema - required", ()=>{
-            const params = {
-                body:{}
-            };
-
-            expect(() => validateSchema(updateCategorySchema, params)).toThrowError("\"body.name is required\"");
         });
     });
 

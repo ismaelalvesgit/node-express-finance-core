@@ -38,63 +38,12 @@ describe("Category Router", () => {
             expect(res.body[0]).toHaveProperty("name");
             expect(res.body[0]).toHaveProperty("id");
         });
-        
-        it("create", async() => {
-            const res = await request(app)
-            .post("/category")
-            .send({
-                name: chance.name()
-            })
-            .expect(StatusCodes.CREATED);
-            expect(res.body).toBeDefined();
-        });
-       
-        it("update", async() => {
-            const [ id ] = await knex("category").insert({
-                name: chance.name()
-            });
-            const res = await request(app)
-            .put(`/category/${id}`)
-            .send({
-                name: chance.name(),
-            })
-            .expect(StatusCodes.OK);
-            expect(res.body).toBeDefined();
-        });
-        
-        it("delete", async() => {
-            const [ id ] = await knex("category").insert({
-                name: chance.name()
-            });
-            await request(app)
-            .del(`/category/${id}`)
-            .expect(StatusCodes.NO_CONTENT);
-        });
     });
     
     describe("erro", ()=>{
         it("findOne", async() => {
             await request(app)
             .get(`/category/${chance.integer()}`)
-            .expect(StatusCodes.NOT_FOUND);
-        });
-        
-        it("create", async() => {
-            const res = await request(app)
-            .post("/category")
-            .expect(StatusCodes.BAD_REQUEST);
-            expect(res.body).toBeDefined();
-        });
-       
-        it("update", async() => {
-            await request(app)
-            .put(`/category/${chance.integer()}`)
-            .expect(StatusCodes.BAD_REQUEST);
-        });
-        
-        it("delete", async() => {
-            await request(app)
-            .del(`/category/${chance.integer()}`)
             .expect(StatusCodes.NOT_FOUND);
         });
     });
