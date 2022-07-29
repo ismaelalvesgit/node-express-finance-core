@@ -39,9 +39,35 @@ export const createInvestmentSchema = joi.object({
 
 export const updateInvestmentSchema = joi.object({
     body: joi.object({
-        categoryId: joi.number().integer().unsafe(),
         longName: joi.string(),
         currency: joi.string(),
         sector: joi.string().uppercase(),
     }).min(1),
+});
+
+export const batchInvestmentSchema = joi.object({
+    query: joi.object({
+        notify: joi.bool().default(true)
+    }),
+    body: joi.array().items(
+        joi.object({
+            id: joi.number().integer().unsafe().required(),
+            name: joi.string().uppercase(),
+            longName: joi.string(),
+            logoUrl: joi.string(),
+            sector: joi.string().uppercase(),
+            balance: joi.number(),
+            currency: joi.string().uppercase(),
+            priceDay: joi.number(),
+            priceDayHigh: joi.number(),
+            priceDayLow: joi.number(),
+            changePercentDay: joi.number(),
+            variationDay: joi.number(),
+            variationDayTotal: joi.number(),
+            changePercentTotal: joi.number(),
+            variationTotal: joi.number(),
+            volumeDay: joi.number(),
+            previousClosePrice: joi.number(),
+        }).min(1)
+    ),
 });
