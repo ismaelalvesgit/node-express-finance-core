@@ -105,29 +105,6 @@ paths:
       responses:
         200: # status code
           $ref: "#/components/responses/category"
-          
-   
-    # post:
-    #   tags:
-    #     - Category
-    #   summary: Criação de categoria.
-    #   requestBody:
-    #     content:
-    #       application/json:
-    #         schema:
-    #           $ref: "#/components/schemas/category"
-    #   responses:
-    #     200: # status code
-    #       description: Cadastro de categoria.
-    #       content:
-    #         application/json:
-    #           schema:
-    #             type: string
-    #             example: "Categoria criada com sucesso!!!"
-    #     400: # status code
-    #       $ref: "#/components/responses/badRequest"
-    #     500: # status code
-    #       $ref: "#/components/responses/internal"
 
   /category/{id}:
     get:
@@ -168,60 +145,6 @@ paths:
           $ref: "#/components/responses/notFound"
         500: # status code
           $ref: "#/components/responses/internal"
-
-    # put:
-    #   tags:
-    #     - Category
-    #   summary: Atualiza uma categoria.
-    #   parameters:
-    #     - in: path
-    #       required: true
-    #       name: id
-    #       description: ID da categoria
-    #       schema:
-    #         type: string
-    #         example: "1"
-    #   requestBody:
-    #     content:
-    #       application/json:
-    #         schema:
-    #           $ref: "#/components/schemas/category"
-    #   responses:
-    #     200: # status code
-    #       description: Retorna status.
-    #       content:
-    #         application/json:
-    #           schema:
-    #             type: string
-    #             example: "Categoria atualizada com sucesso!!!"
-    #     400: # status code
-    #       $ref: "#/components/responses/badRequest"
-    #     404: # status code
-    #       $ref: "#/components/responses/notFound"
-    #     500: # status code
-    #       $ref: "#/components/responses/internal"
-
-    # delete:
-    #   tags:
-    #     - Category
-    #   summary: Deleta uma categoria.
-    #   parameters:
-    #     - in: path
-    #       required: true
-    #       name: id
-    #       description: ID da categoria
-    #       schema:
-    #         type: string
-    #         example: "1"
-    #   responses:
-    #     204: # status code
-    #       description: Categoria deletada com sucesso.
-    #     400: # status code
-    #       $ref: "#/components/responses/badRequest"
-    #     404: # status code
-    #       $ref: "#/components/responses/notFound"
-    #     500: # status code
-    #       $ref: "#/components/responses/internal"
   
   # Broker
   /broker:
@@ -1268,6 +1191,105 @@ paths:
           $ref: "#/components/responses/notFound"
         500: # status code
           $ref: "#/components/responses/internal"
+  
+  /investment/batch:
+    put:
+      tags:
+        - Investment
+      summary: Atualizar varios investimentos
+      parameters:
+        - in: query
+          name: notify
+          description: Notificar por meio de web socket
+          schema:
+            type: boolean
+            example: true
+      responses:
+        200: # status code
+          description: pesquia de investimentos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required: 
+                    - id
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: VISC11
+                      description: "Nome da cota"
+                    longName:
+                      type: string
+                      example: Vinci Corporate Fundo De Investimento Imobiliario
+                      description: "Nome completo do ativo"
+                    logoUrl:
+                      type: string
+                      example: https://s3-symbol-logo.tradingview.com/vinci--big.svg
+                      description: "logo"
+                    sector:
+                      type: string
+                      example: SHOPPINGS
+                      description: "Setor de atuação do ativo"
+                    balance:
+                      type: number
+                      example: 1
+                      description: "Valor investido no ativo"
+                    currency:
+                      type: string
+                      example: USD
+                      description: "Moeda utilizada no ativo"
+                    priceDay:
+                      type: number
+                      example: 4965
+                      description: "Preço do dia"
+                    priceDayHigh:
+                      type: number
+                      example: 4988
+                      description: "Preço mais alto do dia"
+                    priceDayLow:
+                      type: number
+                      example: 4930
+                      description: "Preço mais baixo do dia"
+                    changePercentDay:
+                      type: number
+                      example: -0.48
+                      description: "Variação em porcentagem do dia"
+                    variationDay:
+                      type: number
+                      description: "Variação de preço do dia"
+                      example: -1170
+                    variationDayTotal:
+                      type: number
+                      description: "Variação de preço do dia vezes numero de ações"
+                      example: -1170
+                    changePercentTotal:
+                      type: number
+                      description: "Variação do preço da ação total em porcentage"
+                      example: -0.70
+                    variationTotal:
+                      type: number
+                      description: "Variação do preço da ação total"
+                      example: -1170
+                    volumeDay:
+                      type: number
+                      example: 3447100
+                      description: "Volume movimentado no dia"
+                    previousClosePrice:
+                      type: number
+                      example: 4930
+                      description: "Preço do dia anterior"
+                    
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
           
   /investment:
     get:
@@ -1372,6 +1394,10 @@ paths:
                     type: string
                     example: Vinci Corporate Fundo De Investimento Imobiliario
                     description: "Nome completo do ativo"
+                  logoUrl:
+                    type: string
+                    example: https://s3-symbol-logo.tradingview.com/vinci--big.svg
+                    description: "logo"
                   balance:
                     type: number
                     example: 1
@@ -1476,9 +1502,6 @@ paths:
             schema:
               type: object
               properties:
-                categoryId:
-                  type: number
-                  example: 10
                 longName:
                   type: string
                   example: "Ismael Alves"
