@@ -53,7 +53,7 @@ export const create = async (data) => {
             throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }
 
-        const category = await categoryModel.findOrCreate({ name: data.category }, trx);
+        const category = await categoryModel.findOne({ name: data.category }, trx);
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
         const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
 
@@ -113,7 +113,7 @@ export const update = (where, data) => {
             throw new Brapi({ statusCode: 404, message: "Investment not Found" });
         }
         
-        const category = await categoryModel.findOrCreate({ name: data.category }, trx);
+        const category = await categoryModel.findOne({ name: data.category }, trx);
         const broker = await brokerModel.findOrCreate({ name: data.broker }, trx);
         const investment = await investmentService.findOrCreate({ name: data.investment, categoryId: category.id }, trx);
        
@@ -151,8 +151,8 @@ export const update = (where, data) => {
             investmentId: investment.id,
             type: data.type,
             negotiationDate: data.negotiationDate,
-            qnt,
             price: data.price,
+            qnt,
             total,
             profit,
             fees: data.fees,
