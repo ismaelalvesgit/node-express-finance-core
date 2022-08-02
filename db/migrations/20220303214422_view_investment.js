@@ -1,6 +1,7 @@
 import { jsonObjectQuerySelect } from "../../src/utils";
 import * as categoryModel from "../../src/model/category.model";
 
+/* eslint-disable max-len*/
 /**
 * @param {import('knex').Knex} knex
 */
@@ -50,7 +51,7 @@ exports.up = function (knex) {
                 knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME}) * 100 ), 2) as 'percent'`),
                 knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME} where categoryId = category.id) * 100 ), 2) as 'percentCategory'`)
             ])
-            .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
+            .innerJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
             .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`)
             .groupBy(`${TABLE_NAME}.id`));
     });
