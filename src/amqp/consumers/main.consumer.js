@@ -65,7 +65,11 @@ export class MainConsumer {
         const { fields, content } = message;
         try {
             if (fields.deliveryTag > 5 && error) {
-                Logger.error(`FAIL TO CONSUMER ROUTER KEY: ${fields.routingKey} - EXCHANGE: ${fields.exchange} - DATA: ${JSON.stringify(content)}`);
+                Logger.error(`FAIL TO CONSUMER,
+                    ROUTER KEY: ${fields.routingKey} - 
+                    EXCHANGE: ${fields.exchange} - 
+                    DATA: ${JSON.stringify(content)}`
+                );
                 channel.ack(message);
             }
 

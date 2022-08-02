@@ -8,6 +8,9 @@ import { categoryIsBR, findBrapiQoute, searchBrapiQoute } from "../utils";
 
 /**
  * @param {import("../model/investment.model").Investment} where 
+ * @param { string } sortBy 
+ * @param { string } orderBy 
+ * @param { number } limit 
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const findStokeAll = (where, sortBy, orderBy, limit) => {
@@ -15,10 +18,13 @@ export const findStokeAll = (where, sortBy, orderBy, limit) => {
 };
 
 /**
- * @param {import("../model/investment.model").Investment} where 
+ * @param {import("../model/investment.model").Investment} where
+ * @param { string } sortBy 
+ * @param { string } orderBy 
+ * @param { number } limit 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findAll = (where, sortBy, orderBy, limit) => {
+export const findAll =(where, sortBy, orderBy, limit) => {
     return investmentModel.findAll({ where, sortBy, orderBy, limit });
 };
 
