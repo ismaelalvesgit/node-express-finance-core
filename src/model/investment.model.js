@@ -1,8 +1,6 @@
 import knex from "../db";
-import categoryType from "../enum/categoryType";
-import { jsonObjectArrayQuerySelect, jsonObjectQuerySelect } from "../utils";
+import { jsonObjectArrayQuerySelect } from "../utils";
 import transacting from "../utils/transacting";
-import * as categoryModel from "./category.model";
 import * as transactionModel from "./transaction.model";
 
 const TABLE_NAME = "investment";
@@ -85,44 +83,6 @@ export const findTransaction = (options, trx) => {
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findStokeAll = (options, trx) => {
-    const query = knex(TABLE_NAME)
-        .select([
-            knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
-            ...selectDefault.map((select) => {
-                return `${TABLE_NAME}.${select}`;
-            }),
-            knex.raw("TRUNCATE(SUM((transaction.total + transaction.fees + transaction.brokerage + transaction.taxes)) / SUM(transaction.qnt), 0) as priceAverage"),
-            knex.raw("TRUNCATE(SUM(transaction.qnt), 0) as qnt"),
-            knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME}) * 100 ), 2) as 'percent'`),
-            knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME} where categoryId = category.id) * 100 ), 2) as 'percentCategpry'`)
-        ])
-        .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
-        .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`)
-        .whereIn("category.name", [categoryType.EQUITY, categoryType.ETF_INTER])
-        .whereNotNull("transaction.id")
-        .groupBy(`${TABLE_NAME}.id`);
-    if (options.where) {
-        query.where(options.where);
-    }
-    if (options?.sortBy) {
-        query.orderBy(options.sortBy, options.orderBy || "asc");
-    }
-    if (options?.limit) {
-        query.limit(options.limit);
-    }
-    return transacting(query, trx);
-};
-
-/**
- * @param {Object} options 
- * @param {Investment} options.where 
- * @param {string} options.sortBy 
- * @param {'desc'|'asc'} options.orderBy 
- * @param {number} options.limit 
- * @param {import('knex').Knex.Transaction} trx 
- * @returns {import('knex').Knex.QueryBuilder}
- */
 export const findAll = (options, trx) => {
     const query = knex(VIEW);
     if (options?.where) {
@@ -136,7 +96,7 @@ export const findAll = (options, trx) => {
         if(key.startsWith("category")){
             const e = key.split(".")[1];
             if(Array.isArray(value)){
-                query.whereRaw(`category->"$.${e}" IN (?)`, [value.toString().split(",")]);
+                query.whereRaw(`category->>"$.${e}" IN (?)`, [value.toString().split(",")]);
             }else{
                 query.whereRaw(`category->"$.${e}" = ?`, [value]);
             }
@@ -150,6 +110,9 @@ export const findAll = (options, trx) => {
     if (options?.limit) {
         query.limit(options.limit);
     }
+
+    query.where("balance", ">", 0);
+
     return transacting(query, trx);
 };
 
