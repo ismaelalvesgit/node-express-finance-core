@@ -27,5 +27,7 @@
 	"Investment.update": "Investment update sucess",
 	"InternalServer.Investment": "Failed to Modify Investment 😞",
 	"Currency.create": "Currency created",
+	"Events.create": "Event created",
+	"InternalServer.Events": "Failed to Modify Event 😞",
 	"InternalServer.Currency": "Failed to Modify Currency 😞"
 }
