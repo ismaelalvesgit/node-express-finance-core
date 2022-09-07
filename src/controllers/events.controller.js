@@ -1,6 +1,8 @@
 import { eventsService } from "../services";
 import { NotFound } from "../utils/erro";
 import catchAsync from "../utils/catchAsync";
+import { delCache } from "../utils/cache";
+import { StatusCodes } from "http-status-codes";
 
 export const findOne = catchAsync(async (req, res) =>{
     const where = {id: req.params.id};
@@ -18,4 +20,12 @@ export const find = catchAsync(async (req, res) =>{
     const limit = req.query.limit;
     const data = await eventsService.findAll(where, sortBy, orderBy, limit);
     res.json(data);
+});
+
+export const batchCreated = catchAsync((req, res, next) =>{
+    const data = req.body;
+    eventsService.batchCreated(data).then(()=>{
+        delCache(req);
+        res.status(StatusCodes.CREATED).json(req.__("Events.create"));
+    }).catch(next);
 });

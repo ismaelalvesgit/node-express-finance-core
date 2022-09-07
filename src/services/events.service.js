@@ -1,4 +1,5 @@
 import * as eventsModel from "../model/events.model";
+import knex from "../db";
 
 /**
  * @param {import("../model/events.model").Events} where 
@@ -22,15 +23,32 @@ export const findOne = (where, trx) => {
  * @param {import('knex').Knex.Transaction} trx
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const create = async (data, trx) => {
+export const create = (data, trx) => {
     return eventsModel.create(data, trx);
 };
 
 /**
  * @param {import("../model/events.model").Events} data
- * @param {import('knex').Knex.Transaction} trx  
+ * @param {import("../model/events.model").Events} find
+ * @param {import('knex').Knex.Transaction} trx
  * @returns {import('knex').Knex.QueryBuilder}
  */
- export const findOrCreate = async (data, trx) => {
-    return eventsModel.findOrCreate(data, trx);
- };
+export const findOrCreate = (data, trx, find) => {
+    return eventsModel.findOrCreate(data, trx, find);
+};
+
+/**
+* @param {import("../model/events.model").Events[]} data
+* @returns {import('knex').Knex.QueryBuilder}
+*/
+export const batchCreated = (data) => {
+    return knex.transaction((trx) => {
+        return Promise.all(data.map((event) => {
+            const { investmentId, link } = event;
+            return eventsModel.findOrCreate(event, trx, {
+                investmentId,
+                link
+            });
+        }));
+    });
+};
