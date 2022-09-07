@@ -108,11 +108,11 @@ export const findOne = (where, trx) => {
 /**
  * @param {Object} options 
  * @param {Transaction} options.where 
- * @param {Transaction} options.date 
+ * @param {Date} options.date 
  * @param {import('knex').Knex.Transaction} trx 
  * @returns {import('knex').Knex.QueryBuilder}
  */
-export const findAllDividensByMonth = (options, trx) => {
+export const getQntByBroker = (options, trx) => {
     const query = knex(TABLE_NAME)
         .select([
             knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
@@ -121,6 +121,7 @@ export const findAllDividensByMonth = (options, trx) => {
         .sum({ qnt: "qnt" })
         .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
         .groupBy("broker.id");
+        
     if (options?.where) {
         query.where(options?.where);
     }

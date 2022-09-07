@@ -2,11 +2,28 @@ const prefix = "/dividends";
 import express from "express";
 const router = express.Router();
 import verify from "../middleware/verifiy.middleware";
-import { findAllDividendsSchema, createDividendsSchema } from "../validations/dividends";
-import { findOne, find, create, update, del } from "../controllers/dividends.controller";
+import { 
+    findAllDividendsSchema, 
+    createDividendsSchema, 
+    autoCreateDividendsSchema, 
+    autoPaidDividendsSchema 
+} from "../validations/dividends";
+import { findOne, find, create, update, del, autoCreate, autoPaid } from "../controllers/dividends.controller";
 import cachedMiddleware from "../middleware/cached.middleware";
 import { TIME_DAY } from "../utils/cache";
 
+/**
+ * POST - /dividends/autoCreate
+ */
+ router.route("/autoCreate")
+    .post(verify(autoCreateDividendsSchema), autoCreate);
+
+/**
+ * POST - /dividends/autoPaid
+ */
+ router.route("/autoPaid")
+    .post(verify(autoPaidDividendsSchema), autoPaid);
+    
 /**
  * GET - /dividends/:id
  * PUT - /dividends/:id

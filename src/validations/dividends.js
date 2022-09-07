@@ -35,3 +35,23 @@ export const createDividendsSchema = joi.object({
         currency: joi.string(),
     }).required(),
 });
+
+export const autoCreateDividendsSchema = joi.object({
+    body: joi.array().items(
+        joi.object({
+            investmentId: joi.number().unsafe().positive().min(1).required(),
+            type: joi.string().valid(...Object.keys(dividendsType)).required(),
+            dueDate: joi.string().regex(/^\d{4}-\d{2}-\d{2}$/).required(),
+            dateBasis: joi.string().regex(/^\d{4}-\d{2}-\d{2}$/).required(),
+            price: joi.number().unsafe().positive().min(0).required(),
+            fees: joi.number().unsafe().min(0),
+            currency: joi.string(),
+        }).required()
+    ).min(1),
+});
+
+export const autoPaidDividendsSchema = joi.object({
+    body: joi.object({
+        dueDate: joi.date().required(),
+    }).min(1)
+});

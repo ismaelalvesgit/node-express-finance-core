@@ -46,6 +46,22 @@ export const update = catchAsync((req, res, next) =>{
     }).catch(next);
 });
 
+export const autoCreate = catchAsync((req, res, next) =>{
+    const data = req.body;
+    dividendsService.autoCreate(data).then(()=>{
+        delCache(req);
+        res.status(StatusCodes.OK).json(req.__("Dividends.create"));
+    }).catch(next);
+});
+
+export const autoPaid = catchAsync((req, res, next) =>{
+    const { dueDate } = req.body;
+    dividendsService.autoPaid(dueDate).then(()=>{
+        delCache(req);
+        res.status(StatusCodes.OK).json(req.__("Dividends.update"));
+    }).catch(next);
+});
+
 export const del = catchAsync(async (req, res, next) =>{
     const id = req.params.id;
     dividendsService.del({id}).then((result)=>{
