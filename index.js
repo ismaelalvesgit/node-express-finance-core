@@ -13,7 +13,7 @@ setImmediate(() => {
             try {
                 await syncBound();
             } catch (e) {
-                Logger.warning(e);
+                Logger.warn(e);
             }
         });
         Logger.info(`Server on http://localhost:${env.server.port}`);

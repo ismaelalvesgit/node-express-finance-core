@@ -25,11 +25,10 @@ import env from "../env";
  */
 const errorsConfigs = [
     { class: NotFound, code: null, i18n: "NotFound" },
-
     { class: InternalServer, code: "Category", i18n: "InternalServer.Category" },
     { class: InternalServer, code: "Broker", i18n: "InternalServer.Broker" },
+    { class: InternalServer, code: "Events", i18n: "InternalServer.Events" },
     { class: BadRequest, code: "Transaction.qnt", i18n: "Transaction.Qnt" },
-
     { class: Error, code: "ER_DUP_ENTRY", i18n: "BadRequest.Duplicate" },
     { class: ValidadeSchema, code: "any.required", i18n: "ValidadeSchema.required" },
     { class: ValidadeSchema, code: "any.only", i18n: "ValidadeSchema.only" },
