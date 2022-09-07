@@ -51,7 +51,7 @@ exports.up = function (knex) {
                 knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME}) * 100 ), 2) as 'percent'`),
                 knex.raw(`TRUNCATE((balance / (select sum(balance) from ${TABLE_NAME} where categoryId = category.id) * 100 ), 2) as 'percentCategory'`)
             ])
-            .innerJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
+            .leftJoin("transaction", "transaction.investmentId", "=", `${TABLE_NAME}.id`)
             .innerJoin("category", "category.id", "=", `${TABLE_NAME}.categoryId`)
             .groupBy(`${TABLE_NAME}.id`));
     });

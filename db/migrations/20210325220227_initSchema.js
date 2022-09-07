@@ -126,8 +126,7 @@ exports.up = async function (knex) {
       .inTable("investment")
       .onUpdate("CASCADE")
       .onDelete("CASCADE");
-    table.bigInteger("assetMainId").notNullable();
-    table.unique(["assetMainId", "investmentId"]);
+    table.unique(["link", "investmentId"]);
     table.date("dateReference").notNullable();
     table.date("dateDelivery").notNullable();
     table.text("link").notNullable();
