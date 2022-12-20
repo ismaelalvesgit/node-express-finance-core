@@ -2,9 +2,15 @@ const prefix = "/transaction";
 import express from "express";
 const router = express.Router();
 import verify from "../middleware/verifiy.middleware";
-import { createTransactionSchema, findAllTransactionSchema } from "../validations/transaction";
-import { findOne, find, create, update, del } from "../controllers/transaction.controller";
+import { createTransactionSchema, findAllTransactionSchema, groupingSchema } from "../validations/transaction";
+import { findOne, find, create, update, del, grouping } from "../controllers/transaction.controller";
 import cachedMiddleware from "../middleware/cached.middleware";
+
+/**
+ * PUT - /transaction/grouping
+ * */    
+router.route("/grouping")
+    .put(verify(groupingSchema), grouping);
 
 /**
  * GET - /transaction/:id

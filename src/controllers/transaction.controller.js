@@ -57,3 +57,18 @@ export const del = catchAsync(async (req, res, next) =>{
         res.sendStatus(StatusCodes.NO_CONTENT);
     }).catch(next);
 });
+
+export const grouping = catchAsync(async (req, res, next) =>{
+    const {
+        investmentId,
+        value
+    } = req.body;
+
+    transactionService.grouping({investmentId, value}).then((result)=>{
+        if(result.length === 0){
+            throw new NotFound({code: "Transaction"});
+        }
+        delKeysCache(clearCachePath);
+        res.status(StatusCodes.OK).json(req.__("Transaction.grouping"));
+    }).catch(next);
+});

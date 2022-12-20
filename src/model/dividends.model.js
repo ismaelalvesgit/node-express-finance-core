@@ -3,6 +3,7 @@ import dividendsStatus from "../enum/dividendsStatus";
 import { jsonObjectQuerySelect } from "../utils";
 import transacting from "../utils/transacting";
 import * as investmentModel from "./investment.model";
+import * as categoryModel from "./category.model";
 import * as brokerModel from "./broker.model";
 
 const TABLE_NAME = "dividends";
@@ -117,11 +118,13 @@ export const findUpdateDivideds = (date, trx) => {
     .select([
         knex.raw(jsonObjectQuerySelect("investment", investmentModel.selectDefault)),
         knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
+        knex.raw(jsonObjectQuerySelect("category", categoryModel.selectDefault)),
         ...selectDefault.map((select) => {
             return `${TABLE_NAME}.${select}`;
         })
     ])
     .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
+    .innerJoin("category", "category.id", "=", "investment.categoryId")
     .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
     .where(`${TABLE_NAME}.status`, "=", dividendsStatus.PROVISIONED);
     if (date) {

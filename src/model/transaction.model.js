@@ -117,9 +117,11 @@ export const getQntByBroker = (options, trx) => {
         .select([
             knex.raw(jsonObjectQuerySelect("broker", brokerModel.selectDefault)),
             knex.raw(`SUM(${TABLE_NAME}.qnt) as qnt`),
+            knex.raw("investment.currency as currency"),
         ])
         .sum({ qnt: "qnt" })
         .innerJoin("broker", "broker.id", "=", `${TABLE_NAME}.brokerId`)
+        .innerJoin("investment", "investment.id", "=", `${TABLE_NAME}.investmentId`)
         .groupBy("broker.id");
         
     if (options?.where) {

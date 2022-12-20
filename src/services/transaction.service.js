@@ -181,3 +181,30 @@ export const del = (where) => {
         return investmentService.updateBalance({id: transaction.investment.id}, trx);
     });
 };
+
+/**
+ * @param { Object } data 
+ * @param { number } data.investmentId 
+ * @param { number } data.value 
+ * @returns {import('knex').Knex.QueryBuilder}
+ */
+export const grouping = ({investmentId, value}) => {
+    return knex.transaction(async (trx) => {
+        const transactions = await transactionModel.findAll({where: {investmentId}}, trx);
+        if (transactions.length === 0) {
+            throw new NotFound({code: "Investment"});
+        }
+        
+        return await Promise.all(transactions.map(async(transaction)=>{
+            const id = transaction.id;
+            const qnt = Number(transaction.qnt);
+            const total = Number(transaction.total);
+            const newQnt = qnt / value;
+            const newPrice = total / newQnt;
+            return transactionModel.update({ id }, {
+                qnt: newQnt,
+                price: newPrice
+            },trx);
+        }));
+    });
+};

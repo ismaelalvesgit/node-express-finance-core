@@ -35,3 +35,10 @@ export const createTransactionSchema = joi.object({
         price: joi.number().unsafe().positive().required(),
     }).required(),
 });
+
+export const groupingSchema = joi.object({
+    body: joi.object({
+        investmentId: joi.number().unsafe().positive().required(),
+        value: joi.number().unsafe().positive().required(),
+    }).required(),
+});

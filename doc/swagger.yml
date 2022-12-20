@@ -435,7 +435,39 @@ paths:
           $ref: "#/components/responses/badRequest"
         500: # status code
           $ref: "#/components/responses/internal"
-
+  
+  /transaction/grouping:
+    put:
+      tags:
+        - Transaction
+      summary: Realiza um agrupamento de Transações.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                investmentId:
+                  type: number
+                  example: 1
+                value:
+                  type: number
+                  description: Quantidade do agrupamento 2:1
+                  example: 2
+      responses:
+        200: # status code
+          description: Retorna status.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Agrupamento de Transações realizada com sucesso !!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
   /transaction/{id}:
     get:
       tags:

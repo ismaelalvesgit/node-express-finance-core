@@ -7,8 +7,9 @@ import knex from "../db";
 import { NotFound } from "../utils/erro";
 import { Logger } from "../logger";
 import { format } from "date-fns";
-import { parsePercent } from "../utils";
+import { categoryIsBR, parsePercent } from "../utils";
 import dividendsStatus from "../enum/dividendsStatus";
+import env from "../env";
 
 /**
  * @param {import("../model/dividends.model").Dividends} where 
@@ -102,19 +103,18 @@ export const update = (where, data) => {
  * @param {Date} data.dateBasis
  * @param {number} data.price
  * @param {number} data.fees
- * @param {string} data.currency
  * @returns {import('knex').Knex.QueryBuilder}
  */
 export const autoCreate = (data) => {
     return knex.transaction(async (trx) => {
         await Promise.all(data.map(async(items) => {
-            const { investmentId, type, dateBasis, dueDate, price, fees, currency } = items;
+            const { investmentId, type, dateBasis, dueDate, price, fees } = items;
             const transactions = await transactionModel.getQntByBroker({
                 where: { investmentId },
                 date: dateBasis
             }, trx);
             await Promise.all(transactions.map(async(transaction)=>{
-                const { qnt, broker: { id: brokerId } } = transaction;
+                const { qnt, broker: { id: brokerId }, currency } = transaction;
                 const total = Number(qnt) * Number(price);
                 const dividends = await dividendsModel.findOrCreate(R.reject(R.isNil, {
                     investmentId,
@@ -161,7 +161,7 @@ export const autoPaid = (dueDate) => {
     return knex.transaction(async (trx) => {
         const dividends = await dividendsModel.findUpdateDivideds(format(dueDate, "yyyy-MM-dd"), trx);
         await Promise.all(dividends.map(async (dy) => {
-            const { id, investment, broker, dateBasis, price } = dy;
+            const { id, investment, broker, dateBasis, price, category: { name: categoryType } } = dy;
             try {
                 const transactions = await transactionModel.getQntByBroker({
                     where:{investmentId: investment.id, brokerId: broker.id}, 
@@ -169,16 +169,20 @@ export const autoPaid = (dueDate) => {
                     trx
                 );
                 await Promise.all(transactions.map((transaction)=>{
+                    let fees = 0;
+                    if(!categoryIsBR(categoryType))
+                        fees = env.system.fees.outsidePercent;
                     const { qnt } = transaction;
                     const total = Number(qnt) * Number(price);
                     return dividendsModel.update({id: id}, {
                         status: dividendsStatus.PAID,
                         qnt,
                         price,
-                        total
+                        total,
+                        fees: parsePercent(fees, total)
                     }, trx);
                 }));
-                Logger.info(`Auto PAID dividend, investment: ${investment.name}`);
+                Logger.info(`Auto PAID dividend, investment: ${investment.name}, value: `);
             } catch (error) {
                 Logger.error(`Faill to update dividend - error: ${error}`);
             }

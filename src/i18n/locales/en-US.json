@@ -29,5 +29,6 @@
 	"Currency.create": "Currency created",
 	"Events.create": "Event created",
 	"InternalServer.Events": "Failed to Modify Event 😞",
-	"InternalServer.Currency": "Failed to Modify Currency 😞"
+	"InternalServer.Currency": "Failed to Modify Currency 😞",
+	"Transaction.grouping": "Grouping of Transactions performed successfully!! 😆"
 }
