@@ -91,7 +91,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1668979866565,
+  "iteration": 1677186766984,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -149,7 +149,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT sum(total) as \"Total\" FROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere YEAR(negotiationDate) = YEAR(CURRENT_DATE()) and cat.name in($category);",
+          "rawSql": "SELECT \n  sum(case\n    when inv.currency = \"USD\"\n      then total * $dolar\n    else total\n  end) as \"Total\" FROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere YEAR(negotiationDate) = YEAR(CURRENT_DATE()) and cat.name in($category);",
           "refId": "A",
           "select": [
             [
@@ -210,6 +210,7 @@
           },
           "decimals": 2,
           "mappings": [],
+          "noValue": "R$ 0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -255,7 +256,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT sum(total) as \"Total\" FROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere YEAR(dueDate) = YEAR(CURRENT_DATE()) and dy.status = \"PAID\" and cat.name in($category);",
+          "rawSql": "SELECT\n  sum(case\n    when inv.currency = \"USD\"\n      then(dy.total - dy.fees) * $dolar\n    else (dy.total - dy.fees)\n  end) as \"Total\" FROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere YEAR(dueDate) = YEAR(CURRENT_DATE()) and dy.status = \"PAID\" and cat.name in($category);",
           "refId": "A",
           "select": [
             [
@@ -362,7 +363,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT (\n  (\n  \tselect sum(total) FROM finance.dividends dy\n  \tinner join finance.investment inv on inv.id = dy.investmentId\n  \tinner join finance.category cat on cat.id = inv.categoryId\n  \twhere YEAR(dy.dueDate) = YEAR(CURRENT_DATE()) and dy.status = \"PAID\" and cat.name in($category)\n  ) / sum(total)\n) * 100 as \"Percentual\" FROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere YEAR(negotiationDate) = YEAR(CURRENT_DATE()) and cat.name in($category)",
+          "rawSql": "SELECT\n  (sum(case\n    when inv.currency = \"USD\"\n      then dy.total * $dolar\n    else dy.total\n  end)/ (select sum(case\n    when currency = \"USD\"\n      then balance * $dolar\n    else balance\n  end) from finance.investment)) * 100 as \"Total\" FROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere YEAR(dueDate) = YEAR(CURRENT_DATE()) and dy.status = \"PAID\" and cat.name in($category);",
           "refId": "A",
           "select": [
             [
@@ -384,7 +385,7 @@
           ]
         }
       ],
-      "title": "Retorno do Ano",
+      "title": "Retorno do Mês",
       "transformations": [],
       "type": "stat"
     },
@@ -442,7 +443,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT\n  sum(balance) as \"Total\"\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category)",
+          "rawSql": "SELECT\n  sum(case\n    when inv.currency = \"USD\"\n      then balance * $dolar\n    else balance\n  end) as \"Total\"\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category)",
           "refId": "A",
           "select": [
             [
@@ -503,6 +504,7 @@
           },
           "decimals": 2,
           "mappings": [],
+          "noValue": "R$ 0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -548,7 +550,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT sum(total) as \"Total\" FROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and dy.status = \"PAID\";",
+          "rawSql": "SELECT \n  sum(case\n    when inv.currency = \"USD\"\n      then total * $dolar\n    else total\n  end) as \"Total\" FROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and dy.status = \"PAID\";",
           "refId": "A",
           "select": [
             [
@@ -655,7 +657,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT (\n  (\n  \tselect sum(total) FROM finance.dividends dy\n  \tinner join finance.investment inv on inv.id = dy.investmentId\n  \tinner join finance.category cat on cat.id = inv.categoryId\n  \twhere cat.name in($category) and dy.status = \"PAID\"\n  ) / sum(total)\n) * 100 as \"Percentual\" FROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category)",
+          "rawSql": "SELECT (\n  (\n  \tselect sum(total)\n    end FROM finance.dividends dy\n  \tinner join finance.investment inv on inv.id = dy.investmentId\n  \tinner join finance.category cat on cat.id = inv.categoryId\n  \twhere cat.name in($category) and dy.status = \"PAID\" and cat.name != \"CRIPTOMOEDA\"\n  ) / sum(total)\n) * 100 as \"Percentual\" FROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and cat.name != \"CRIPTOMOEDA\"",
           "refId": "A",
           "select": [
             [
@@ -875,7 +877,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT sum(variationTotal) as \"Total\"\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.priceDay is not null",
+          "rawSql": "SELECT \n  sum(case\n    when inv.currency = \"USD\"\n      then variationTotal * $dolar\n    else variationTotal\n  end) as \"Total\"\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.priceDay is not null",
           "refId": "A",
           "select": [
             [
@@ -936,6 +938,7 @@
           },
           "decimals": 2,
           "mappings": [],
+          "noValue": "R$ 0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -986,7 +989,7 @@
           "hide": false,
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT (\n  (\n    select sum(total) from finance.dividends dy\n    inner join finance.investment inv on inv.id = dy.investmentId\n    inner join finance.category cat on cat.id = inv.categoryId\n    where dy.status = \"PAID\" and cat.name in($category)\n  ) + \n  sum(variationTotal) + \n  (\n    select sum(tran.profit) from finance.transaction tran\n    inner join finance.investment inv on inv.id = tran.investmentId\n    inner join finance.category cat on cat.id = inv.categoryId\n    where cat.name in($category)\n  )\n) AS \"Total\"\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere inv.priceDay is not null and inv.balance > 0 and cat.name in($category)",
+          "rawSql": "SELECT (\n  (\n    select \n      sum(case\n        when inv.currency = \"USD\"\n          then total * $dolar\n        else total\n      end) from finance.dividends dy\n    inner join finance.investment inv on inv.id = dy.investmentId\n    inner join finance.category cat on cat.id = inv.categoryId\n    where dy.status = \"PAID\" and cat.name in($category)\n  ) + \n  sum(case\n    when inv.currency = \"USD\"\n      then variationTotal * $dolar\n    else variationTotal\n  end) + \n  (\n    select \n      sum(case\n        when inv.currency = \"USD\"\n          then tran.profit * $dolar\n        else tran.profit\n      end) from finance.transaction tran\n    inner join finance.investment inv on inv.id = tran.investmentId\n    inner join finance.category cat on cat.id = inv.categoryId\n    where cat.name in($category)\n  )\n)\nAS \"Total\"\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere inv.priceDay is not null and inv.balance > 0 and cat.name in($category)",
           "refId": "A",
           "select": [
             [
@@ -1098,7 +1101,7 @@
           "hide": false,
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT sum(variationDayTotal) AS \"Total\"\nFROM finance.view_investment\nwhere category ->> \"$.name\" in($category)",
+          "rawSql": "SELECT \n  case\n    when currency = \"USD\"\n      then sum(variationDayTotal) * $dolar\n    else sum(variationDayTotal)\n  end  AS \"Total\"\nFROM finance.view_investment\nwhere category ->> \"$.name\" in($category)",
           "refId": "A",
           "select": [
             [
@@ -1210,7 +1213,7 @@
           "hide": false,
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT sum((priceDay - previousClosePrice) * qnt) AS \"Total\" from finance.view_investment\nwhere priceDay is not null and previousClosePrice is not null and balance > 0 and category ->> \"$.name\" in($category)",
+          "rawSql": "SELECT \ncase\n  when currency = \"USD\"\n    then sum((priceDay - previousClosePrice) * qnt) * $dolar\n  else sum((priceDay - previousClosePrice) * qnt)\nend AS \"Total\" from finance.view_investment\nwhere priceDay is not null and previousClosePrice is not null and balance > 0 and category ->> \"$.name\" in($category)",
           "refId": "A",
           "select": [
             [
@@ -1282,134 +1285,7 @@
           },
           "unit": "currencyBRL"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Preço REET"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Preço SRET"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Preço QYLD"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed"
-                }
-              },
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Preço SPG"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Preço DX"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Preço PFF"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Preço PGX"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "currencyUSD"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
@@ -1443,7 +1319,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT\n  inv.updatedAt AS \"time\",\n  inv.priceDay AS \"Preço\",\n  inv.name\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.balance > 0\nORDER BY inv.updatedAt ",
+          "rawSql": "SELECT\n  inv.updatedAt AS \"time\",\n  case\n    when inv.currency = \"USD\"\n      then inv.priceDay * $dolar\n    else inv.priceDay\n  end AS \"Preço\",\n  inv.name\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.balance > 0\nORDER BY inv.updatedAt ",
           "refId": "A",
           "select": [
             [
@@ -1577,7 +1453,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT\n  inv.updatedAt AS \"time\",\n  inv.variationDay AS \"Preço\",\n  inv.name\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.balance > 0\nORDER BY inv.updatedAt",
+          "rawSql": "SELECT\n  inv.updatedAt AS \"time\",\n  case\n    when inv.currency = \"USD\"\n      then inv.variationDay * $dolar\n    else inv.variationDay\n  end AS \"Preço\",\n  inv.name\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.balance > 0\nORDER BY inv.updatedAt",
           "refId": "A",
           "select": [
             [
@@ -1832,6 +1708,26 @@
                 "value": false
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Dividendos"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "currencyBRL"
+              },
+              {
+                "id": "noValue",
+                "value": "R$ 0"
+              },
+              {
+                "id": "decimals",
+                "value": 2
+              }
+            ]
           }
         ]
       },
@@ -1876,7 +1772,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select\ninv.logoUrl as \"Logo\",\ninv.name as \"Código\",\ninv.qnt as \"Total de Cotas\",\ninv.balance as \"Total de Aportes\",\ninv.priceAverage as \"Preço Médio\",\n-- sum(dy.total / 100) as \"Dividendos Recebidos\",\ninv.priceDay as \"Cotação Hoje\",\nsum(inv.balance + inv.variationTotal) as \"Saldo Atual\",\ninv.variationTotal as \"Lucro/Prejuízo\",\ninv.changePercentTotal as \"Saldo (%)\",\ninv.percent as \"(%) Da Carteira\",\nreplace(inv.category -> \"$.name\", '\"', '') as \"Categoria\",\ninv.sector as \"Seguemento\"\nfrom finance.view_investment inv\n-- left join finance.dividends dy on dy.investmentId = inv.id\nwhere balance > 0 and category ->> \"$.name\" in($category)\ngroup by inv.id\norder by inv.balance desc",
+          "rawSql": "select\ninv.logoUrl as \"Logo\",\ninv.name as \"Código\",\ninv.qnt as \"Total de Cotas\",\ninv.balance as \"Total de Aportes\",\n(\n  select sum(dy.total - dy.fees) from finance.dividends dy where dy.investmentId = inv.id and dy.status = \"PAID\"\n) as \"Dividendos\",\ninv.priceAverage as \"Preço Médio\",\ninv.priceDay as \"Cotação Hoje\",\nsum(inv.balance + inv.variationTotal) as \"Saldo Atual\",\ninv.variationTotal as \"Lucro/Prejuízo\",\ninv.changePercentTotal as \"Saldo (%)\",\ninv.percent as \"(%) Da Carteira\",\nreplace(inv.category -> \"$.name\", '\"', '') as \"Categoria\",\ninv.sector as \"Seguemento\"\nfrom finance.view_investment inv\nwhere balance > 0 and category ->> \"$.name\" in($category)\ngroup by inv.id\norder by inv.balance desc",
           "refId": "A",
           "select": [
             [
@@ -1974,7 +1870,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT\ninv.name as \"Código\",\ntran.price as \"Preço\",\nsum(tran.qnt) as \"Qnt\",\ncase\n\twhen tran.type = \"SELL\" THEN tran.total - ABS(tran.profit)\n  else tran.total\nend as \"Total\",\nDATE_FORMAT(tran.negotiationDate, \"%d/%m/%y\") as \"Data\"\nFROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\nwhere negotiationDate > last_day(now() - INTERVAL 1 MONTH)\ngroup by inv.id, tran.negotiationDate, tran.createdAt\norder by tran.negotiationDate, tran.createdAt\n",
+          "rawSql": "SELECT\ninv.name as \"Código\",\ntran.price as \"Preço\",\nsum(tran.qnt) as \"Qnt\",\ncase\n\twhen tran.type = \"SELL\" THEN tran.total - ABS(tran.profit)\n  else tran.total\nend as \"Total\",\nDATE_FORMAT(tran.negotiationDate, \"%d/%m/%y\") as \"Data\"\nFROM finance.transaction tran\ninner join finance.investment inv on inv.id = tran.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere negotiationDate > last_day(now() - INTERVAL 1 MONTH) AND cat.name in($category)\ngroup by inv.id, tran.negotiationDate, tran.createdAt\norder by tran.negotiationDate, tran.createdAt\n",
           "refId": "A",
           "select": [
             [
@@ -2057,7 +1953,7 @@
           "hide": false,
           "metricColumn": "balance",
           "rawQuery": true,
-          "rawSql": "SELECT\n  dy.updatedAt AS \"time\",\n  sum(dy.total - dy.fees) as \"Dividendo\",\n  inv.name as Nome,\n  CONCAT('R$ ', FORMAT(sum(dy.total - dy.fees), 2)) as \"Valor\",\n  DATE_FORMAT(dy.dueDate, '%d-%b') as 'Dt Pag'\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PROVISIONED\" and inv.balance > 0 and cat.name in($category)\ngroup by inv.id\nORDER BY dy.updatedAt",
+          "rawSql": "SELECT\n  dy.updatedAt AS \"time\",\n  case\n    when inv.currency = \"USD\"\n      then sum(dy.total - dy.fees) * $dolar\n    else sum(dy.total - dy.fees)\n  end as \"Dividendo\",\n  inv.name as Nome,\n  case\n    when inv.currency = \"USD\"\n      then CONCAT('R$ ', FORMAT(sum(dy.total - dy.fees) * $dolar, 2))\n    else CONCAT('R$ ', FORMAT(sum(dy.total - dy.fees), 2))\n  end  as \"Valor\",\n  DATE_FORMAT(dy.dueDate, '%d-%b') as 'Dt Pag'\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PROVISIONED\" and inv.balance > 0 and cat.name in($category)\ngroup by inv.id, dy.dueDate\nORDER BY dy.updatedAt",
           "refId": "A",
           "select": [
             [
@@ -2142,7 +2038,7 @@
           "hide": false,
           "metricColumn": "balance",
           "rawQuery": true,
-          "rawSql": "SELECT\n  dy.updatedAt AS \"time\",\n  sum(dy.total - dy.fees) as \"Dividendo\",\n  cat.name as Nome,\n  CONCAT('R$ ', FORMAT(sum(dy.total - dy.fees), 2)) as \"Valor\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PAID\"\ngroup by inv.categoryId\nORDER BY dy.updatedAt",
+          "rawSql": "SELECT\n  dy.updatedAt AS \"time\",\n  sum(case\n    when inv.currency = \"USD\"\n      then (dy.total - dy.fees) * $dolar\n    else (dy.total - dy.fees)\n  end) as \"Dividendo\",\n  cat.name as Nome,\n  case\n    when inv.currency = \"USD\"\n      then CONCAT('R$ ', FORMAT(sum(dy.total - dy.fees) * $dolar, 2)) \n    else CONCAT('R$ ', FORMAT(sum(dy.total - dy.fees), 2))\n  end as \"Valor\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PAID\"\ngroup by inv.categoryId\nORDER BY dy.updatedAt",
           "refId": "A",
           "select": [
             [
@@ -2248,7 +2144,7 @@
           "hide": false,
           "metricColumn": "balance",
           "rawQuery": true,
-          "rawSql": "SELECT sum(dy.total - dy.fees) as \"Mês Atual\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere inv.balance > 0 and dy.dueDate > last_day(now() - INTERVAL 1 MONTH) and cat.name in($category)",
+          "rawSql": "SELECT\n  sum(case\n    when inv.currency = \"USD\"\n      then (dy.total - dy.fees) * $dolar\n    else dy.total - dy.fees\n  end) as \"Mês Atual\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere inv.balance > 0 and dy.dueDate > last_day(now() - INTERVAL 1 MONTH) and dy.dueDate <= last_day(now()) and cat.name in($category)",
           "refId": "A",
           "select": [
             [
@@ -2282,7 +2178,7 @@
           "hide": false,
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "SELECT sum(dy.total - dy.fees) as \"Mês Anterior\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PAID\" and dy.dueDate > last_day(now() - INTERVAL 2 MONTH) and dy.dueDate <= last_day(now() - INTERVAL 1 MONTH) and cat.name in($category)",
+          "rawSql": "SELECT \n  sum(case\n    when inv.currency = \"USD\"\n      then (dy.total - dy.fees) * $dolar\n    else dy.total - dy.fees\n  end) as \"Mês Anterior\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PAID\" and dy.dueDate > last_day(now() - INTERVAL 2 MONTH) and dy.dueDate <= last_day(now() - INTERVAL 1 MONTH) and cat.name in($category)",
           "refId": "B",
           "select": [
             [
@@ -2361,7 +2257,7 @@
           "group": [],
           "metricColumn": "none",
           "rawQuery": true,
-          "rawSql": "select sum(inv.qnt * dy.price) from finance.dividends dy\ninner join finance.view_investment inv on inv.id = dy.investmentId\nwhere dy.id in (select max(tmp.id) from finance.dividends tmp group by tmp.investmentId) and \ndy.dueDate > last_day(now() - INTERVAL 1 MONTH) and \ninv.category ->> \"$.name\" in($category);",
+          "rawSql": "select\n  sum(case\n    when inv.currency = \"USD\"\n      then (inv.qnt * dy.price) * $dolar\n    else inv.qnt * dy.price\n  end) from finance.dividends dy\ninner join finance.view_investment inv on inv.id = dy.investmentId\nwhere dy.id in (select max(tmp.id) from finance.dividends tmp where tmp.dueDate < last_day(now() - INTERVAL 1 MONTH) group by tmp.investmentId) and \ninv.category ->> \"$.name\" in($category);",
           "refId": "A",
           "select": [
             [
@@ -2646,7 +2542,7 @@
           "hide": false,
           "metricColumn": "balance",
           "rawQuery": true,
-          "rawSql": "SELECT\n  inv.updatedAt AS \"time\",\n  inv.balance as \"Balanço\",\n  inv.name as Nome,\n  CONCAT('R$ ', FORMAT(inv.balance, 2)) as \"Valor\"\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.balance > 0\nORDER BY inv.updatedAt",
+          "rawSql": "SELECT\n  inv.updatedAt AS \"time\",\n  case\n    when inv.currency = \"USD\"\n      then inv.balance * $dolar\n    else inv.balance\n  end as \"Balanço\",\n  inv.name as Nome,\n  case\n    when inv.currency = \"USD\"\n      then CONCAT('R$ ', FORMAT(inv.balance * $dolar, 2)) \n    else CONCAT('R$ ', FORMAT(inv.balance, 2))\n  end as \"Valor\"\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.balance > 0\nORDER BY inv.updatedAt",
           "refId": "A",
           "select": [
             [
@@ -2736,7 +2632,7 @@
           "hide": false,
           "metricColumn": "balance",
           "rawQuery": true,
-          "rawSql": "SELECT\n  inv.updatedAt as time_sec,\n  sum(inv.balance) as \"Balanço\",\n  inv.sector as Nome\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.balance > 0\ngroup by inv.sector\nORDER BY 1",
+          "rawSql": "SELECT\n  inv.updatedAt as time_sec,\n  case\n    when inv.currency = \"USD\"\n      then sum(inv.balance) * $dolar\n    else sum(inv.balance)\n  end as \"Balanço\",\n  inv.sector as Nome\nFROM finance.investment inv\ninner join finance.category cat on cat.id = inv.categoryId\nwhere cat.name in($category) and inv.balance > 0\ngroup by inv.sector\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -3108,7 +3004,7 @@
               }
             ]
           },
-          "unit": "currencyUSD"
+          "unit": "currencyBRL"
         },
         "overrides": [
           {
@@ -3175,7 +3071,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT\n  sum(dy.total - dy.fees) AS \"Dividendo\",\n  (((select d.price from finance.dividends d where d.investmentId = dy.investmentId order by d.dueDate desc limit 1) / inv.priceAverage) * 100) as \"Rendimento (%PM)\", \n  (((select d.price from finance.dividends d where d.investmentId = dy.investmentId order by d.dueDate desc limit 1)/ inv.priceAverage) * 100) * 12 as \"Rendimento (%PM) 12M\",\n  inv.name as \"Nome\"\nFROM finance.dividends dy\ninner join finance.view_investment inv on inv.id = dy.investmentId\nwhere dy.status = \"PAID\" AND dy.total > 0 AND inv.category -> \"$.id\" = 6\ngroup by inv.id\nORDER BY sum(dy.total - dy.fees) asc",
+          "rawSql": "SELECT\n  sum(case\n    when inv.currency = \"USD\"\n      then (dy.total - dy.fees) * $dolar\n    else dy.total - dy.fees \n  end) AS \"Dividendo\",\n  (((select d.price from finance.dividends d where d.investmentId = dy.investmentId order by d.dueDate desc limit 1) / inv.priceAverage) * 100) as \"Rendimento (%PM)\", \n  (((select d.price from finance.dividends d where d.investmentId = dy.investmentId order by d.dueDate desc limit 1)/ inv.priceAverage) * 100) * 12 as \"Rendimento (%PM) 12M\",\n  inv.name as \"Nome\"\nFROM finance.dividends dy\ninner join finance.view_investment inv on inv.id = dy.investmentId\nwhere dy.status = \"PAID\" AND dy.total > 0 AND inv.category -> \"$.id\" = 6\ngroup by inv.id\nORDER BY sum(dy.total - dy.fees) asc",
           "refId": "A",
           "select": [
             [
@@ -3262,7 +3158,7 @@
               }
             ]
           },
-          "unit": "currencyUSD"
+          "unit": "currencyBRL"
         },
         "overrides": [
           {
@@ -3329,7 +3225,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT\n  sum(dy.total - dy.fees) AS \"Dividendo\",\n  (((select d.price from finance.dividends d where d.investmentId = dy.investmentId order by d.dueDate desc limit 1) / inv.priceAverage) * 100) as \"Rendimento (%PM)\", \n  (((select d.price from finance.dividends d where d.investmentId = dy.investmentId order by d.dueDate desc limit 1) / inv.priceAverage) * 100) * 12 as \"Rendimento (%PM) 12M\",\n  inv.name as \"Nome\"\nFROM finance.dividends dy\ninner join finance.view_investment inv on inv.id = dy.investmentId\nwhere dy.status = \"PAID\" AND dy.total > 0 AND inv.category -> \"$.id\" = 5\ngroup by inv.id\nORDER BY sum(dy.total - dy.fees) asc",
+          "rawSql": "SELECT\n  sum(case\n    when inv.currency = \"USD\"\n      then (dy.total - dy.fees) * $dolar\n    else dy.total - dy.fees\n  end) AS \"Dividendo\",\n  (((select d.price from finance.dividends d where d.investmentId = dy.investmentId order by d.dueDate desc limit 1) / inv.priceAverage) * 100) as \"Rendimento (%PM)\", \n  (((select d.price from finance.dividends d where d.investmentId = dy.investmentId order by d.dueDate desc limit 1) / inv.priceAverage) * 100) * 12 as \"Rendimento (%PM) 12M\",\n  inv.name as \"Nome\"\nFROM finance.dividends dy\ninner join finance.view_investment inv on inv.id = dy.investmentId\nwhere dy.status = \"PAID\" AND dy.total > 0 AND inv.category -> \"$.id\" = 5\ngroup by inv.id\nORDER BY sum(dy.total - dy.fees) asc",
           "refId": "A",
           "select": [
             [
@@ -3456,7 +3352,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT\n  sum(dy.total - dy.fees) AS \"Dividendo\",\n  DATE_FORMAT(dy.dueDate, \"%m/%y\") as \"Date\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PAID\" AND dy.dueDate >= last_day(now() - INTERVAL 1 YEAR) and cat.name in($category)\nGROUP BY DATE_FORMAT(dy.dueDate, \"%m/%y\")\norder by dy.dueDate asc",
+          "rawSql": "SELECT\n  sum(\n     case \n      when inv.currency = \"USD\"\n        then (dy.total - dy.fees) * $dolar\n      else dy.total - dy.fees\n     end\n ) AS \"Dividendo\",\n DATE_FORMAT(dy.dueDate, \"%m/%y\") as \"Date\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PAID\" AND dy.dueDate >= last_day(now() - INTERVAL 1 YEAR) and cat.name in($category)\nGROUP BY DATE_FORMAT(dy.dueDate, \"%m/%y\")\norder by dy.dueDate asc",
           "refId": "A",
           "select": [
             [
@@ -3583,7 +3479,7 @@
           "group": [],
           "metricColumn": "priceDay",
           "rawQuery": true,
-          "rawSql": "SELECT\n  sum(dy.total - dy.fees ) AS \"Dividendo\",\n  \"Total de dividendos recebidos\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PAID\" and cat.name in($category)\nORDER BY dy.createdAt",
+          "rawSql": "SELECT\n  sum(\n    case\n      when inv.currency = \"USD\"\n        then (dy.total - dy.fees) * $dolar\n      else dy.total - dy.fees\n    end\n  ) AS \"Dividendo\",\n  \"Total de dividendos recebidos\"\nFROM finance.dividends dy\ninner join finance.investment inv on inv.id = dy.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere dy.status = \"PAID\" and cat.name in($category)\nORDER BY dy.createdAt",
           "refId": "A",
           "select": [
             [
@@ -3712,7 +3608,7 @@
           "hide": false,
           "metricColumn": "total",
           "rawQuery": true,
-          "rawSql": "SELECT\n   DATE_FORMAT(t.negotiationDate, \"%m/%y\") as \"Date\",\n    (select sum(t2.total) from finance.transaction t2 where t2.negotiationDate <= LAST_DAY(t.negotiationDate)) as \"Total Compra\"\nfrom finance.transaction t\nwhere t.negotiationDate >= last_day(now() - INTERVAL 1 YEAR)\ngroup by DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by t.negotiationDate asc;",
+          "rawSql": "SELECT\n  DATE_FORMAT(t.negotiationDate, \"%m/%y\") as \"Date\",\n  (\n    select \n      sum(case\n        when inv.currency = \"USD\"\n          then t2.total * $dolar\n        else t2.total\n      end)\n    from finance.transaction t2 \n    inner join finance.investment inv on inv.id = t2.investmentId\n    inner join finance.category cat on cat.id = inv.categoryId\n    where t2.negotiationDate <= LAST_DAY(t.negotiationDate) and cat.name in($category)\n  ) as \"Total Compra\"\nfrom finance.transaction t\ninner join finance.investment inv on inv.id = t.investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere t.negotiationDate >= last_day(now() - INTERVAL 1 YEAR) and cat.name in($category)\ngroup by DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by t.negotiationDate asc;",
           "refId": "A",
           "select": [
             [
@@ -3831,7 +3727,7 @@
           "hide": false,
           "metricColumn": "total",
           "rawQuery": true,
-          "rawSql": "SELECT\n   DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n  sum(total) AS \"Total Compra\"\nFROM finance.transaction\nwhere `type` = \"BUY\" AND negotiationDate >= last_day(now() - INTERVAL 1 YEAR)\nGROUP BY  DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by negotiationDate asc",
+          "rawSql": "SELECT\n   DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n   sum(case\n    when inv.currency = \"USD\"\n      then total * $dolar\n    else total\n   end) AS \"Total Compra\"\nFROM finance.transaction\ninner join finance.investment inv on inv.id = investmentId  \ninner join finance.category cat on cat.id = inv.categoryId\nwhere `type` = \"BUY\" AND negotiationDate >= last_day(now() - INTERVAL 1 YEAR) and cat.name in($category)\nGROUP BY  DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by negotiationDate asc",
           "refId": "A",
           "select": [
             [
@@ -3857,7 +3753,7 @@
           "hide": false,
           "metricColumn": "total",
           "rawQuery": true,
-          "rawSql": "SELECT\n  DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n  sum(ABS(qnt) * price) AS \"Total Venda\"\nFROM finance.transaction\nwhere `type` = \"SELL\" AND negotiationDate >= last_day(now() - INTERVAL 1 YEAR)\nGROUP BY DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by negotiationDate asc",
+          "rawSql": "SELECT\n  DATE_FORMAT(negotiationDate, \"%m/%y\") as \"Date\",\n  sum(case\n    when inv.currency = \"USD\"\n      then ABS(qnt) * price * $dolar\n    else ABS(qnt) * price\n  end) AS \"Total Venda\"\nFROM finance.transaction\ninner join finance.investment inv on inv.id = investmentId\ninner join finance.category cat on cat.id = inv.categoryId\nwhere `type` = \"SELL\" AND negotiationDate >= last_day(now() - INTERVAL 1 YEAR) and cat.name in($category)\nGROUP BY DATE_FORMAT(negotiationDate, \"%m/%y\")\norder by negotiationDate asc",
           "refId": "B",
           "select": [
             [
@@ -4473,17 +4369,47 @@
         "sort": 0,
         "type": "query",
         "datasource": "${DS_MYSQL}"
+      },
+      {
+        "current": {},
+        "datasource": {
+          "type": "marcusolsson-json-datasource",
+          "uid": "${DS_JSON_API (CURRENCY)}"
+        },
+        "definition": "$.USDBRL.bid",
+        "hide": 0,
+        "includeAll": false,
+        "label": "dolar (R$)",
+        "multi": false,
+        "name": "dolar",
+        "options": [],
+        "query": {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$.USDBRL.bid"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "urlPath": "/last/USD-BRL"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
   "time": {
-    "from": "now-5m",
-    "to": "now"
+    "from": "2022-03-02T19:36:59.941Z",
+    "to": "2022-03-03T00:56:59.941Z"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Finance",
   "uid": "u6pvSDYnk",
-  "version": 111,
+  "version": 128,
   "weekStart": ""
 }
