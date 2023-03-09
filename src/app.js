@@ -45,7 +45,7 @@ app.use(cors());
 app.use(express.json({limit: env.server.bodyLimit}));
 app.use(express.urlencoded({extended: true}));
 app.use(helmet({
-    contentSecurityPolicy: env.isProd,
+    contentSecurityPolicy: env.isProduction,
 }));
 app.use(hsts({
     maxAge: 31536000,

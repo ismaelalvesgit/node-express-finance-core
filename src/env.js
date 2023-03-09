@@ -7,7 +7,7 @@ dotenv.config({path: path.join(__dirname, env)});
 const url = process.env.SERVER_URL || "http://localhost:3000";
 export default {
     env: process.env.NODE_ENV || "development",
-    isProd: process.env.NODE_ENV === "production",
+    isProduction: process.env.NODE_ENV === "production",
     timezone: process.env.TZ || "America/Fortaleza",
     brapi: process.env.BRAPI_URL,
     mercadoBitCoin: process.env.MERCADO_BITCOIN_URL,
