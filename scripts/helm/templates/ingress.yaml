@@ -9,11 +9,6 @@ metadata:
   annotations:
     {{ include "service.annotations" . }}
     nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.rewrite }}
-    # nginx.ingress.kubernetes.io/ssl-redirect: {{ .Values.ingress.sslRedirect }}
-    # nginx.ingress.kubernetes.io/force-ssl-redirect: {{ .Values.ingress.forceSslRedirect }}
-    # nginx.ingress.kubernetes.io/ssl-passthrough: {{ .Values.ingress.sslPassthrough }}
-    # nginx.ingress.kubernetes.io/proxy-send-timeout: {{ .Values.ingress.proxySendTimeout }}
-    # nginx.ingress.kubernetes.io/proxy-read-timeout: {{ .Values.ingress.proxyRendTimeout }}
 
 spec:
   ingressClassName: nginx
@@ -25,7 +20,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name:  {{ template "service.fullname" . }}
+            name: {{ template "service.fullname" . }}
             port: 
               number: {{ .Values.env.SERVER_PORT }}
 {{- end }}
