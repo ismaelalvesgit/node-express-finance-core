@@ -123,6 +123,32 @@ describe("Category Router", () => {
         });
     });
     
+    describe("createAsync", ()=>{
+        it("should return status code 201 with success", async() => {
+            await request(getApp)
+            .post(`${prefix}/async`)
+            .send({
+                name: chance.name()
+            })
+            .expect(StatusCodes.OK);
+        });
+        
+        it("should return status code 400 data not valid", async() => {
+           const res = await request(getApp)
+            .post(`${prefix}/async`)
+            .expect(StatusCodes.BAD_REQUEST);
+            expect(res.body.details[0].message).toBe("name e obrigátorio");
+        });
+        
+        it("should return status code 400 data not valid lang en-US", async() => {
+           const res = await request(getApp)
+            .post(`${prefix}/async`)
+            .set("accept-language", "en-US")
+            .expect(StatusCodes.BAD_REQUEST);
+            expect(res.body.details[0].message).toBe("name is required");
+        });
+    });
+    
     describe("update", ()=>{
         it("should return status code 200 with success", async() => {
             const [id] = await knex("category").insert({
