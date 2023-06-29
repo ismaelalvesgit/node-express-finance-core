@@ -65,7 +65,7 @@ paths:
               $ref: "#/components/schemas/product"
       responses:
         200: # status code
-          description: Created product.
+          description: Published product.
         400: # status code
           $ref: "#/components/responses/badRequest"
         500: # status code
@@ -246,6 +246,22 @@ paths:
   ##############################################################################
   #    Category
   ##############################################################################
+  /v1/category/async:
+    post:
+      tags:
+        - Category
+      summary: Created category.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/category"
+      responses:
+        200: # status code
+          description: Published by success.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+
   /v1/category:
     get:
       tags:
