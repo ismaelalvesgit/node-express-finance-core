@@ -1,0 +1,581 @@
+openapi: 3.0.0
+
+info:
+  title: Example Express
+  description: Criated API by Exemple
+  version: 0.0.1
+
+servers:
+  - url: http://localhost:3000
+    description: Development
+
+tags:
+  - name: Category
+    description: Category namespace
+  - name: Product
+    description: Product namespace
+  - name: System
+    description: System namespace
+
+paths:
+  /v1/system/healthcheck:
+    get:
+      tags:
+        - System
+      summary: Return status of API.
+      responses:
+        200: # status code
+          description: Return status of API.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "OK"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /v1/system/metrics:
+    get:
+      tags:
+        - System
+      summary: Return metrics of API.
+      responses:
+        200: # status code
+          description: Return metrics of API.
+          content:
+            application/json:
+              schema:
+                type: string
+        500: # status code
+          $ref: "#/components/responses/internal"
+  
+  ##############################################################################
+  #    Product
+  ##############################################################################
+  
+  /v1/product/async:
+    post:
+      tags:
+        - Product
+      summary: Send product by queue.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/product"
+      responses:
+        200: # status code
+          description: Created product.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+  
+  /v1/product:
+    get:
+      tags:
+        - Product
+      summary: Return list of products.
+      parameters:
+        - in: query
+          name: page
+          description: Page
+          schema:
+            type: number
+            example: 1
+        - in: query
+          name: pageSize
+          description: Quantity itens by page
+          schema:
+            type: number
+            example: 10
+        - in: query
+          name: orderBy
+          description: OrderBy
+          schema:
+            type: string
+            example: "name"
+        - in: query
+          name: orderByDescending
+          description: OrderBy Descending
+          schema:
+            type: boolean
+            example: false
+        - in: query
+          name: filterBy
+          description: Filter itens
+          schema:
+            type: array
+            items:
+              example: 'name eq ismael'
+              
+      responses:
+        200: # status code
+          $ref: "#/components/responses/product"
+
+    post:
+      tags:
+        - Product
+      summary: Created product.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/product"
+      responses:
+        201: # status code
+          description: Created by success.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /v1/product/{id}:
+    get:
+      tags:
+        - Product
+      summary: Return product by ID.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do product
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          description: product.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: "Ismael Alves"
+                  imageUrl:
+                    type: string
+                    example: "https://github.com/ismaelalvesgit"
+                  description:
+                    type: string
+                    example: "Example"
+                  price:
+                    type: number
+                    example: 10
+                  quantity:
+                    type: number
+                    example: 10
+                  createdAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  updatedAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  category:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      imageUrl:
+                        type: string
+                        example: "https://github.com/ismaelalvesgit"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    put:
+      tags:
+        - Product
+      summary: Updated one product.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID product
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/product"
+      responses:
+        202: # status code
+          description: Success
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    delete:
+      tags:
+        - Product
+      summary: Delete one product.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID product
+          schema:
+            type: string
+            example: "1"
+      responses:
+        204: # status code
+          description: Success
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"        
+          
+  ##############################################################################
+  #    Category
+  ##############################################################################
+  /v1/category:
+    get:
+      tags:
+        - Category
+      summary: Return list of categorys.
+      parameters:
+        - in: query
+          name: page
+          description: Page
+          schema:
+            type: number
+            example: 1
+        - in: query
+          name: pageSize
+          description: Quantity itens by page
+          schema:
+            type: number
+            example: 10
+        - in: query
+          name: orderByDescending
+          description: OrderBy Descending
+          schema:
+            type: boolean
+            example: false
+        - in: query
+          name: filterBy
+          description: Filter itens
+          schema:
+            type: array
+            items:
+              example: 'name eq ismael'
+              
+      responses:
+        200: # status code
+          $ref: "#/components/responses/category"
+
+    post:
+      tags:
+        - Category
+      summary: Created category.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/category"
+      responses:
+        201: # status code
+          description: Created by success.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /v1/category/{id}:
+    get:
+      tags:
+        - Category
+      summary: Return category by ID.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do category
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          description: Category.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: "Raquel"
+                  imageUrl:
+                    type: string
+                    example: "https://github.com/ismaelalvesgit"
+                  createdAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  updatedAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    put:
+      tags:
+        - Category
+      summary: Updated one category.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID category
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/category"
+      responses:
+        202: # status code
+          description: Success
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    delete:
+      tags:
+        - Category
+      summary: Delete one category.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID category
+          schema:
+            type: string
+            example: "1"
+      responses:
+        204: # status code
+          description: Success
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+components:
+  responses:
+    badRequest:
+      description: Failed on request.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                message:
+                  type: string
+
+    notFound:
+      description: Value not found
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                message:
+                  type: string
+
+    internal:
+      description: Internal error.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                message:
+                  type: string
+
+    category:
+      description: List of category
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                currentPage:
+                  type: number
+                  example: 1
+                totalPages:
+                  type: number
+                  example: 1
+                totalCount:
+                  type: number
+                  example: 1
+                nextPage:
+                  type: number
+                  example: 0
+                previousPage:
+                  type: number
+                  example: 0
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      imageUrl:
+                        type: string
+                        example: "https://github.com/ismaelalvesgit"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+    
+    product:
+      description: List of product
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                currentPage:
+                  type: number
+                  example: 1
+                totalPages:
+                  type: number
+                  example: 1
+                totalCount:
+                  type: number
+                  example: 1
+                nextPage:
+                  type: number
+                  example: 0
+                previousPage:
+                  type: number
+                  example: 0
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      imageUrl:
+                        type: string
+                        example: "https://github.com/ismaelalvesgit"
+                      description:
+                        type: string
+                        example: "Example"
+                      price:
+                        type: number
+                        example: 10
+                      quantity:
+                        type: number
+                        example: 10
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      category:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                            example: 1
+                          name:
+                            type: string
+                            example: "Ismael Alves"
+                          imageUrl:
+                            type: string
+                            example: "https://github.com/ismaelalvesgit"
+                          createdAt:
+                            type: string
+                            example: "2021-03-31 22:34:36.476"
+                          updatedAt:
+                            type: string
+                            example: "2021-03-31 22:34:36.476"
+
+  schemas:
+    category:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          example: "Ismael Alves"
+        imageUrl:
+          type: string
+          example: "https://github.com/ismaelalvesgit"
+   
+    product:
+      type: object
+      required:
+        - name
+        - categoryId
+        - price
+        - quantity
+      properties:
+        name:
+          type: string
+          example: "Ismael Alves"
+        imageUrl:
+          type: string
+          example: "https://github.com/ismaelalvesgit"
+        categoryId:
+          type: number
+          example: 10
+        description:
+          type: string
+          example: "Example"
+        price:
+          type: number
+          example: 10
+        quantity:
+          type: number
+          example: 10
