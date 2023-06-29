@@ -15,7 +15,7 @@ import { Logger } from "@infrastructure/logger/logger";
 import ApmClient from "@infrastructure/apm/apm";
 import { container } from "@di/container";
 
-const apmAgent = container.resolve(ApmClient)
+const apmAgent = container.resolve(ApmClient);
 
 const errorsConfigs = [
   { class: NotFound, type: null, value: "NotFoundError" },
@@ -107,12 +107,12 @@ export const errorHandler = (
   let status = StatusCodes.INTERNAL_SERVER_ERROR;
   let throwErr = _loadErrorMessage(req, err);
   switch (throwErr.constructor) {
-    // case BadRequest:
-    // case FailedSQL:
-    // case InvalidProperties: {
-    //   status = StatusCodes.BAD_REQUEST;
-    //   break;
-    // }
+    case BadRequest:
+    case FailedSQL:
+    case InvalidProperties: {
+      status = StatusCodes.BAD_REQUEST;
+      break;
+    }
     case NotFound: {
       status = StatusCodes.NOT_FOUND;
       break;

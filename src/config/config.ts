@@ -84,7 +84,7 @@ export class Config {
 
     private getKafkaConfig() {
         return {
-            brokers: (process.env["KAFKA_BROKER"] || '').split(';'),
+            brokers: (process.env["KAFKA_BROKER"] || "").split(";"),
             connectionTimeout:  parseInt(process.env["KAFKA_TIMEOUT"] || "30000"),
         };
     }

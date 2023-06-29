@@ -35,13 +35,13 @@ export default class RedisClient implements IRedisAdapter {
     }
 
     private get closed (){
-        return (this.client?.status === 'close' || this.client?.status === 'end')
+        return (this.client?.status === "close" || this.client?.status === "end");
     }
 
     async get(key: string): Promise<string | null> {
         try {
             if(this.closed) {
-                return null
+                return null;
             }
 
             const path = `${this.config.get().redis.prefix}:${key}`;
@@ -57,35 +57,34 @@ export default class RedisClient implements IRedisAdapter {
     async set(key: string, value: string, exp?: number): Promise<number | undefined> {
         try {
             if(this.closed) {
-                return undefined
+                return undefined;
             }
             const path = `${this.config.get().redis.prefix}:${key}`;
-            console.log(this.client?.status)
             this.client?.set.bind(this.client)(path, value);
             return this.expire(key, exp ?? this.timeDay);
         } catch (error) {
             Logger.error(`Redis: ${error}`);
-            return undefined
+            return undefined;
         }
     }
 
     async expire(key: string, seconds: number): Promise<number | undefined> {
         try {
             if(this.closed) {
-                return undefined
+                return undefined;
             }
             const path = `${this.config.get().redis.prefix}:${key}`;
             return this.client?.expire.bind(this.client)(path, seconds);
         } catch (error) {
             Logger.error(`Redis: ${error}`);
-            return undefined
+            return undefined;
         }
     }
 
     async delete(key: string) {
         try {
             if(this.closed) {
-                return undefined
+                return undefined;
             }
             const path = `${this.config.get().redis.prefix}:${key}`;
             return this.client?.del.bind(this.client)(path);
@@ -98,7 +97,7 @@ export default class RedisClient implements IRedisAdapter {
     async deleteByPrefix(prefix: string) {
         try {
             if(this.closed) {
-                return undefined
+                return undefined;
             }
             const path = `${this.config.get().redis.prefix}:${prefix}`;
             const keys = await this.client?.keys.bind(this.client)(`${path}:*`);
