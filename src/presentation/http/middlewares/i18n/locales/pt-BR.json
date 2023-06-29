@@ -1,0 +1,18 @@
+{
+	"ServiceUnavailable.router": "A rota ainda não foi configurada",
+	"ServiceUnavailable.throttling": "Limite de solicitação atingido 😅, aguarde um pouco e tente novamente 😇",
+	"NotFound": "{{code}} não encontrado",
+	"BadRequest.Duplicate": "Valor único já cadastrado '{{name}}'",
+	"InvalidProperties.empty": "{{name}} não pode ser vazio",
+	"InvalidProperties.required": "{{name}} e obrigátorio",
+	"InvalidProperties.min": "{{name}} deve ser pelo menos {{limit}} caracteres",
+	"InvalidProperties.email": "{{name}} deve ser um email válido",
+	"InvalidProperties.only": "{{name}} deve ser um de {{valids}}",
+	"InvalidProperties.async": "{{name}} não existe em nossa base",
+	"InvalidProperties.object.min": "\"{{name}}\" deve possuir pelo menos 1 key",
+	"InternalServer": "Entre em contato com o desenvolvedor passe eu seu ID {{requestId}}, lamentamos isso ter ocorrido 😞",
+	"Contact.create": "Contato criada com sucesso!!!",
+	"Contact.update": "Contato atualizada com sucesso!!!",
+	"BadRequest.Contact": "Falha ao criar o Contato",
+	"InternalServer.Contact": "Falha ao Modificar a Contato 😞"
+}

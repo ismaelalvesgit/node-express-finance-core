@@ -1,0 +1,18 @@
+{
+	"ServiceUnavailable.router": "Route is yet to be configured",
+	"ServiceUnavailable.throttling": "Request limit reached 😅, wait a while and try again 😇",
+	"NotFound": "{{code}} not found",
+	"BadRequest.Duplicate": "Unique value already registered '{{duplicateValue}}'",
+	"InvalidProperties.empty": "{{name}} is not empty",
+	"InvalidProperties.required": "{{name}} is required",
+	"InvalidProperties.min": "{{name}} length must be at least {{limit}} characters long",
+	"InvalidProperties.email": "{{name}} must be a valid email",
+	"InvalidProperties.only": "{{name}} must be one of {{valids}}",
+	"InvalidProperties.async": "{{name}} not exist",
+	"InvalidProperties.object.min": "\"{{name}}\" must have at least 1 key",
+	"InternalServer": "Contact the developer and give me your ID {{id}}, we're sorry this happened 😞",
+	"Contact.create": "Contact Created",
+	"Contact.update": "Contact update sucess",
+	"BadRequest.Contact": "Fail to create Contact",
+	"InternalServer.Contact": "Failed to Modify Contact 😞"
+}
