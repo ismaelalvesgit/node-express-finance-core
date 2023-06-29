@@ -1,17 +1,21 @@
 import { Config } from "@config/config";
+import { tokens } from "@di/tokens";
 import { IKafkaAdapter, IKafkaAdapterParams } from "@infrastructure/types/IkafkaAdapter";
 import { Producer, Kafka, Partitioners, Message, IHeaders, RecordMetadata } from "kafkajs";
+import { inject, injectable } from "tsyringe";
 import { v4 as uuidv4 } from "uuid";
 
+@injectable()
 export default class KafkaClient implements IKafkaAdapter {
     
-    protected topic: string;
     protected kafka?: Kafka;
     protected producer?: Producer;
 
-    constructor({ topic }: IKafkaAdapterParams){
-        const { kafka: { brokers, connectionTimeout }, serviceName } = new Config().get();
-        this.topic = topic;
+    constructor(
+        @inject(tokens.Config)
+        private config: Config,
+    ){
+        const { kafka: { brokers, connectionTimeout }, serviceName } = this.config.get();
         this.kafka = brokers.length > 0 ? new Kafka({
             brokers,
             clientId: serviceName,
@@ -25,7 +29,7 @@ export default class KafkaClient implements IKafkaAdapter {
         });
     }
 
-    async execute(data: Object[] | Object, headers?: IHeaders): Promise<RecordMetadata[]> { 
+    async execute<IEntity>({topic, data, headers}: IKafkaAdapterParams<IEntity>): Promise<RecordMetadata[]> { 
         if(this.kafka == undefined || this.producer === undefined){
             return [];
         }
@@ -44,7 +48,7 @@ export default class KafkaClient implements IKafkaAdapter {
 
             });
         } else {
-            messages = data.map((message: Object)=>{
+            messages = data.map((message: IEntity)=>{
                 return {
                     timestamp: new Date().getTime().toString(),
                     value: JSON.stringify({
@@ -58,7 +62,7 @@ export default class KafkaClient implements IKafkaAdapter {
 
         await this.producer?.connect();
         const record = await this.producer?.send({
-            topic: this.topic,
+            topic,
             messages
         });
         await this.producer?.disconnect();

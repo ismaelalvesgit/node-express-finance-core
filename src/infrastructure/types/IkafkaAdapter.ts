@@ -1,9 +1,11 @@
 import { IHeaders, RecordMetadata } from "kafkajs";
 
-export interface IKafkaAdapterParams {
+export interface IKafkaAdapterParams <IEntity> {
     topic: string
+    data: IEntity[] | IEntity, 
+    headers?: IHeaders
 }
 
 export interface IKafkaAdapter {
-    execute(data: Object[] | Object, headers?: IHeaders): Promise<RecordMetadata[]>
+    execute<IEntity>(params: IKafkaAdapterParams<IEntity>): Promise<RecordMetadata[]>
 }
