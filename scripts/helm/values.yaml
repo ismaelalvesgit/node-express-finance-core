@@ -1,0 +1,67 @@
+replicaCount: 1
+image:
+  repository: ismaelalvesdoc/node-horizontal-example
+  tag: latest
+  pullPolicy: Always
+  livenessPath: /system/healthcheck
+
+service:
+  enabled: true
+  type: NodePort
+
+ingress:
+  enabled: false
+  host: ingress.local
+  rewrite: /
+
+env:
+  NODE_ENV: development
+  TZ: America/Fortaleza
+  SERVER_PORT: 3000
+  DB_HOST: kubernetes.docker.internal
+  DB_PORT: 3306
+  DB_USERNAME: root
+  DB_DATABASE: example
+  DB_DEBUG: false
+  REDIS_HOST: kubernetes.docker.internal
+  REDIS_PORT: 6379
+  APM_SERVER_URL: http://kubernetes.docker.internal:8200
+  APM_SERVICE_NAME: example
+  AMQP_ACTIVE: false
+  AMQP_PROTOCOL: amqp
+  AMQP_HOSTNAME: kubernetes.docker.internal
+  AMQP_PORT: 5672
+  AMQP_USERNAME: admin
+  AMQP_VHOST: /
+
+secret:
+  DB_PASSWORD: admin
+  AMQP_PASSWORD: admin
+  APM_API_KEY: ''
+  APM_SECRET_TOKEN: ''
+
+resources:
+  requests:
+    memory: 700Mi
+    cpu: 400m
+  limits:
+    memory: 1Gi
+    cpu: 800m
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 70

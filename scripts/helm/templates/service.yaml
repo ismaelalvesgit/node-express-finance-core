@@ -1,0 +1,18 @@
+{{- if .Values.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "service.fullname" . }}
+  {{- if or .Values.namespace .Release.Namespace }}
+  namespace: {{ or .Values.namespace .Release.Namespace }}
+  {{- end}}
+  annotations:
+  {{ include "service.annotations" . | indent 3 }}
+spec:
+  selector: {{ include "service.labels" . | nindent 4 }}
+  ports:
+  - port: {{ .Values.env.SERVER_PORT }}
+    name: http
+    protocol: TCP
+  type: {{ .Values.service.type }}
+{{- end }}
