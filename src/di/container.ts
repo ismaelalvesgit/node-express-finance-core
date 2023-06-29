@@ -25,10 +25,14 @@ import HealthcheckController from "@presentation/http/controllers/system/healthc
 import SystemRepository from "@domain/system/infrastructure/systemRepository";
 import EmailClient from "@infrastructure/email/email";
 import ApmClient from "@infrastructure/apm/apm";
+import CreateAsyncCategoryController from "@presentation/http/controllers/category/createAsyncCategoryController";
+import CreateAsyncProductController from "@presentation/http/controllers/product/createAsyncProductController";
+import KafkaClient from "@infrastructure/kafka/kafka";
 
 const childContainer = container.createChildContainer();
 
 childContainer.registerSingleton(tokens.Config, Config);
+childContainer.registerSingleton(tokens.KafkaClient, KafkaClient);
 childContainer.registerSingleton(tokens.RedisClient, RedisClient);
 childContainer.registerSingleton(tokens.EmailClient, EmailClient);
 childContainer.registerSingleton(tokens.ApmClient, ApmClient);
@@ -40,6 +44,7 @@ childContainer.registerSingleton(tokens.SystemRepository, SystemRepository);
 childContainer.registerSingleton(tokens.CategoryRouter, CategoryRouter);
 childContainer.registerSingleton(tokens.FindByIdCategoryController, FindByIdCategoryController);
 childContainer.registerSingleton(tokens.FindAllCategoryController, FindAllCategoryController);
+childContainer.registerSingleton(tokens.CreateAsyncCategoryController, CreateAsyncCategoryController);
 childContainer.registerSingleton(tokens.CreateCategoryController, CreateCategoryController);
 childContainer.registerSingleton(tokens.DeleteCategoryController, DeleteCategoryController);
 childContainer.registerSingleton(tokens.UpdateCategoryController, UpdateCategoryController);
@@ -48,6 +53,7 @@ childContainer.registerSingleton(tokens.CategoryService, CategoryService);
 childContainer.registerSingleton(tokens.ProductRouter, ProductRouter);
 childContainer.registerSingleton(tokens.FindByIdProductController, FindByIdProductController);
 childContainer.registerSingleton(tokens.FindAllProductController, FindAllProductController);
+childContainer.registerSingleton(tokens.CreateAsyncProductController, CreateAsyncProductController);
 childContainer.registerSingleton(tokens.CreateProductController, CreateProductController);
 childContainer.registerSingleton(tokens.DeleteProductController, DeleteProductController);
 childContainer.registerSingleton(tokens.UpdateProductController, UpdateProductController);
