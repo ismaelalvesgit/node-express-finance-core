@@ -35,6 +35,10 @@ export interface Configuration {
         secretToken?: string
         cloudProvider?: string
     }
+    kafka: {
+        brokers: string[]
+        connectionTimeout: number
+    }
     timezone: string
 }
 

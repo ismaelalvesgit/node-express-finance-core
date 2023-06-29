@@ -20,7 +20,8 @@ export class Config {
             db: this.getDbConfig(),
             redis: this.getRedisConfig(),
             email: this.getEmailConfig(),
-            apm: this.getApmConfig()
+            apm: this.getApmConfig(),
+            kafka: this.getKafkaConfig()
         };
     }
 
@@ -78,6 +79,13 @@ export class Config {
             apiUrl: process.env["EMAIL_API_URL"] || "https://api.mailjet.com",
             apiKey: process.env["EMAIL_API_KEY"] || "",
             secret: process.env["EMAIL_SECRET"] || ""
+        };
+    }
+
+    private getKafkaConfig() {
+        return {
+            brokers: (process.env["KAFKA_BROKER"] || '').split(';'),
+            connectionTimeout:  parseInt(process.env["KAFKA_TIMEOUT"] || "30000"),
         };
     }
 }
