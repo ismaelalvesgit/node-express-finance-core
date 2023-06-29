@@ -12,6 +12,7 @@ import { validator } from "@presentation/http/middlewares/validator";
 import { createCategorySchema, updateCategorySchema } from "@presentation/http/schemas/category";
 import { queryDataSchema } from "@presentation/http/schemas/common";
 import cacheHandler from "@presentation/http/middlewares/cache";
+import CreateAsyncCategoryController from "@presentation/http/controllers/category/createAsyncCategoryController";
 
 @injectable()
 export class CategoryRouter implements IRouter {
@@ -28,6 +29,9 @@ export class CategoryRouter implements IRouter {
         @inject(tokens.CreateCategoryController)
         private createCategoryController: CreateCategoryController,
 
+        @inject(tokens.CreateAsyncCategoryController)
+        private createAsyncCategoryController: CreateAsyncCategoryController,
+
         @inject(tokens.DeleteCategoryController)
         private deleteCategoryController: DeleteCategoryController,
 
@@ -42,6 +46,9 @@ export class CategoryRouter implements IRouter {
             .get(validator(queryDataSchema), cacheHandler({path: "category"}), catchAsync(this.findAllCategoryController))
             .post(validator(createCategorySchema), catchAsync(this.createCategoryController));
             
+        this.router.route(`${this.prefix}/async`)
+            .post(validator(createCategorySchema), catchAsync(this.createAsyncCategoryController));
+
         this.router.route(`${this.prefix}/:id`)
             .get(cacheHandler({path: "category"}), catchAsync(this.findByIdCategoryController))
             .put(validator(updateCategorySchema), catchAsync(this.updateCategoryController))

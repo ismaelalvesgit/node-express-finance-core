@@ -12,6 +12,7 @@ import { validator } from "@presentation/http/middlewares/validator";
 import { createProductSchema, updateProductSchema } from "@presentation/http/schemas/product";
 import { queryDataSchema } from "@presentation/http/schemas/common";
 import cacheHandler from "@presentation/http/middlewares/cache";
+import CreateAsyncProductController from "@presentation/http/controllers/product/createAsyncProductController";
 
 @injectable()
 export class ProductRouter implements IRouter {
@@ -28,6 +29,9 @@ export class ProductRouter implements IRouter {
         @inject(tokens.CreateProductController)
         private createProductController: CreateProductController,
 
+        @inject(tokens.CreateAsyncProductController)
+        private createAsyncProductController: CreateAsyncProductController,
+
         @inject(tokens.DeleteProductController)
         private deleteProductController: DeleteProductController,
 
@@ -41,6 +45,9 @@ export class ProductRouter implements IRouter {
         this.router.route(this.prefix)
             .get(validator(queryDataSchema), cacheHandler({path: "product"}), catchAsync(this.findAllProductController))
             .post(validator(createProductSchema), catchAsync(this.createProductController));
+
+            this.router.route(`${this.prefix}/async`)
+            .post(validator(createProductSchema), catchAsync(this.createAsyncProductController));
             
         this.router.route(`${this.prefix}/:id`)
             .get(cacheHandler({path: "product"}), catchAsync(this.findByIdProductController))
