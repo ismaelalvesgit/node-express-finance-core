@@ -6,7 +6,7 @@ import { IProductService } from "@domain/product/types/IProductService";
 import { StatusCodes } from "http-status-codes";
 
 @injectable()
-export default class CreateCategoryController implements IBaseController {
+export default class CreateProductController implements IBaseController {
 
     constructor(
         @inject(tokens.ProductService)

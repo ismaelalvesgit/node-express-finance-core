@@ -37,9 +37,9 @@ export default abstract class RepositoryBase<IEntity> implements IReposioryBase<
 
         query.select(`${this.tableName}.*`);
     
-        this.innerJoin(query, queryTotal, params.join)
-        this.orderByName(query, orderByDescending, params.orderBy)
-        this.whereByName(query, queryTotal, params.filterBy)
+        this.innerJoin(query, queryTotal, params.join);
+        this.orderByName(query, orderByDescending, params.orderBy);
+        this.whereByName(query, queryTotal, params.filterBy);
 
 
         query.offset((page - 1) * pageSize);
