@@ -69,7 +69,7 @@ export class Config {
             serverUrl: process.env["APM_SERVER_URL"] || "",
             apiKey: process.env["APM_API_KEY"],
             secretToken: process.env["APM_SECRET_TOKEN"],
-            cloudProvider: process.env["APM_CLOUND_PROVIDER"]
+            cloudProvider: process.env["APM_CLOUND_PROVIDER"] || "none"
         };
     }
   
