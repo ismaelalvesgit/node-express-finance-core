@@ -15,6 +15,7 @@ export default class CreateAsyncCategoryController implements IBaseController {
 
     async handler(req: Request, res: Response) {
         await this.categoryService.createAsync(req.body);
+        req.io.emit("/category", "Send queue new category")
         res.sendStatus(StatusCodes.OK);
     }
 }

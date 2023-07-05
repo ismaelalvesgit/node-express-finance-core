@@ -15,6 +15,7 @@ export default class CreateCategoryController implements IBaseController {
 
     async handler(req: Request, res: Response) {
         await this.categoryService.create(req.body);
+        req.io.emit("/category", "Created new category")
         res.sendStatus(StatusCodes.CREATED);
     }
 }

@@ -1,4 +1,5 @@
 import { NextFunction, Response, Request, Router } from "express";
+import { Server } from "socket.io";
 
 export interface IRouter {
   setup(): Router
@@ -11,5 +12,6 @@ export interface IBaseController {
 declare module "express-serve-static-core" {
   interface Request {
     requestId: string
+    io: Server
   }
 }
