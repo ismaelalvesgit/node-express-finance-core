@@ -8,7 +8,6 @@ import path from "path";
 import { CategoryRouter } from "./routers/v1/categoryRouter";
 import { ProductRouter } from "./routers/v1/productRouter";
 import { SystemRouter } from "./routers/v1/systemRouter";
-import { ISystemService } from "@domain/system/types/ISystemService";
 
 @injectable()
 export default class Routes { 
@@ -24,10 +23,7 @@ export default class Routes {
         private productRouter: ProductRouter,
 
         @inject(tokens.SystemRouter)
-        private systemRouter: SystemRouter,
-        
-        @inject(tokens.SystemService)
-        private systemService: ISystemService,
+        private systemRouter: SystemRouter
     ) {}
 
     public setupRouter(router: Router) {
@@ -48,17 +44,7 @@ export default class Routes {
         router.use("/v1", this.systemRouter.setup()); 
 
         router.get("/", (_, res) =>{
-            this.systemService.sendEmailNotification({
-                to: {
-                    name: "ismael alves",
-                    email: "cearaismael1997@gmail.com"
-                },
-                subject: "Bem-Vindo",
-                data: {},
-                template: "welcome"
-            });
-            
-            res.redirect("/v1/docs");
+            res.render("index", {url: `http://localhost:${this.config.get().port}`});
         });
 
         // router.all(
