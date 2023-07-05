@@ -72,6 +72,7 @@
     "ramda": "^0.29.0",
     "reflect-metadata": "^0.1.13",
     "response-time": "^2.3.2",
+    "socket.io": "^4.7.1",
     "swagger-ui-express": "^4.6.3",
     "tsyringe": "^4.8.0",
     "x-xss-protection": "^2.0.0",
