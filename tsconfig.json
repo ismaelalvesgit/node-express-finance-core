@@ -21,15 +21,29 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "outDir": "dist",
-    "baseUrl": "./src",                                
+    "baseUrl": "./src",
     "paths": {
-      "@config/*": ["config/*"],
-      "@infrastructure/*": ["infrastructure/*"],
-      "@domain/*": ["domain/*"],
-      "@helpers/*": ["helpers/*"],
-      "@presentation/*": ["presentation/*"],
-      "@middlewares/*": ["presentation/http/middlewares/*"],
-      "@di/*": ["di/*"]
+      "@config/*": [
+        "config/*"
+      ],
+      "@infrastructure/*": [
+        "infrastructure/*"
+      ],
+      "@domain/*": [
+        "domain/*"
+      ],
+      "@helpers/*": [
+        "helpers/*"
+      ],
+      "@presentation/*": [
+        "presentation/*"
+      ],
+      "@middlewares/*": [
+        "presentation/http/middlewares/*"
+      ],
+      "@di/*": [
+        "di/*"
+      ]
     }
-  }                                                 
+  }
 }

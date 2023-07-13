@@ -38,6 +38,7 @@ export enum EWhereOperator {
     LessThanOrEqual = "le",
     Like = "lk"
 }
+
 export interface ICacheHandlerParams {
     path: string
     timeExp?: number

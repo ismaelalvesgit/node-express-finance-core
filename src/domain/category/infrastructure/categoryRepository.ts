@@ -4,7 +4,6 @@ import { ICategory } from "../types/ICategory";
 import { ICategoryRepository } from "../types/ICategoryRepository";
 import { tokens } from "@di/tokens";
 import { IRedisAdapter } from "@infrastructure/types/IRedisAdapter";
-import { IProduct } from "@domain/product/types/IProduct";
 
 @injectable()
 export default class CategoryRepository extends RepositoryBase<ICategory> implements ICategoryRepository {
@@ -16,7 +15,7 @@ export default class CategoryRepository extends RepositoryBase<ICategory> implem
         super("category");
     }
 
-    async create(data: IProduct): Promise<void> {
+    async create(data: ICategory): Promise<void> {
         await super.create(data);
         await this.redis.deleteByPrefix("category");
     }
