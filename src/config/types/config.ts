@@ -1,5 +1,6 @@
 export interface Configuration {
     port: number
+    serviceHost: string
     serviceName: string
     environment: string
     docs: {

@@ -11,8 +11,9 @@
     "build:tsc": "tsc -p tsconfig.prod.json && tscpaths -p tsconfig.prod.json -s . -o ./dist",
     "build:docs": "copyfiles -u 1 docs/**/* dist/docs",
     "build:assets": "copyfiles -u 1 src/public/**/* dist/src",
+    "build:views": "copyfiles -u 1 src/presentation/views/**/* dist/src",
     "build:i18n": "copyfiles -u 1 src/presentation/http/middlewares/i18n/locales/**/* dist/src",
-    "build": "concurrently \"npm:build:tsc\" \"npm:build:docs\" \"npm:build:assets\" \"npm:build:i18n\"",
+    "build": "concurrently \"npm:build:tsc\" \"npm:build:docs\" \"npm:build:assets\" \"npm:build:views\" \"npm:build:i18n\"",
     "setup:up": "npm run migrate:up && npm run seed:run",
     "seed:run": "knex seed:run --env local",
     "test": "cross-env NODE_ENV=test jest --detectOpenHandles",
@@ -49,12 +50,12 @@
     "nodemon": "^1.14.9",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
-    "tscpaths": "^0.0.9",
-    "typescript": "^5.1.0"
+    "ts-node": "^10.9.1"
   },
   "dependencies": {
+    "tscpaths": "^0.0.9",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.1.0",
     "@ismaelalves/logger": "^0.1.3",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",

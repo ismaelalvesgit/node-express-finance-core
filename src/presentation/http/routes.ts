@@ -64,7 +64,7 @@ export default class Routes {
         router.use("/v1", this.systemRouter.setup()); 
 
         router.get("/", (_, res) =>{
-            res.render("index", {url: `http://localhost:${this.config.get().port}`});
+            res.render("index", {url: this.config.get().serviceHost});
         });
 
         // router.all(

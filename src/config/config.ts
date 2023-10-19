@@ -28,10 +28,12 @@ export class Config {
     }
 
     private getServiceConfig() {
+        const port = Number(process.env["SERVICE_PORT"]) || 3000
         return {
+            serviceHost: process.env["SERVICE_HOST"] || `http://localhost:${port}`,
             serviceName: process.env["SERVICE_NAME"] || "finance-core",
             environment: process.env["NODE_ENV"] || EnvironmentType.Develop,
-            port: Number(process.env["PORT"]) || 3000,
+            port,
             timezone: process.env["TZ"] || "America/Fortaleza"
         };
     }
