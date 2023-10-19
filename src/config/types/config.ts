@@ -39,6 +39,14 @@ export interface Configuration {
         brokers: string[]
         connectionTimeout: number
     }
+    backend: {
+        brapi: string
+    }
+    system: {
+        fees: {
+            outsidePercent: number
+        }
+    }
     timezone: string
 }
 

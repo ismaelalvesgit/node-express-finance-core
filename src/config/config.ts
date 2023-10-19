@@ -21,16 +21,26 @@ export class Config {
             redis: this.getRedisConfig(),
             email: this.getEmailConfig(),
             apm: this.getApmConfig(),
-            kafka: this.getKafkaConfig()
+            backend: this.getBackendConfig(),
+            kafka: this.getKafkaConfig(),
+            system: this.getSystemConfig(),
         };
     }
 
     private getServiceConfig() {
         return {
-            serviceName: process.env["SERVICE_NAME"] || "example-horizontal",
+            serviceName: process.env["SERVICE_NAME"] || "finance-core",
             environment: process.env["NODE_ENV"] || EnvironmentType.Develop,
             port: Number(process.env["PORT"]) || 3000,
             timezone: process.env["TZ"] || "America/Fortaleza"
+        };
+    }
+
+    private getSystemConfig() {
+        return {
+            fees: {
+                outsidePercent: Number(process.env["FEES_OUTSIDE_PERCENT"]) || 30,
+            }
         };
     }
 
@@ -86,6 +96,15 @@ export class Config {
         return {
             brokers: (process.env["KAFKA_BROKER"] || "").split(";"),
             connectionTimeout:  parseInt(process.env["KAFKA_TIMEOUT"] || "30000"),
+        };
+    }
+
+    private getBackendConfig() {
+        return {
+            brapi: process.env["BRAPI_URL"] || "",
+            mercadoBitCoin: process.env["MERCADO_BITCOIN_URL"] || "",
+            curreyncyApi: process.env["CURRENCY_URL"] || "",
+            invest: process.env["INVEST_URL"] || "",
         };
     }
 }

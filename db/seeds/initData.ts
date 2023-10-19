@@ -1,56 +1,138 @@
+import { ECategoryType } from "@domain/category/types/ICategory";
 import { Knex } from "knex";
-import Chance from "chance"
-import { ICategory } from "@domain/category/types/ICategory";
-import { IProduct } from "@domain/product/types/IProduct";
 
-const chance = new Chance()
-
-const generateCategory = (quantity: number) => {
-    const data: Partial<ICategory>[] = []
-    for (let i = 0; i < quantity; i++) {
-        data.push({
-            name: chance.name(),
-            imageUrl: chance.url()
-        })
-    }
-    return data
-}
-
-const generateProduct = (quantity: number) => {
-    const data: Partial<IProduct>[] = []
-    for (let i = 0; i < quantity; i++) {
-        data.push({
-            name: chance.name(),
-            description: chance.company(),
-            imageUrl: chance.url(),
-            quantity: chance.integer({min: 1, max: 10}),
-            price: chance.integer({min: 10, max: 100})
-        })
-    }
-    return data
-}
+const brokers = [
+    "ADVALOR DTVM LTDA",
+    "AGORA CTVM S/A",
+    "ALFA CCVM S.A.",
+    "AMARIL FRANKLIN CTV LTDA",
+    "ATIVA INVESTIMENTOS S.A. CTCV",
+    "B3 S.A. - BRASIL BOLSA BALCÃO",
+    "BANCO ANDBANK (BRASIL) S.A.",
+    "BANCO BNP PARIBAS BRASIL S/A",
+    "BANCO BTG PACTUAL",
+    "BANCO CITIBANK",
+    "BANCO CREDIT AGRICOLE BRASIL S.A.",
+    "BANCO DAYCOVAL",
+    "BANCO DE INVEST. CREDIT SUISSE (BRASIL) S.A.",
+    "BANCO DO BRASIL S/A",
+    "BANCO INDUSVAL S/A",
+    "BANCO ITAU BBA S/A",
+    "BANCO J.P.MORGAN S/A",
+    "BANCO MODAL",
+    "BANCO OURINVEST",
+    "BANCO SAFRA S/A",
+    "BANCO SANTANDER (BRASIL) S.A.",
+    "BANCO SOFISA",
+    "BANCO VOTORANTIM S/A",
+    "BANESTES DTVM S/A",
+    "BANK OF AMERICA MERRILL LYNCH BANCO MULTIPLO",
+    "BANRISUL S/A CVMC",
+    "BB BANCO DE INVESTIMENTO S.A",
+    "BB BANCO DE INVESTIMENTO S/A",
+    "BB GESTAO DE RECURSOS DTVM S/A",
+    "BCO FIBRA",
+    "BGC LIQUIDEZ DTVM",
+    "BOCOM BBM CCVM S/A",
+    "BRADESCO S/A CTVM",
+    "BRASIL PLURAL CCTVM S/A",
+    "BS2 DTVM S/A",
+    "BTG PACTUAL CTVM S.A.",
+    "C6 CTVM LTDA",
+    "CAIXA ECONOMICA FEDERAL",
+    "CITIBANK DTVM S/A",
+    "CITIGROUP GMB CCTVM S.A.",
+    "CLEAR CORRETORA",
+    "CM CAPITAL MARKETS CCTVM LTDA",
+    "CODEPE CV E CAMBIO S/A",
+    "COINVALORES CCVM LTDA.",
+    "CORRETORA GERAL DE VC LTDA",
+    "CREDIT SUISSE BRASIL S.A. CTVM",
+    "CREDIT SUISSE BRASIL S.A. CTVM",
+    "DEUTSCHE BANK S/A",
+    "DIBRAN DTVM LTDA",
+    "DILLON S.A. DTVM",
+    "ELITE CCVM LTDA.",
+    "FATOR S.A. CV",
+    "FRAM CAPITAL",
+    "GENIAL INSTITUCIONAL CCTVM S.A",
+    "GENIAL INVESTIMENTOS CVM S.A",
+    "GOLDMAN SACHS DO BRASIL CTVM",
+    "GRADUAL CCTVM S/A",
+    "GUIDE INVESTIMENTOS S.A. CV",
+    "H.COMMCOR DTVM LTDA",
+    "HAITONG SECURITIES",
+    "ICAP DO BRASIL CTVM LTDA",
+    "IDEAL CTVM SA",
+    "ING CCT S/A",
+    "INTER DTVM LTDA",
+    "INTL FCSTONE DTVM LTDA.",
+    "ITAU CV S/A",
+    "ITAU UNIBANCO S/A",
+    "J. P. MORGAN CCVM S.A.",
+    "LEROSA S.A. CVC",
+    "LLA DTVM LTDA",
+    "MAGLIANO S.A. CCVM",
+    "MAGNETIS DTVM LTDA",
+    "MAXIMA S/A CTVM",
+    "MERC. DO BRASIL COR. S.A. CTVM",
+    "MERRILL LYNCH S/A CTVM",
+    "MIRAE ASSET WEALTH MANAGEMENT",
+    "MODAL DTVM LTDA",
+    "MORGAN STANLEY CTVM S/A",
+    "MUNDINVEST S.A. CCVM",
+    "NECTON INVESTIMENTOS S.A. CVMC",
+    "NOVA FUTURA CTVM LTDA",
+    "NOVINVEST CVM LTDA.",
+    "NU INVEST CORRETORA DE VALORES",
+    "ORAMA DTVM S.A.",
+    "ORLA DTVM S/A",
+    "OURINVEST DTVM S.A.",
+    "PI DISTRIBUIDORA DE TÍTULOS E",
+    "PLANNER CV S.A",
+    "POSITIVA CTVM S/A",
+    "RB CAPITAL INVESTIMENTOS DTVM",
+    "RENASCENÇA DTVM LTDA",
+    "RICO INVESTIMENTOS",
+    "RIO BRAVO INVEST S.A. DTVM",
+    "RJI CTVM LTDA",
+    "SAFRA CVC LTDA.",
+    "SANTANDER CCVM S/A",
+    "SANTANDER SECURITIES SERVICES",
+    "SENSO CCVM S.A.",
+    "SICOOB",
+    "SINGULARE CORRETORA DE TÍTULOS E VALORES MOBILIÁRIOS S.A.",
+    "SITA SCCVM S.A.",
+    "SLW CVC LTDA.",
+    "SOCOPA SC PAULISTA S.A.",
+    "SOLIDUS S/A CCVM",
+    "SPINELLI S.A. CVMC",
+    "SSM - SISTEMA DE SIMULACAO DE MARGENS",
+    "TERRA INVESTIMENTOS DTVM LTDA",
+    "TORO CTVM LTDA.",
+    "TRINUS CAPITAL DTVM S.A.",
+    "TULLETT PREBON",
+    "UBS BRASIL CCTVM S/A",
+    "UM INVESTIMENTOS S.A. CTVM",
+    "UNILETRA CCTVM S.A.",
+    "VITREO DTVM S.A.",
+    "VOTORANTIM ASSET MANAG. DTVM",
+    "WALPIRES S.A. CCTVM",
+    "WARREN CVMC LTDA",
+    "XP INVESTIMENTOS CCTVM S/A",
+]
 
 export async function seed(knex: Knex) {
-    const categoryCount = 3
-    const products = generateProduct(3)
-    const categorys = generateCategory(categoryCount)
-
     return knex.transaction(async (trx) => {
-
-        await Promise.all(categorys.map(async(item)=>{
-            await knex("category").insert(item).transacting(trx);
-        }))
-
-        await Promise.all(products.map(async(item)=>{
-            const index = chance.integer({min: 0, max: categoryCount - 1})
-            const category = await knex('category')
-                .where({name: categorys[index].name})
-                .first()
-                .transacting(trx)
-            await knex("product").insert({
-                ...item,
-                categoryId: category.id
-            }).transacting(trx);
-        }))
+        await knex("category").insert(Object.values(ECategoryType).map((data) => {
+            return {
+                name: data
+            };
+        })).transacting(trx);
+        await knex("broker").insert(brokers.map((data) => {
+            return {
+              name: data
+            };
+          })).transacting(trx);
     });
 };

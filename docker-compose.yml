@@ -17,10 +17,10 @@ services:
   mysql:
     image: mysql:5.7
     restart: always
-    container_name: mysql-example
+    container_name: mysql-finance
     environment:
-      MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: example
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
     ports:
       - 3307:3306
     # volumes:

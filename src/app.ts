@@ -16,7 +16,6 @@ import i18n from "@presentation/http/middlewares/i18n";
 import { errorHandler } from "@presentation/http/middlewares/errorHandler";
 import changeLocale from "@presentation/http/middlewares/changeLocale";
 import { Server } from "socket.io";
-import path from 'path'
 import socketIo from "@presentation/http/middlewares/socket";
 
 @singleton()
@@ -35,7 +34,7 @@ export class App {
         this.config = config;
         this.app = express();
         this.server = http.createServer(this.app);
-        this.io = new Server(this.server)
+        this.io = new Server(this.server);
         this.setupApplication();
     }
 
@@ -74,7 +73,7 @@ export class App {
     }
 
     get getSocket() {
-        return this.io
+        return this.io;
     }
 
     get getApp(){
@@ -83,11 +82,11 @@ export class App {
 
     listen() {
         const { port } = this.config.get();
-        this.io.on('connection', socket=>{
-            socket.on('/example', msg=>{
-                Logger.info(msg)
-            })
-        })
+        this.io.on("connection", socket=>{
+            socket.on("/example", msg=>{
+                Logger.info(msg);
+            });
+        });
         this.server.listen(port, ()=>{
             Logger.info(`Server on http://localhost:${port}`);
         });
