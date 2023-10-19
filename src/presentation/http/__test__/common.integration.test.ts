@@ -5,6 +5,8 @@ import { App } from "../../../app";
 import { Chance } from "chance";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
+import { ECategoryType } from "@domain/category/types/ICategory";
+import { GeneratorMock } from "@test/generator.mock";
 
 const chance = new Chance();
 const { getApp } = container.resolve(App);
@@ -12,7 +14,21 @@ const { getApp } = container.resolve(App);
 describe("Common Request Router", () => { 
 
     beforeEach(async()=>{
-        await knex("product").del();
+        await GeneratorMock.clearTable(["investment", "category"]);
+    });
+
+    it("request docs", async() => {
+        const res = await request(getApp)
+        .get("/v1/docs")
+        .expect(StatusCodes.MOVED_PERMANENTLY);
+        expect(res.text.length).toBeGreaterThan(0);
+    });
+
+    it("request system healthcheck", async() => {
+        const res = await request(getApp)
+        .get("/v1/system/healthcheck")
+        .expect(StatusCodes.OK);
+        expect(res.body.length).toBe(undefined);
     });
 
     it("get data from cache middleware", async() => {
@@ -31,59 +47,58 @@ describe("Common Request Router", () => {
 
     test.each([
         { 
-            data: { name: "Raquel", quantity: 1, price: 10 }, 
+            data: { name: "VISC11", category: ECategoryType.FIIS, balance: 10 }, 
             operator: EWhereOperator.Equal,
             atribute: "name",
-            condition: "Raquel"
+            condition: "VISC11"
         },
         { 
-            data: { name: "Ismael", quantity: 1, price: 10 }, 
+            data: { name: "BBSE3", category: ECategoryType.FIIS, balance: 10 }, 
             operator: EWhereOperator.NotEqual,
             atribute: "name",
-            condition: "Raquel"
+            condition: "VISC11"
         },
         { 
-            data: { name: "Raquel", quantity: 1, price: 10 }, 
+            data: { name: "VISC11", category: ECategoryType.FIIS, balance: 10 }, 
             operator: EWhereOperator.GreaterThan,
-            atribute: "price",
+            atribute: "balance",
             condition: 5
         },
         { 
-            data: { name: "Ismael", quantity: 1, price: 10 }, 
+            data: { name: "BBSE3", category: ECategoryType.FIIS, balance: 10 }, 
             operator: EWhereOperator.GreaterThanOrEqual,
-            atribute: "price",
+            atribute: "balance",
             condition: 10
         },
         { 
-            data: { name: "Raquel", quantity: 1, price: 10 }, 
+            data: { name: "VISC11", category: ECategoryType.FIIS, balance: 10 }, 
             operator: EWhereOperator.LessThan,
-            atribute: "price",
+            atribute: "balance",
             condition: 11
         },
         { 
-            data: { name: "Ismael", quantity: 1, price: 10 }, 
+            data: { name: "BBSE3", category: ECategoryType.FIIS, balance: 10 }, 
             operator: EWhereOperator.LessThanOrEqual,
-            atribute: "price",
+            atribute: "balance",
             condition: 10
         },
         { 
-            data: { name: "Raquel", quantity: 1, price: 10 }, 
+            data: { name: "VISC11", category: ECategoryType.FIIS, balance: 10 }, 
             operator: EWhereOperator.Like,
             atribute: "name",
-            condition: "quel"
+            condition: "VISC"
         }
     ])("request query Data: $data, Operator: $operator, Atribute: $atribute, Condition: $condition", 
     async ({data, operator, atribute, condition}) =>{
-        const { name, price, quantity } = data;
-        const prefix = "/v1/product";
+        const { name, category, balance } = data;
+        const prefix = "/v1/investment";
         const [ categoryId ] = await knex("category").insert({
-            name: chance.name()
+            name: category
         });
-        await knex("product").insert({
+        await knex("investment").insert({
             name,
             categoryId,
-            quantity,
-            price
+            balance
         });
 
         const res = await request(getApp)
@@ -92,8 +107,6 @@ describe("Common Request Router", () => {
         expect(res.body.items[0]).toHaveProperty("name");
         expect(res.body.items[0]).toHaveProperty("id");
         expect(res.body.items[0].name).toBe(name);
-        expect(Number(res.body.items[0].quantity)).toBe(quantity);
-        expect(Number(res.body.items[0].price)).toBe(price);
         expect(Number(res.body.items[0].categoryId)).toBe(categoryId);
     });
     

@@ -2,19 +2,19 @@ import { Response, Request } from "express";
 import { IBaseController } from "../../types/IRouter";
 import { inject, injectable } from "tsyringe";
 import { tokens } from "@di/tokens";
-import { IProductService } from "@domain/product/types/IProductService";
+import { IDividendsService } from "@domain/dividends/types/IDividendsService";
 
 @injectable()
-export default class FindByIdProductController implements IBaseController {
+export default class FindByIdDividendsController implements IBaseController {
 
     constructor(
-        @inject(tokens.ProductService)
-        private productService: IProductService,
+        @inject(tokens.DividendsService)
+        private dividendsService: IDividendsService,
     ) { }
 
     async handler(req: Request, res: Response) {
         const id = req.params.id;
-        const data = await this.productService.findById(id);
+        const data = await this.dividendsService.findById(id);
         res.json(data);
     }
 }

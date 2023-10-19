@@ -3,19 +3,19 @@ import { IBaseController } from "../../types/IRouter";
 import { inject, injectable } from "tsyringe";
 import { tokens } from "@di/tokens";
 import { StatusCodes } from "http-status-codes";
-import { IProductService } from "@domain/product/types/IProductService";
+import { IDividendsService } from "@domain/dividends/types/IDividendsService";
 
 @injectable()
-export default class UpdateProductController implements IBaseController {
+export default class DeleteDividendsController implements IBaseController {
 
     constructor(
-        @inject(tokens.ProductService)
-        private productService: IProductService,
+        @inject(tokens.DividendsService)
+        private dividendsService: IDividendsService,
     ) { }
 
     async handler(req: Request, res: Response) {
         const id = req.params.id;
-        await this.productService.update(id, req.body);
-        res.sendStatus(StatusCodes.ACCEPTED);
+        await this.dividendsService.delete(id);
+        res.sendStatus(StatusCodes.NO_CONTENT);
     }
 }

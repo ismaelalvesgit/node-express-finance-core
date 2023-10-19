@@ -3,19 +3,19 @@ import { IBaseController } from "../../types/IRouter";
 import { inject, injectable } from "tsyringe";
 import { tokens } from "@di/tokens";
 import { StatusCodes } from "http-status-codes";
-import { ICategoryService } from "@domain/category/types/ICategoryService";
+import { ITransactionService } from "@domain/transaction/types/ITransactionService";
 
 @injectable()
-export default class UpdateCategoryController implements IBaseController {
+export default class DeleteTransactionController implements IBaseController {
 
     constructor(
-        @inject(tokens.CategoryService)
-        private categoryService: ICategoryService,
+        @inject(tokens.TransactionService)
+        private transactionService: ITransactionService,
     ) { }
 
     async handler(req: Request, res: Response) {
         const id = req.params.id;
-        await this.categoryService.update(id, req.body);
-        res.sendStatus(StatusCodes.ACCEPTED);
+        await this.transactionService.delete(id);
+        res.sendStatus(StatusCodes.NO_CONTENT);
     }
 }

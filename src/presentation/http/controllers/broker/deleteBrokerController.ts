@@ -3,19 +3,19 @@ import { IBaseController } from "../../types/IRouter";
 import { inject, injectable } from "tsyringe";
 import { tokens } from "@di/tokens";
 import { StatusCodes } from "http-status-codes";
-import { ICategoryService } from "@domain/category/types/ICategoryService";
+import { IBrokerService } from "@domain/broker/types/IBrokerService";
 
 @injectable()
-export default class DeleteCategoryController implements IBaseController {
+export default class DeleteBrokerController implements IBaseController {
 
     constructor(
-        @inject(tokens.CategoryService)
-        private categoryService: ICategoryService,
+        @inject(tokens.BrokerService)
+        private brokerService: IBrokerService,
     ) { }
 
     async handler(req: Request, res: Response) {
         const id = req.params.id;
-        await this.categoryService.delete(id);
+        await this.brokerService.delete(id);
         res.sendStatus(StatusCodes.NO_CONTENT);
     }
 }

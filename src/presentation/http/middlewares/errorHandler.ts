@@ -14,17 +14,22 @@ import { NextFunction, Request, Response } from "express";
 import { Logger } from "@infrastructure/logger/logger";
 import ApmClient from "@infrastructure/apm/apm";
 import { container } from "@di/container";
+import { AxiosError } from "axios";
 
 const apmAgent = container.resolve(ApmClient);
 
 const errorsConfigs = [
-  { class: NotFound, type: null, value: "NotFoundError" },
+  { class: NotFound, type: null, value: "NotFound" },
+  { class: BadRequest, type: null, value: "BadRequest.Duplicate" },
+  { class: BadRequest, type: "Transaction.qnt", value: "Transaction.Qnt" },
+  { class: BadRequest, type: "Transaction.exist", value: "Transaction.Exist" },
   { class: FailedSQL, type: "ER_DUP_ENTRY", value: "BadRequest.Duplicate" },
   { class: FailedSQL, type: "ERROR", value: "InternalServer" },
   { class: ServiceUnavailable, type: "router", value: "ServiceUnavailable.router" },
   { class: ServiceUnavailable, type: "throttling", value: "ServiceUnavailable.throttling" },
   { class: InvalidProperties, type: "any.required", value: "InvalidProperties.required" },
   { class: InvalidProperties, type: "any.only", value: "InvalidProperties.only" },
+  { class: InvalidProperties, type: "array.base", value: "InvalidProperties.array.base" },
   { class: InvalidProperties, type: "string.empty", value: "InvalidProperties.empty" },
   { class: InvalidProperties, type: "string.min", value: "InvalidProperties.min" },
   { class: InvalidProperties, type: "string.email", value: "InvalidProperties.email" },
@@ -91,8 +96,18 @@ const _loadErrorMessage = (req: Request, err: any) =>{
         });
         return detail;
       });
+
+      if(!err.details && !Array.isArray(err.details)){
+        err.message = req.__(errorConfig.value, {
+          code: err.message,
+          name: err.message,
+          duplicateValue: err.message,
+          requestId
+        });
+      }
     }
   }
+
   return err;
 };
 
@@ -132,6 +147,12 @@ export const errorHandler = (
     }
     case AlreadyExists: {
       status = StatusCodes.CONFLICT;
+      break;
+    }
+    case AxiosError: {
+      const axiosError = (throwErr as AxiosError);
+      status = axiosError.response?.status || 500;
+      throwErr.details = axiosError.response?.data;
       break;
     }
     default: {

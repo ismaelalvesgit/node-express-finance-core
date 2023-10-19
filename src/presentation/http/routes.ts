@@ -6,8 +6,12 @@ import YAML from "yamljs";
 import swagger from "swagger-ui-express";
 import path from "path";
 import { CategoryRouter } from "./routers/v1/categoryRouter";
-import { ProductRouter } from "./routers/v1/productRouter";
 import { SystemRouter } from "./routers/v1/systemRouter";
+import { BrokerRouter } from "./routers/v1/brokerRouter";
+import { EventsRouter } from "./routers/v1/eventsRouter";
+import { DividendsRouter } from "./routers/v1/dividendsRouter";
+import { InvestmentRouter } from "./routers/v1/investmentRouter";
+import { TransactionRouter } from "./routers/v1/transactionRouter";
 
 @injectable()
 export default class Routes { 
@@ -16,11 +20,23 @@ export default class Routes {
         @inject(tokens.Config)
         private config: Config,
   
+        @inject(tokens.TransactionRouter)
+        private transactionRouter: TransactionRouter,
+  
+        @inject(tokens.InvestmentRouter)
+        private investmentRouter: InvestmentRouter,
+
+        @inject(tokens.DividendsRouter)
+        private dividendsRouter: DividendsRouter,
+
+        @inject(tokens.EventsRouter)
+        private eventsRouter: EventsRouter,
+
+        @inject(tokens.BrokerRouter)
+        private brokerRouter: BrokerRouter,
+
         @inject(tokens.CategoryRouter)
         private categoryRouter: CategoryRouter,
-
-        @inject(tokens.ProductRouter)
-        private productRouter: ProductRouter,
 
         @inject(tokens.SystemRouter)
         private systemRouter: SystemRouter
@@ -39,8 +55,12 @@ export default class Routes {
             res.sendStatus(200);
         });
         
+        router.use("/v1", this.transactionRouter.setup()); 
+        router.use("/v1", this.investmentRouter.setup()); 
+        router.use("/v1", this.dividendsRouter.setup()); 
+        router.use("/v1", this.eventsRouter.setup()); 
+        router.use("/v1", this.brokerRouter.setup()); 
         router.use("/v1", this.categoryRouter.setup()); 
-        router.use("/v1", this.productRouter.setup()); 
         router.use("/v1", this.systemRouter.setup()); 
 
         router.get("/", (_, res) =>{

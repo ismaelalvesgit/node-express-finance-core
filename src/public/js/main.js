@@ -3,37 +3,40 @@ var $ = jQuery;
 var animationTime = 20,
     days = 7;
 $(document).ready(function(){
-    var socket = io()
-    socket.emit('/example', 'new client connetion')
-    socket.on('/category', (msg)=>{
-        console.log(msg)
-    })
+    var socket = io();
+    socket.emit("/example", "new client connetion");
+    socket.on("/category", (msg)=>{
+        console.log(msg);
+    });
+    socket.on("/update-investment", (msg)=>{
+        console.log(msg);
+    });
 
     // timer arguments: 
     //   #1 - time of animation in mileseconds, 
     //   #2 - days to deadline
 
-    $('#progress-time-fill, #death-group').css({'animation-duration': animationTime+'s'});
+    $("#progress-time-fill, #death-group").css({"animation-duration": animationTime+"s"});
 
     var deadlineAnimation = function () {
         setTimeout(function(){
-            $('#designer-arm-grop').css({'animation-duration': '1.5s'});
+            $("#designer-arm-grop").css({"animation-duration": "1.5s"});
         },0);
 
         setTimeout(function(){
-            $('#designer-arm-grop').css({'animation-duration': '1s'});
+            $("#designer-arm-grop").css({"animation-duration": "1s"});
         },4000);
 
         setTimeout(function(){
-            $('#designer-arm-grop').css({'animation-duration': '0.7s'});
+            $("#designer-arm-grop").css({"animation-duration": "0.7s"});
         },8000);
 
         setTimeout(function(){
-            $('#designer-arm-grop').css({'animation-duration': '0.3s'});
+            $("#designer-arm-grop").css({"animation-duration": "0.3s"});
         },12000);
 
         setTimeout(function(){
-            $('#designer-arm-grop').css({'animation-duration': '0.2s'});
+            $("#designer-arm-grop").css({"animation-duration": "0.2s"});
         },15000);
     };
 
@@ -46,20 +49,20 @@ $(document).ready(function(){
 
         function countTime() {
             --actualDay;
-            $('.deadline-days .day').text(actualDay);
+            $(".deadline-days .day").text(actualDay);
 
             if (actualDay == 0) {
                 clearInterval(timer);
-                $('.deadline-days .day').text(deadline);
+                $(".deadline-days .day").text(deadline);
             }
         }
     }
 
     var deadlineText = function () {
-        var $el = $('.deadline-days');
-        var html = '<div class="mask-red"><div class="inner">' + $el.html() + '</div></div><div class="mask-white"><div class="inner">' + $el.html() + '</div></div>';
+        var $el = $(".deadline-days");
+        var html = "<div class=\"mask-red\"><div class=\"inner\">" + $el.html() + "</div></div><div class=\"mask-white\"><div class=\"inner\">" + $el.html() + "</div></div>";
         $el.html(html);
-    }
+    };
 
     deadlineText();
 
