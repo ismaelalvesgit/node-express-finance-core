@@ -4,9 +4,9 @@ export interface IHttpAdapterParams {
     baseURL?: string
     headers?: AxiosRequestHeaders
     params?: unknown
-    auth?: AxiosBasicCredentials
+    auth?: AxiosBasicCredentials  
 }
 
 export interface IHttpAdapter { 
-    send(config: AxiosRequestConfig): Promise<AxiosResponse>
+    send<IEntity>(config: AxiosRequestConfig<IEntity>): Promise<AxiosResponse<IEntity>>
 }

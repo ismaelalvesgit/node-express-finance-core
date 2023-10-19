@@ -1,7 +1,7 @@
 import { Config } from "@config/config";
 import { tokens } from "@di/tokens";
 import { IKafkaAdapter, IKafkaAdapterParams } from "@infrastructure/types/IkafkaAdapter";
-import { Producer, Kafka, Partitioners, Message, IHeaders, RecordMetadata } from "kafkajs";
+import { Producer, Kafka, Partitioners, Message, RecordMetadata } from "kafkajs";
 import { inject, injectable } from "tsyringe";
 import { v4 as uuidv4 } from "uuid";
 

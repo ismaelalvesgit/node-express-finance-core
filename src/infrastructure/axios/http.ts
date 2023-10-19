@@ -21,7 +21,7 @@ export default class HttpClient implements IHttpAdapter {
         AxiosLogger.attachInterceptor.bind(AxiosLogger)(this.instance);
     }
 
-    send(config: AxiosRequestConfig<any>): Promise<AxiosResponse<any, any>> {
+    send<IEntity>(config: AxiosRequestConfig<IEntity>): Promise<AxiosResponse<IEntity, IEntity>> {
        return this.instance.request(config);
     } 
 

@@ -1,14 +1,15 @@
-/* eslint-disable max-classes-per-file */
+/* eslint-disable max-classes-per-file  */
+/* eslint-disable @typescript-eslint/no-explicit-any  */
 class CustomError extends Error {
     private _: string;
-    public i18n?: string;
+    public i18n: string | null | undefined;
     public details: CustomError[] | null | undefined;
 
     constructor(
         code: string,
         message: string | null = null,
         details: CustomError[] | null = null,
-        i18n?: string,
+        i18n: string | null = null,
     ) {
         super(message || code);
         this._ = code;
@@ -16,6 +17,11 @@ class CustomError extends Error {
         this.i18n = i18n;
         Error.captureStackTrace(this, this.constructor);
     }
+}
+
+export interface ErrorParams {
+    code: string
+    message: string
 }
 
 export class InvalidProperties extends CustomError {
@@ -26,19 +32,19 @@ export class InvalidProperties extends CustomError {
 
 export class InternalServer extends CustomError {
     constructor(message: string, details: null | any[] = null) {
-        super("INTERNAL_SERVER_ERROR", message, details);
+        super("INTERNAL_SERVER", message, details);
     }
 }
 
 export class BadRequest extends CustomError {
-    constructor(message: string, details: null | any[] = null) {
-        super("BAD_REQUEST", message, details);
+    constructor({message, code}: Partial<ErrorParams>, details: null | any[] = null) {
+        super("BAD_REQUEST", message, details, code);
     }
 }
 
 export class NotFound extends CustomError {
     constructor(message: string, details: null | any[] = null) {
-        super("NOT_FOUND_ERROR", message, details);
+        super("NOT_FOUND", message, details);
     }
 }
 
@@ -63,5 +69,11 @@ export class OutOfCuttingTime extends CustomError {
 export class ServiceUnavailable extends CustomError {
     constructor(i18n: string) {
         super("SERVICE_UNAVAILABLE", null, null, i18n);
+    }
+}
+
+export class Brapi extends CustomError {
+    constructor(msg: string){
+        super("BRAPI_API", msg);
     }
 }
