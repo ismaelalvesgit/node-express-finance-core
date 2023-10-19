@@ -10,6 +10,7 @@ export default {
     isProduction: process.env.NODE_ENV === "production",
     timezone: process.env.TZ || "America/Fortaleza",
     brapi: process.env.BRAPI_URL,
+    brapiKey: process.env.BRAPI_TOKEN,
     mercadoBitCoin: process.env.MERCADO_BITCOIN_URL,
     curreyncyApi: process.env.CURRENCY_URL,
     yahoo: process.env.YAHOO_FINANCE_URL,

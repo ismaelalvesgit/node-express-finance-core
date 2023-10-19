@@ -97,7 +97,7 @@ const _formatDataCoin2 = (name, data) => {
 export const findQoute = async (name) => {
     try {
         const { data } = await http.send({
-            url: `/quote/${name.toLocaleUpperCase()}?fundamental=true`,
+            url: `/quote/${name.toLocaleUpperCase()}?fundamental=true&token=${env.brapiKey}`,
             method: "GET"
         });
         return data.results[0];
@@ -120,7 +120,7 @@ export const findQoute = async (name) => {
 export const searchQoute = async (name) => {
     try {
         const { data } = await http.send({
-            url: "/available",
+            url: `/available?token=${env.brapiKey}`,
             method: "GET",
             params: {
                 search: name
@@ -146,7 +146,7 @@ export const searchQoute = async (name) => {
 export const findQouteCoin = async (name) => {
     try {
         const { data } = await http.send({
-            url: "v2/crypto",
+            url: `/v2/crypto?token=${env.brapiKey}`,
             method: "GET",
             params: {
                 coin: name,
@@ -196,7 +196,7 @@ export const findQouteCoin2 = async (name) => {
 export const searchQouteCoin = async (name) => {
     try {
         const { data } = await http.send({
-            url: "v2/crypto/available",
+            url: `/v2/crypto/available?token=${env.brapiKey}`,
             method: "GET",
             params: {
                 search: name
