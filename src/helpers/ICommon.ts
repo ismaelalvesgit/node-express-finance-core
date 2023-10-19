@@ -36,6 +36,7 @@ export enum EWhereOperator {
     GreaterThanOrEqual = "ge",
     LessThan = "lt",
     LessThanOrEqual = "le",
+    In = "in",
     Like = "lk"
 }
 
