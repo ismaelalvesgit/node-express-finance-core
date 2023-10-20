@@ -37,13 +37,13 @@ filterBy           | filtro de itens | default: empty => "Property" "Condition" 
 ## 3) FilterBy
 Condition          | Values               | Exemple
 -------------------|----------------------|------------------
-Equal              | "eq" or "Eq" or "EQ" | name eq Ismael or category->>$name eq Ismael
-NotEqual           | "ne" or "Ne" or "NE" | name ne Ismael or category->>$name ne Ismael
+Equal              | "eq" or "Eq" or "EQ" | name eq Ismael or category.name eq Ismael
+NotEqual           | "ne" or "Ne" or "NE" | name ne Ismael or category.name ne Ismael
 GreaterThan        | "gt" or "Gt" or "GT" | price gt 10
 GreaterThanOrEqual | "ge" or "Ge" or "GE" | price ge 10
 LessThan           | "lt" or "Lt" or "LT" | price lt 10
 LessThanOrEqual    | "le" or "Le" or "LE" | price le 10
-In                 | "In" or "in" or "IN" | name in Ismael,Raquel,Amor or category->>$name in Ismael,Raquel,Amor
+In                 | "In" or "in" or "IN" | name in Ismael,Raquel,Amor or category.name in Ismael,Raquel,Amor
 Like               | "lk" or "Lk" or "LK" | name lk ismael (only string columns)
 
 ## 2) Helm
