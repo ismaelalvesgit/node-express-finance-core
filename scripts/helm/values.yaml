@@ -3,7 +3,7 @@ image:
   repository: ismaelalvesdoc/node-horizontal-example
   tag: latest
   pullPolicy: Always
-  livenessPath: /system/healthcheck
+  livenessPath: /v1/system/healthcheck
 
 service:
   enabled: true

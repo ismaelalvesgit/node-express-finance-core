@@ -1,11 +1,9 @@
 import { IPagination, IQueryData } from "@helpers/ICommon";
 import { IInvestment } from "./IInvestiment";
-import { ECategoryType } from "@domain/category/types/ICategory";
-import { IQuoteBrapi } from "./IBrapi";
 import { Knex } from "knex";
 
 export interface IInvestmentService {
-    getQoute(symbol: string, category: ECategoryType): Promise<IQuoteBrapi>
+    searchSymbol(symbol: string): Promise<boolean>
     find(params: Partial<IQueryData>): Promise<IPagination<IInvestment>>
     findById(id: number | string): Promise<IInvestment>
     create(data: IInvestment, trx?: Knex.Transaction): Promise<void>

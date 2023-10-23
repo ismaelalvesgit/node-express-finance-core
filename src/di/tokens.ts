@@ -9,7 +9,7 @@ export const tokens = {
     HealthcheckController: Symbol("HealthcheckController"),
     SystemService: Symbol("SystemService"),
     SystemRepository: Symbol("SystemRepository"),
-    BrapiRepository: Symbol("BrapiRepository"),
+    InvestRepository: Symbol("InvestRepository"),
 
     BrokerRouter: Symbol("BrokerRouter"),
     FindByIdBrokerController: Symbol("FindByIdBrokerController"),

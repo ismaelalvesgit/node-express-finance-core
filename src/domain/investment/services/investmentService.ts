@@ -5,15 +5,14 @@ import { IQueryData, IPagination, IInnerJoinData } from "@helpers/ICommon";
 import { IInvestment } from "../types/IInvestiment";
 import { tokens } from "@di/tokens";
 import { IInvestmentRepository } from "../types/IInvestmentRepository";
-import { CategorySelect, ECategoryType } from "@domain/category/types/ICategory";
+import { CategorySelect } from "@domain/category/types/ICategory";
 import { ICategoryRepository } from "@domain/category/types/ICategoryRepository";
 import { BadRequest, NotFound } from "@infrastructure/exceptions/errorException";
-import { IQuoteBrapi } from "../types/IBrapi";
-import { IBrapiRepository } from "../types/IBrapiRepository";
 import { Knex } from "knex";
 import { ITransactionRepository } from "@domain/transaction/types/ITransactionRepository";
 import { Logger } from "@infrastructure/logger/logger";
 import { IInvestmentViewRepository } from "../types/IInvestmentViewRepository";
+import { IInvestRepository } from "../types/IInvestRepository";
 
 @injectable()
 export default class InvestmentService implements IInvestmentService {
@@ -40,8 +39,8 @@ export default class InvestmentService implements IInvestmentService {
         @inject(tokens.TransactionRepository)
         private transactionRepository: ITransactionRepository,
 
-        @inject(tokens.BrapiRepository)
-        private brapiRepository: IBrapiRepository,
+        @inject(tokens.InvestRepository)
+        private investRepository: IInvestRepository,
     ) { }
 
     async syncBalance(trx?: Knex.Transaction<any, any[]> | undefined): Promise<void> {
@@ -64,8 +63,10 @@ export default class InvestmentService implements IInvestmentService {
         }, trx);
     }
 
-    getQoute(symbol: string, category: ECategoryType): Promise<IQuoteBrapi> {
-       return this.brapiRepository.getQoute(symbol, category);
+    async searchSymbol(symbol: string): Promise<boolean> {
+        const symbols = await this.investRepository.searchSymbol(symbol);
+        if(symbols.length === 0) throw new NotFound(`Symbol not found ${symbol}`);
+        return true
     }
 
     find(params: Partial<IQueryData>): Promise<IPagination<IInvestment>> {
@@ -85,7 +86,7 @@ export default class InvestmentService implements IInvestmentService {
         const category = await this.categoryRepository.findById(data.categoryId, undefined, trx);
         if(!category) throw new NotFound("Category");
 
-        await this.getQoute(data.name, category.name); // Check is symbol exist
+        await this.searchSymbol(data.name); // Check is symbol exist
 
         return this.investmentRepository.create(data, trx);
     }
@@ -98,7 +99,9 @@ export default class InvestmentService implements IInvestmentService {
 
         if(data.name){
             const investment = await this.investmentRepository.findById(id, this.defaultJoin, trx);
-            await this.getQoute(data.name, investment.category.name); // Check is symbol exist
+            if(data.name !== investment.name){
+                await this.searchSymbol(data.name); // Check is symbol exist
+            }
         }
 
         if (data.logoUrl && data.logoUrl.endsWith("favicon.svg")) {

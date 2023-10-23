@@ -103,10 +103,7 @@ export class Config {
 
     private getBackendConfig() {
         return {
-            brapi: process.env["BRAPI_URL"] || "",
-            mercadoBitCoin: process.env["MERCADO_BITCOIN_URL"] || "",
-            curreyncyApi: process.env["CURRENCY_URL"] || "",
-            invest: process.env["INVEST_URL"] || "",
+            invest: process.env["INVEST_URL"] || ""
         };
     }
 }

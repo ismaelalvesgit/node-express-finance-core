@@ -44,7 +44,7 @@ import DeleteInvestmentController from "@presentation/http/controllers/investmen
 import UpdateInvestmentController from "@presentation/http/controllers/investment/updateInvestmentController";
 import InvestmentRepository from "@domain/investment/infrastructure/investmentRepository";
 import InvestmentService from "@domain/investment/services/investmentService";
-import BrapiRepository from "@domain/investment/infrastructure/brapiRepository";
+import InvestRepository from "@domain/investment/infrastructure/investRepository";
 import BatchUpdateInvestmentController from "@presentation/http/controllers/investment/batchUpdateInvestmentController";
 import { TransactionRouter } from "@presentation/http/routers/v1/transactionRouter";
 import FindByIdTransactionController from "@presentation/http/controllers/transaction/findByIdTransactionController";
@@ -71,7 +71,7 @@ childContainer.registerSingleton(tokens.SystemRouter, SystemRouter);
 childContainer.registerSingleton(tokens.HealthcheckController, HealthcheckController);
 childContainer.registerSingleton(tokens.SystemService, SystemService);
 childContainer.registerSingleton(tokens.SystemRepository, SystemRepository);
-childContainer.registerSingleton(tokens.BrapiRepository, BrapiRepository);
+childContainer.registerSingleton(tokens.InvestRepository, InvestRepository);
 
 childContainer.registerSingleton(tokens.BrokerRouter, BrokerRouter);
 childContainer.registerSingleton(tokens.FindByIdBrokerController, FindByIdBrokerController);

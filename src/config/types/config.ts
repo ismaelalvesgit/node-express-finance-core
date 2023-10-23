@@ -41,7 +41,7 @@ export interface Configuration {
         connectionTimeout: number
     }
     backend: {
-        brapi: string
+        invest: string
     }
     system: {
         fees: {
