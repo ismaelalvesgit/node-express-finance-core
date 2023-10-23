@@ -1,6 +1,6 @@
 replicaCount: 1
 image:
-  repository: ismaelalvesdoc/node-horizontal-example
+  repository: ismaelalvesdoc/express-finance-core
   tag: latest
   pullPolicy: Always
   livenessPath: /v1/system/healthcheck
