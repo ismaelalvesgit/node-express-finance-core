@@ -52,7 +52,7 @@ export interface Configuration {
 }
 
 export enum EnvironmentType {
-    Develop = "develop",
+    Develop = "development",
     Production = "production",
     Test = "test"
 }
