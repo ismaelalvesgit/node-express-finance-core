@@ -1,29 +1,57 @@
-# Ambiente de EXEMPLO para projetos em NODE.JS
-Este projeto foi criado para motivos acadêmicos para minha aprendizagem pessoal
-utilizando [node.js](https://nodejs.org/en) e [Express.js](https://expressjs.com/pt-br/). 
+# 📊 node-express-finance-core
+API REST para gerenciamento de informações financeiras, com foco em FIIs, FII AGRO, FIP(Fundo de Investimento em Participações), FIA(Fundos de Investimentos de Ações), FIDC(Fundo de Investimento em Direitos Creditórios), FIINFRA(Fundo de investimento em infraestrutura), Fundo Setorial, Ações, Criptomoedas, ETFs (nacionais e estrangeiros), além de controle de carteira de investimentos. Projeto modular, escalável e pronto para produção.
+utilizando [Node.js](https://nodejs.org/en) e [Express.js](https://expressjs.com/pt-br/). 
 
-## Screenshots
-App view:
-![App UI](/app.png)
+# ✨ Funcionalidades
+- 🔍 Consulta de informações sobre:
+  - **FII**(Fundos Imobiliários), **FII AGRO**(Fundos de Agronegócio), **FIP**(Fundo de Investimento em Participações), **FIA**(Fundos de Investimentos de Ações), **FIDC**(Fundo de Investimento em Direitos Creditórios), **FIINFRA**(Fundo de investimento em infraestrutura), **Fundo Setorial**
+  - **Ações** (BR e exterior)
+  - **Criptomoedas**
+  - **ETFs** e **REITs**
+- 📊 Gerenciamento de carteira de investimentos
+- 🔁 Importação e atualização de cotações
+- 📦 Estrutura modular e reutilizável para múltiplos tipos de ativo
+- 🌍 Noticias sobre mercado financeiro e BACEN
+- 🏛️ Histórico de indices **IFIX**, **BDRX**, **S&P500**, **IBOVESPA**, **CDI**, **IPCA**, **Tesouro Direto**
+- 📁 Base em Mysql com [knex.js](https://knexjs.org/)
+- 🧪 Testes com Jest
+- 🚀 Pronto para deploy com Docker
 
-## Setup
 
-## 1) Instalação de dependencias
-<br>
-
-## Linguagem
-È necessario que o [node.js](https://nodejs.org/en) já esteja instalado em sua máquina
-
-## Docker
-``` sh
-docker-compose up
+# 🚀 Como rodar o projeto
+Pré-requisitos
+- [Node.js](https://nodejs.org/en)
+- Docker e Docker Compose
+- Mysql (caso não use Docker)
+- 
+### 1. Clone o repositório:
+```bash
+git clone https://github.com/ismaelalvesgit/node-express-finance-core.git
 ```
-Obs: Deixei uma aquivo de [Docker-Compose](https://docs.docker.com/compose/) para que a utilização deste 
-projeto seja mais simples
 
-# Extra
+### 2. Navegue até o diretório do projeto:
+```bash
+cd node-express-finance-core
+```
 
-## 1) QueryData
+### 3. Instale as dependências:
+```bash
+npm install
+```
+
+### 4. Com docker:
+```bash
+docker-compose up -d
+```
+
+### 5. Executando...:
+```bash
+npm run dev
+```
+
+# 🛠️ Uso
+
+### 1. QueryData
 Criei uma forma simples de realizar pesquisas do dados nos endpoint´s paginados
 
 Name | Description | Data
@@ -37,23 +65,31 @@ filterBy           | filtro de itens | default: empty => "Property" "Condition" 
 ## 3) FilterBy
 Condition          | Values               | Exemple
 -------------------|----------------------|------------------
-Equal              | "eq" or "Eq" or "EQ" | name eq Ismael or category.name eq Ismael
-NotEqual           | "ne" or "Ne" or "NE" | name ne Ismael or category.name ne Ismael
+Equal              | "eq" or "Eq" or "EQ" | name eq Ismael
+NotEqual           | "ne" or "Ne" or "NE" | name ne Ismael
 GreaterThan        | "gt" or "Gt" or "GT" | price gt 10
 GreaterThanOrEqual | "ge" or "Ge" or "GE" | price ge 10
 LessThan           | "lt" or "Lt" or "LT" | price lt 10
 LessThanOrEqual    | "le" or "Le" or "LE" | price le 10
-In                 | "In" or "in" or "IN" | name in Ismael,Raquel,Amor or category.name in Ismael,Raquel,Amor
+In                 | "In" or "in" or "IN" | name in Ismael,Raquel
 Like               | "lk" or "Lk" or "LK" | name lk ismael (only string columns)
 
-## 2) Helm
+# 🚀 Tipos de deploys pre-configurados
+# 🐳 Docker
+```bash
+docker build -t finance-core .
+docker run finance-core
+```
+
+# ![Helm](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=helm&logoColor=white)
 Deixei configurado o [helm](https://helm.sh/) para que sejá possivel trabalhar com [kubernetes](https://kubernetes.io/pt-br/).
-### 2.1) Helm Values
+
+### 1. Helm Values
 ```yml
 replicaCount: 1 # Number of pod´s running
 
 image:
-  repository: ismaelalvesdoc/node-horizontal-example # Repository name
+  repository: ismaelalvesdoc/node-express-finance-core # Repository name
   tag: latest # Version Tag
   pullPolicy: Always # Policy of download image
   livenessPath: /api/v1/healthcheck # Router (Healthcheck)
@@ -101,12 +137,12 @@ autoscaling: # Auto Scaling (Horizontal)
         
 ```
 
-## Contato
+# 📫 Contribuições
+Sinta-se à vontade para abrir issues ou enviar pull requests. Sugestões são sempre bem-vindas!
+
+# 🤓 Contato
 Desenvolvido por: [Ismael Alves](https://github.com/ismaelalvesgit) 🤓🤓🤓
 
 * Email: [cearaismael1997@gmail.com](mailto:cearaismael1997@gmail.com) 
 * Github: [github.com/ismaelalvesgit](https://github.com/ismaelalvesgit)
 * Linkedin: [linkedin.com/in/ismael-alves-6945531a0/](https://www.linkedin.com/in/ismael-alves-6945531a0/)
-
-## Customização de Configurações do projeto
-Verifique [Configurações e Referencias](https://dotnet.microsoft.com/pt-br/apps/aspnet).
