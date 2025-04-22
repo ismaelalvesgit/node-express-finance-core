@@ -46,8 +46,7 @@ export default class RedisClient implements IRedisAdapter {
 
             const path = `${this.config.get().redis.prefix}:${key}`;
             const data = await this.client?.get.bind(this.client)(path);
-            return JSON.parse(data || "");
-           
+            return data ? JSON.parse(data) : null;
         } catch (error) {
             Logger.error(`Redis: ${error}`);
             return null;
@@ -60,7 +59,7 @@ export default class RedisClient implements IRedisAdapter {
                 return undefined;
             }
             const path = `${this.config.get().redis.prefix}:${key}`;
-            this.client?.set.bind(this.client)(path, value);
+            await this.client?.set.bind(this.client)(path, value);
             return this.expire(key, exp ?? this.timeDay);
         } catch (error) {
             Logger.error(`Redis: ${error}`);
