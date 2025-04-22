@@ -64,7 +64,7 @@ Benefícios:
 # 🌐 Suporte Multilíngue (i18n)
 O projeto possui suporte a múltiplos idiomas através da integração com o pacote i18n, possibilitando respostas mais amigáveis e localizadas, dependendo do idioma requisitado pelo cliente.
 
-## ✅ Características:
+✅ Características:
 - Traduções organizadas em arquivos separados por idioma (locales/)
 - Idioma definido por Accept-Language no header da requisição
 - Mensagens padronizadas para erros, logs e respostas da API
