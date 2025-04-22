@@ -75,6 +75,7 @@ In                 | "In" or "in" or "IN" | name in Ismael,Raquel
 Like               | "lk" or "Lk" or "LK" | name lk ismael (only string columns)
 
 # 🚀 Tipos de deploys pre-configurados
+
 # 🐳 Docker
 ```bash
 docker build -t finance-core .
