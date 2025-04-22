@@ -103,7 +103,8 @@ export class Config {
 
     private getBackendConfig() {
         return {
-            invest: process.env["INVEST_URL"] || ""
+            invest: process.env["INVEST_URL"] || "",
+            bcb: process.env["BCB_URL"] || "",
         };
     }
 }

@@ -59,6 +59,14 @@ import AutoCreateDividendsController from "@presentation/http/controllers/divide
 import EventTransactionController from "@presentation/http/controllers/transaction/eventTransactionController";
 import InvestmentViewRepository from "@domain/investment/infrastructure/investmentViewRepository";
 import SyncBalanceInvestmentController from "@presentation/http/controllers/investment/asyncBalanceInvestmentController";
+import BcbRepository from "@domain/bcb/infrastructure/bcbRepository";
+import BcbService from "@domain/bcb/services/bcbService";
+import { BcbRouter } from "@presentation/http/routers/v1/bcbRouter";
+import IndexBcbController from "@presentation/http/controllers/bcb/IndexBcbController";
+import InflactionIndicatorBcbController from "@presentation/http/controllers/bcb/inflactionIndicatorBcbController";
+import NewsBcbController from "@presentation/http/controllers/bcb/newsBcbController";
+import IndexV2BcbController from "@presentation/http/controllers/bcb/IndexV2BcbController";
+import IndexerBcbController from "@presentation/http/controllers/bcb/IndexerBcbController";
 
 const childContainer = container.createChildContainer();
 
@@ -127,5 +135,14 @@ childContainer.registerSingleton(tokens.DeleteTransactionController, DeleteTrans
 childContainer.registerSingleton(tokens.UpdateTransactionController, UpdateTransactionController);
 childContainer.registerSingleton(tokens.TransactionRepository, TransactionRepository);
 childContainer.registerSingleton(tokens.TransactionService, TransactionService);
+
+childContainer.registerSingleton(tokens.BcbRouter, BcbRouter);
+childContainer.registerSingleton(tokens.NewsBcbController, NewsBcbController);
+childContainer.registerSingleton(tokens.InflactionIndicatorBcbController, InflactionIndicatorBcbController);
+childContainer.registerSingleton(tokens.IndexV2BcbController, IndexV2BcbController);
+childContainer.registerSingleton(tokens.IndexerBcbController, IndexerBcbController);
+childContainer.registerSingleton(tokens.IndexBcbController, IndexBcbController);
+childContainer.registerSingleton(tokens.BcbRepository, BcbRepository);
+childContainer.registerSingleton(tokens.BcbService, BcbService);
 
 export { childContainer as container };

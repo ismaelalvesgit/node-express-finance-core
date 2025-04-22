@@ -909,49 +909,36 @@ paths:
           $ref: "#/components/responses/news"
   
   # Bcb
-  /v1/bcb/selic:
+  /v1/bcb/index:
     get:
       tags:
         - Bcb
-      summary: Retorna historio da taxa selic
+      summary: Retorna historio da taxa selic e inflação
       parameters:
         - in: query
           name: dateStart
           description: Data inicial de filtro
           schema:
             type: string
-            example: "2021-03-31 22:34:36.476"
+            example: "31/03/2025"
         - in: query
           name: dateEnd
           description: Data final de filtro
           schema:
             type: string
-            example: "2021-03-31 22:34:36.476"
-      responses:
-        200: # status code
-          $ref: "#/components/responses/selic"
-          
-  /v1/bcb/inflaction:
-    get:
-      tags:
-        - Bcb
-      summary: Retorna historicos da taxa de inflação
-      parameters:
+            example: "31/03/2025"
         - in: query
-          name: dateStart
-          description: Data inicial de filtro
+          name: type
+          description: Tipo de index
           schema:
             type: string
-            example: "2021-03-31 22:34:36.476"
-        - in: query
-          name: dateEnd
-          description: Data final de filtro
-          schema:
-            type: string
-            example: "2022-03-31 22:34:36.476"
+            enum:
+              - SELIC
+              - INFLACTION
+            example: "SELIC"
       responses:
         200: # status code
-          $ref: "#/components/responses/selic"
+          $ref: "#/components/responses/index"
   
   /v1/bcb/inflactionIndicator:
     get:
@@ -961,148 +948,66 @@ paths:
       responses:
         200: # status code
           $ref: "#/components/responses/inflactionIndicator"
-  
-  /v1/bcb/ibovespa:
-    get:
-      tags:
-        - Bcb
-      summary: Retorna dados historicos do indice ibovespa
-      parameters:
-        - in: query
-          name: type
-          description: | 
-            Quantidade de dados retornados: 
-            ex: -1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A
-          schema:
-            type: string
-            example: "1"
-      responses:
-        200: # status code
-          $ref: "#/components/responses/indice"
-          
-  /v1/bcb/ifix:
-    get:
-      tags:
-        - Bcb
-      summary: Retorna dados historicos do indice ifix
-      parameters:
-        - in: query
-          name: type
-          description: | 
-            Quantidade de dados retornados: 
-            ex: -1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A
-          schema:
-            type: string
-            example: "1"
-      responses:
-        200: # status code
-          $ref: "#/components/responses/indice"
-  
-  /v1/bcb/bdrx:
-    get:
-      tags:
-        - Bcb
-      summary: Retorna dados historicos do indice bdrx
-      parameters:
-        - in: query
-          name: type
-          description: | 
-            Quantidade de dados retornados: 
-            ex: -1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A
-          schema:
-            type: string
-            example: "1"
-      responses:
-        200: # status code
-          $ref: "#/components/responses/indice"
-  
-  /v1/bcb/sp500:
-    get:
-      tags:
-        - Bcb
-      summary: Retorna dados historicos do indice S&P500
-      parameters:
-        - in: query
-          name: type
-          description: | 
-            Quantidade de dados retornados: 
-            ex: 1=30D, 2=60D, 3=1A, 4=5A
-          schema:
-            type: string
-            example: "1"
-      responses:
-        200: # status code
-          $ref: "#/components/responses/indice"
-  
-  /v1/bcb/boundList:
-    get:
-      tags:
-        - Bcb
-      summary: Retorna lista de bound
-      responses:
-        200: # status code
-          $ref: "#/components/responses/boundList"
 
-  /v1/bcb/bound/{code}:
+  /v1/bcb/indexV2:
     get:
       tags:
         - Bcb
-      summary: Retorna dados historicos do tesouro brasileiro
+      summary: Retorna dados historicos do indice Ifix, Ibov, Bdrx, S&P500
       parameters:
         - in: query
           name: type
-          description: | 
-            Quantidade de dados retornados: 
-            ex: 1=30D, 2=60D, 3=1A, 4=5A
           schema:
             type: string
-            example: "1"
-        - in: path
-          name: code
-          required: true
+            enum:
+              - BDRX
+              - IFIX
+              - IBOV
+              - SP500
+            example: "IBOV"
+        - in: query
+          name: period
           schema:
             type: string
-            example: 'tesouro-ipca-com-juros-semestrais-2026'
+            enum:
+              - ONE_DAY
+              - FIVE_DAYS
+              - THIRTY_DAYS
+              - SEVENTY_DAYS
+              - ONE_YEAR
+              - FIVE_YEARS
+            example: "IBOV"
       responses:
         200: # status code
-          $ref: "#/components/responses/bound"
-          
-  /v1/bcb/ipca:
+          $ref: "#/components/responses/indice"
+        
+  /v1/bcb/indexer:
     get:
       tags:
         - Bcb
-      summary: Retorna dados historicos do indice ipca
+      summary: Retorna dados historicos do indice Ipca, Cdi
       parameters:
         - in: query
           name: type
-          description: | 
-            Quantidade de dados retornados: 
-            ex: 0=2022/2021, 1=5A, 2=10A
           schema:
             type: string
-            example: "1"
+            enum:
+              - IPCA
+              - CDI
+            example: "IPCA"
+        - in: query
+          name: period
+          schema:
+            type: string
+            enum:
+              - ONE_YEAR
+              - FIVE_YEARS
+              - TEN_YEARS
+            example: "ONE_YEAR"
       responses:
         200: # status code
           $ref: "#/components/responses/indice2"
-          
-  /v1/bcb/cdi:
-    get:
-      tags:
-        - Bcb
-      summary: Retorna dados historicos do indice cdi
-      parameters:
-        - in: query
-          name: type
-          description: | 
-            Quantidade de dados retornados: 
-            ex: 0=2022/2021, 1=5A, 2=10A
-          schema:
-            type: string
-            example: "1"
-      responses:
-        200: # status code
-          $ref: "#/components/responses/indice2"
-          
+
   /v1/bcb/news:
     get:
       tags:
@@ -2085,7 +1990,7 @@ components:
                       description: carimbo de hora exato em que o artigo foi publicado.
                       example: "2021-03-31 22:34:36.476"
     
-    selic:
+    index:
       description: lista de dados historicos.
       content:
         application/json:

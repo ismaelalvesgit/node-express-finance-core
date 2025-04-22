@@ -77,3 +77,9 @@ export class Brapi extends CustomError {
         super("BRAPI_API", msg);
     }
 }
+
+export class BcbApi extends CustomError {
+    constructor(msg: string){
+        super("BCB_API", msg);
+    }
+}

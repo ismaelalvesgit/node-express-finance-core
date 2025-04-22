@@ -12,6 +12,7 @@ import { EventsRouter } from "./routers/v1/eventsRouter";
 import { DividendsRouter } from "./routers/v1/dividendsRouter";
 import { InvestmentRouter } from "./routers/v1/investmentRouter";
 import { TransactionRouter } from "./routers/v1/transactionRouter";
+import { BcbRouter } from "./routers/v1/bcbRouter";
 
 @injectable()
 export default class Routes { 
@@ -37,6 +38,9 @@ export default class Routes {
 
         @inject(tokens.CategoryRouter)
         private categoryRouter: CategoryRouter,
+        
+        @inject(tokens.BcbRouter)
+        private bcbRouter: BcbRouter,
 
         @inject(tokens.SystemRouter)
         private systemRouter: SystemRouter
@@ -61,6 +65,7 @@ export default class Routes {
         router.use("/v1", this.eventsRouter.setup()); 
         router.use("/v1", this.brokerRouter.setup()); 
         router.use("/v1", this.categoryRouter.setup()); 
+        router.use("/v1", this.bcbRouter.setup()); 
         router.use("/v1", this.systemRouter.setup()); 
 
         router.get("/", (_, res) =>{

@@ -42,6 +42,7 @@ export interface Configuration {
     }
     backend: {
         invest: string
+        bcb: string
     }
     system: {
         fees: {

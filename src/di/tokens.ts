@@ -66,4 +66,13 @@ export const tokens = {
     BatchUpdateTransactionController: Symbol("BatchUpdateTransactionController"),
     TransactionRepository: Symbol("TransactionRepository"),
     TransactionService: Symbol("TransactionService"),
+    
+    BcbRouter: Symbol("BcbRouter"),
+    NewsBcbController: Symbol("NewsBcbController"),
+    InflactionIndicatorBcbController: Symbol("InflactionIndicatorBcbController"),
+    IndexV2BcbController: Symbol("IndexV2BcbController"),
+    IndexerBcbController: Symbol("IndexerBcbController"),
+    IndexBcbController: Symbol("IndexBcbController"),
+    BcbRepository: Symbol("BcbRepository"),
+    BcbService: Symbol("BcbService"),
 };
