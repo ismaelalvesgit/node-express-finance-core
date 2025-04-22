@@ -107,7 +107,7 @@ describe("Common Request Router", () => {
         expect(res.body.items[0]).toHaveProperty("name");
         expect(res.body.items[0]).toHaveProperty("id");
         expect(res.body.items[0].name).toBe(name);
-        expect(Number(res.body.items[0].categoryId)).toBe(categoryId);
+        expect(Number(res.body.items[0].category.id)).toBe(categoryId);
     });
     
 });

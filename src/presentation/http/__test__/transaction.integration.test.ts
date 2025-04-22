@@ -5,7 +5,7 @@ import { Chance } from "chance";
 import { StatusCodes } from "http-status-codes";
 import request from "supertest";
 import { GeneratorMock } from "@test/generator.mock";
-import { ETransactionType } from "@domain/transaction/types/ITransaction";
+import { ETransactionEventDirection, ETransactionType } from "@domain/transaction/types/ITransaction";
 import { ECategoryType } from "@domain/category/types/ICategory";
 import { Config } from "@config/config";
 import nock from "nock";
@@ -13,7 +13,7 @@ import nock from "nock";
 const chance = new Chance();
 const { getApp } = container.resolve(App);
 const prefix = "/v1/transaction";
-const url = new Config().get().backend.brapi;
+const url = new Config().get().backend.invest;
 const requestMock = nock(url);
 
 describe("Transaction Router", () => {
@@ -257,26 +257,34 @@ describe("Transaction Router", () => {
         });
     });
 
-    describe("Grouping", ()=>{
-        it("should return status code 200 with success", async() => {
+    describe("Event", ()=>{
+        it.each([
+            ["Agrupamento", ETransactionEventDirection.GROUPING],
+            ["Separação", ETransactionEventDirection.SPLIT],
+        ])("should return status code 200 with success %s", async(type, direction) => {
             const [{investmentId}] = await GeneratorMock.transaction(1);
 
             const res = await request(getApp)
-            .put(`${prefix}/grouping`)
+            .put(`${prefix}/event`)
             .send({
                 investmentId,
+                direction,
                 quantity: 2,
             })
             .expect(StatusCodes.OK);
-            expect(res.body).toBe("Agrupamento de Transações realizada com sucesso!!! 😆");
+            expect(res.body).toBe(`${type} de Transações realizada com sucesso!!! 😆`);
         });
         
-        it("should return status code 404 with success", async() => {
+        it.each([
+            [ETransactionEventDirection.GROUPING],
+            [ETransactionEventDirection.SPLIT],
+        ])("should return status code 404 with success %s", async(direction) => {
             const [{investmentId}] = await GeneratorMock.transaction(1);
 
             const res = await request(getApp)
-            .put(`${prefix}/grouping`)
+            .put(`${prefix}/event`)
             .send({
+                direction,
                 investmentId: Number(investmentId) + 20,
                 quantity: 2,
             })

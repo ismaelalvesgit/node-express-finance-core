@@ -8,7 +8,7 @@ import { Config } from "@config/config";
 import nock from "nock";
 import { ECategoryType } from "@domain/category/types/ICategory";
 
-const url = new Config().get().backend.brapi;
+const url = new Config().get().backend.invest;
 const { getApp } = container.resolve(App);
 const requestMock = nock(url);
 const prefix = "/v1/investment";
@@ -80,7 +80,7 @@ describe("Investment Router", () => {
     describe("Create", ()=>{
         it("should return status code 201 with success", async() => {
             const name = "VISC11";
-            requestMock.get(`/quote/${name}?fundamental=true`).reply(200, {results: []});
+            requestMock.get(`/home/mainsearchquery?q=${name}`).reply(200, [{name}]);
             const categorys = await GeneratorMock.category();
             const category = categorys.find((category) => category.name === ECategoryType.FIIS);
             const res = await request(getApp)
@@ -154,7 +154,7 @@ describe("Investment Router", () => {
         it("should return status code 200 with success", async() => {
             const [{id, categoryId}] = await GeneratorMock.investment(1);
             const name = "XPCA11";
-            requestMock.get(`/quote/${name}?fundamental=true`).reply(200, {results: []});
+            requestMock.get(`/home/mainsearchquery?q=${name}`).reply(200, [{name}]);
 
             const res = await request(getApp)
             .put(`${prefix}/${id}`)
@@ -169,7 +169,7 @@ describe("Investment Router", () => {
         
         it("should return status code 400 duplicated data", async() => {
             const [{id}, {name}] = await GeneratorMock.investment(2);
-            requestMock.get(`/quote/${name}?fundamental=true`).reply(200, {results: []});
+            requestMock.get(`/home/mainsearchquery?q=${name}`).reply(200, [{name}]);
 
             const res = await request(getApp)
             .put(`${prefix}/${id}`)
