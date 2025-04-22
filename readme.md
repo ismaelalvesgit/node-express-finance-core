@@ -16,6 +16,8 @@ utilizando [Node.js](https://nodejs.org/en) e [Express.js](https://expressjs.com
 - 📁 Base em Mysql com [knex.js](https://knexjs.org/)
 - 🧪 Testes com Jest
 - 🚀 Pronto para deploy com Docker
+- 🌐 Suporte Multilíngue (i18n)
+- 📈 Monitoramento & Observabilidade
 
 
 # 🚀 Como rodar o projeto
@@ -48,6 +50,15 @@ docker-compose up -d
 ```bash
 npm run dev
 ```
+
+# 🌐 Suporte Multilíngue (i18n)
+O projeto possui suporte a múltiplos idiomas através da integração com o pacote i18n, possibilitando respostas mais amigáveis e localizadas, dependendo do idioma requisitado pelo cliente.
+
+## ✅ Características:
+- Traduções organizadas em arquivos separados por idioma (locales/)
+- Idioma definido por Accept-Language no header da requisição
+- Mensagens padronizadas para erros, logs e respostas da API
+- Fácil de estender para novos idiomas
 
 # 🛠️ Uso
 
