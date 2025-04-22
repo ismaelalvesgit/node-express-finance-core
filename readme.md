@@ -12,7 +12,7 @@ utilizando [Node.js](https://nodejs.org/en) e [Express.js](https://expressjs.com
 - 🔁 Importação e atualização de cotações
 - 📦 Estrutura modular e reutilizável para múltiplos tipos de ativo
 - 🌍 Noticias sobre mercado financeiro e BACEN
-- 🏛️ Histórico de indices **IFIX**, **BDRX**, **S&P500**, **IBOVESPA**, **CDI**, **IPCA**, **Tesouro Direto**
+- 🏛️ Histórico de indices **IFIX**, **BDRX**, **S&P500**, **IBOVESPA**, **CDI**, **IPCA**
 - 📁 Base em Mysql com [knex.js](https://knexjs.org/)
 - 🧪 Testes com Jest
 - 🚀 Pronto para deploy com Docker
@@ -62,7 +62,7 @@ orderBy            | Ordenação por atributo | default: ASC
 orderByDescending  | Tipo de ordenação | default: false => true=DESC, false=ASC 
 filterBy           | filtro de itens | default: empty => "Property" "Condition" "Value"
 
-## 3) FilterBy
+## 2. FilterBy
 Condition          | Values               | Exemple
 -------------------|----------------------|------------------
 Equal              | "eq" or "Eq" or "EQ" | name eq Ismael
