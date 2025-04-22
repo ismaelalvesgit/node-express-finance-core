@@ -42,3 +42,21 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- define "service.annotations" -}}
 meta.helm.sh/release-name: {{ .Chart.Name }}
 {{- end }}
+
+{{- define "service.vault.annotations" -}}
+vault.hashicorp.com/agent-inject: 'true'
+vault.hashicorp.com/agent-inject-status: "update"
+vault.hashicorp.com/role: 'vault-auth'
+vault.hashicorp.com/agent-inject-secret-config: "kv/data/{{ template "service.fullname" . }}"
+vault.hashicorp.com/agent-inject-template-config: |
+    {{printf "{{- with secret "}} "kv/data/{{ template "service.fullname" . }}" {{ ` -}} 
+    #!/bin/sh
+    set -e
+    echo "Get Secret From Vault Hashicorp"
+    {{ range $k, $v := .Data.data }}
+    echo {{ $k }}
+    export {{ $k }}={{ $v }}
+    {{ end }}
+    {{- end }} `}}
+{{- end }}
+

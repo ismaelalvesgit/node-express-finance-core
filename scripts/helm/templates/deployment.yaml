@@ -21,9 +21,15 @@ spec:
   template:
     metadata:
       labels: {{ include "service.labels" . | nindent 8 }}
+      {{- if .Values.vault.enabled }}
+      annotations: {{ include "service.vault.annotations" . | nindent 8 }}
+      {{- end }}
     spec:
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
+      {{- if .Values.vault.enabled }}
+      serviceAccountName: vault-auth
+      {{- end }}
       initContainers:
       - name: migrations
         env:

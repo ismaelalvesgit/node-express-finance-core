@@ -5,6 +5,9 @@ image:
   pullPolicy: Always
   livenessPath: /v1/system/healthcheck
 
+vault:
+  enabled: true
+
 service:
   enabled: true
   type: NodePort
@@ -27,16 +30,9 @@ env:
   REDIS_PORT: 6379
   APM_SERVER_URL: http://kubernetes.docker.internal:8200
   APM_SERVICE_NAME: example
-  AMQP_ACTIVE: false
-  AMQP_PROTOCOL: amqp
-  AMQP_HOSTNAME: kubernetes.docker.internal
-  AMQP_PORT: 5672
-  AMQP_USERNAME: admin
-  AMQP_VHOST: /
 
 secret:
   DB_PASSWORD: admin
-  AMQP_PASSWORD: admin
   APM_API_KEY: ''
   APM_SECRET_TOKEN: ''
 

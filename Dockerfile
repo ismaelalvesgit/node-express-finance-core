@@ -12,11 +12,16 @@ LABEL maintainer="Ismael Alves <cearaismael1997@gmail.com>"
 WORKDIR /app
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/dist ./
-RUN npm install --only=production
+COPY --from=build /app/entrypoint.sh ./entrypoint.sh
 
+RUN npm install --only=production
+RUN chmod +x /app/entrypoint.sh
 RUN addgroup -S app && adduser -S -G app app 
+
 USER app
 
 EXPOSE 3000
 
-CMD [ "node", "src/index.js" ]
+ENTRYPOINT ["./entrypoint.sh"]
+
+CMD [ "/app/entrypoint.sh" ]
