@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node dist/src/index.js",
     "dev": "nodemon src/index.ts",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
     "build:tsc": "tsc -p tsconfig.prod.json && tscpaths -p tsconfig.prod.json -s . -o ./dist",
     "build:docs": "copyfiles -u 1 docs/**/* dist/docs",
     "build:assets": "copyfiles -u 1 src/public/**/* dist/src",
@@ -56,7 +56,7 @@
     "tscpaths": "^0.0.9",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.0",
-    "@ismaelalves/logger": "^0.1.3",
+    "@ismaelalves/logger": "^0.1.4",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
     "dotenv": "^16.3.1",
