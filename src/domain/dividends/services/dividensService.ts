@@ -15,6 +15,7 @@ import { ITransactionRepository } from "@domain/transaction/types/ITransactionRe
 import { Config } from "@config/config";
 import { CategoryIsBR } from "@domain/category/types/ICategory";
 import DateHelper from "@helpers/Date";
+import { parseISO } from "date-fns";
 
 @injectable()
 export default class DividendsService implements IDividendsService {
@@ -69,13 +70,22 @@ export default class DividendsService implements IDividendsService {
                         fees: Common.parsePercent(fees ?? 0, total),
                         currency
                     } as IDividends;
+
                     const dividendCreateFind = {
                         investmentId,
                         brokerId,
-                        dateBasis,
-                        dueDate,
                         type,
                     } as IDividends;
+
+                    if(DateHelper.differenceInYears(parseISO(`${dateBasis}`), parseISO(`${dueDate}`)) > 2) {
+                        dividendCreateFind.dueDate = dueDate;
+                    } else if (DateHelper.differenceInYears(parseISO(`${dueDate}`), parseISO(`${dateBasis}`)) > 2) {
+                        dividendCreateFind.dateBasis = dateBasis;
+                    }else {
+                        dividendCreateFind.dueDate = dueDate;
+                        dividendCreateFind.dateBasis = dateBasis;
+                    }
+
                     const dividends = await this.dividendsRepository.findOrCreate(dividendCreate, trx, dividendCreateFind);
                     if(dividends && Number(qnt) !== Number(dividends.qnt)){
                         // Update qnt after created last time
