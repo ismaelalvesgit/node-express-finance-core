@@ -67,7 +67,7 @@ export default class TransactionService implements ITransactionService {
                     {filterBy: [`investmentId ${EWhereOperator.Equal} ${params.investmentId}`]},
                     trx
                 )
-            ])
+            ]);
 
             if(transactions.items.length === 0) throw new NotFound("InvestmentId");
 
@@ -103,7 +103,7 @@ export default class TransactionService implements ITransactionService {
                     {filterBy: [`investmentId ${EWhereOperator.Equal} ${params.investmentId}`]},
                     trx
                 )
-            ])
+            ]);
 
             if(transactions.items.length === 0) throw new NotFound("InvestmentId");
 

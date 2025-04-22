@@ -66,7 +66,7 @@ export default class InvestmentService implements IInvestmentService {
     async searchSymbol(symbol: string): Promise<boolean> {
         const symbols = await this.investRepository.searchSymbol(symbol);
         if(symbols.length === 0) throw new NotFound(`Symbol not found ${symbol}`);
-        return true
+        return true;
     }
 
     find(params: Partial<IQueryData>): Promise<IPagination<IInvestment>> {

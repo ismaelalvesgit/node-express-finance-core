@@ -28,7 +28,7 @@ export class Config {
     }
 
     private getServiceConfig() {
-        const port = Number(process.env["SERVICE_PORT"]) || 3000
+        const port = Number(process.env["SERVICE_PORT"]) || 3000;
         return {
             serviceHost: process.env["SERVICE_HOST"] || `http://localhost:${port}`,
             serviceName: process.env["SERVICE_NAME"] || "finance-core",

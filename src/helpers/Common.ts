@@ -62,8 +62,8 @@ export default class Common {
             category === ECategoryType.REITS ||
             category === ECategoryType.INDEX_EXT ||
             category === ECategoryType.ETF_EXT
-        ) return false
+        ) return false;
         
-        return true
+        return true;
     }
 }
