@@ -51,6 +51,16 @@ docker-compose up -d
 npm run dev
 ```
 
+# 📈 Monitoramento & Observabilidade
+Para garantir a confiabilidade e performance da aplicação, é recomendada a integração com ferramentas de APM (Application Performance Monitoring). Isso permite acompanhar o desempenho dos endpois da API, identificar gargalos e receber alertas sobre falhas em tempo real.
+
+Benefícios:
+- ⏱️ Análise de tempo de processamento por chamadas de API
+- ⚠️ Detecção de falhas silenciosas e exceções não tratadas
+- 📊 Métricas de throughput e latência
+- 🔍 Tracing distribuído (ideal para arquiteturas baseadas em eventos e micro-serviços)
+- 🔔 Alertas proativos com base em métricas personalizadas
+
 # 🌐 Suporte Multilíngue (i18n)
 O projeto possui suporte a múltiplos idiomas através da integração com o pacote i18n, possibilitando respostas mais amigáveis e localizadas, dependendo do idioma requisitado pelo cliente.
 
