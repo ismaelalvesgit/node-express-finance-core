@@ -1,31 +1,53 @@
-openapi: 3.0.0
+openapi: 3.0.3
 
 info:
-  title: Example Express
-  description: Criated API by Exemple
-  version: 0.0.1
+  title: Finance
+  description: Criado para ser utilizado com carteira pessoal de investimentos
+  version: 0.1.0
 
 servers:
   - url: http://localhost:3000
-    description: Development
+    description: Desenvolvimento
+
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
 
 tags:
   - name: Category
     description: Category namespace
-  - name: Product
-    description: Product namespace
+  - name: Broker
+    description: Broker namespace
+  - name: Transaction
+    description: Transaction namespace
+  - name: Dividends
+    description: Dividends namespace
+  - name: Events
+    description: Events namespace
+  - name: News
+    description: News namespace
+  - name: Bcb
+    description: Bcb namespace
+  - name: Currency
+    description: Currency namespace
+  - name: Investment
+    description: Investment namespace
   - name: System
     description: System namespace
 
 paths:
+  # System
   /v1/system/healthcheck:
     get:
       tags:
         - System
-      summary: Return status of API.
+      summary: Retorna o status da API.
       responses:
         200: # status code
-          description: Return status of API.
+          description: Retorna o status da API.
           content:
             application/json:
               schema:
@@ -38,299 +60,76 @@ paths:
     get:
       tags:
         - System
-      summary: Return metrics of API.
+      summary: Retorna metricas da API.
       responses:
         200: # status code
-          description: Return metrics of API.
+          description: Retorna metricas da API.
           content:
             application/json:
               schema:
                 type: string
         500: # status code
           $ref: "#/components/responses/internal"
-  
-  ##############################################################################
-  #    Product
-  ##############################################################################
-  
-  /v1/product/async:
-    post:
-      tags:
-        - Product
-      summary: Send product by queue.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/product"
-      responses:
-        200: # status code
-          description: Published product.
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-        500: # status code
-          $ref: "#/components/responses/internal"
-  
-  /v1/product:
+   
+  # Category       
+  /v1/category:
     get:
       tags:
-        - Product
-      summary: Return list of products.
+        - Category
+      summary: Retorna a lista de categorias.
       parameters:
         - in: query
-          name: page
-          description: Page
-          schema:
-            type: number
-            example: 1
-        - in: query
-          name: pageSize
-          description: Quantity itens by page
-          schema:
-            type: number
-            example: 10
-        - in: query
           name: orderBy
-          description: OrderBy
+          description: Atributo de ordenação
           schema:
             type: string
             example: "name"
         - in: query
           name: orderByDescending
-          description: OrderBy Descending
+          description: Tipo de ordenação (asc | desc)
           schema:
             type: boolean
-            example: false
-        - in: query
-          name: filterBy
-          description: Filter itens
-          schema:
-            type: array
-            items:
-              example: 'name eq ismael'
-              
-      responses:
-        200: # status code
-          $ref: "#/components/responses/product"
-
-    post:
-      tags:
-        - Product
-      summary: Created product.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/product"
-      responses:
-        201: # status code
-          description: Created by success.
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-        500: # status code
-          $ref: "#/components/responses/internal"
-
-  /v1/product/{id}:
-    get:
-      tags:
-        - Product
-      summary: Return product by ID.
-      parameters:
-        - in: path
-          required: true
-          name: id
-          description: ID do product
-          schema:
-            type: string
-            example: "1"
-      responses:
-        200: # status code
-          description: product.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: number
-                    example: 1
-                  name:
-                    type: string
-                    example: "Ismael Alves"
-                  imageUrl:
-                    type: string
-                    example: "https://github.com/ismaelalvesgit"
-                  description:
-                    type: string
-                    example: "Example"
-                  price:
-                    type: number
-                    example: 10
-                  quantity:
-                    type: number
-                    example: 10
-                  createdAt:
-                    type: string
-                    example: "2021-03-31 22:34:36.476"
-                  updatedAt:
-                    type: string
-                    example: "2021-03-31 22:34:36.476"
-                  category:
-                    type: object
-                    properties:
-                      id:
-                        type: number
-                        example: 1
-                      name:
-                        type: string
-                        example: "Ismael Alves"
-                      imageUrl:
-                        type: string
-                        example: "https://github.com/ismaelalvesgit"
-                      createdAt:
-                        type: string
-                        example: "2021-03-31 22:34:36.476"
-                      updatedAt:
-                        type: string
-                        example: "2021-03-31 22:34:36.476"
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-        500: # status code
-          $ref: "#/components/responses/internal"
-
-    put:
-      tags:
-        - Product
-      summary: Updated one product.
-      parameters:
-        - in: path
-          required: true
-          name: id
-          description: ID product
-          schema:
-            type: string
-            example: "1"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/product"
-      responses:
-        202: # status code
-          description: Success
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-        500: # status code
-          $ref: "#/components/responses/internal"
-
-    delete:
-      tags:
-        - Product
-      summary: Delete one product.
-      parameters:
-        - in: path
-          required: true
-          name: id
-          description: ID product
-          schema:
-            type: string
-            example: "1"
-      responses:
-        204: # status code
-          description: Success
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-        500: # status code
-          $ref: "#/components/responses/internal"        
-          
-  ##############################################################################
-  #    Category
-  ##############################################################################
-  /v1/category/async:
-    post:
-      tags:
-        - Category
-      summary: Created category.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/category"
-      responses:
-        200: # status code
-          description: Published by success.
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-
-  /v1/category:
-    get:
-      tags:
-        - Category
-      summary: Return list of categorys.
-      parameters:
-        - in: query
-          name: page
-          description: Page
-          schema:
-            type: number
-            example: 1
+            example: true
         - in: query
           name: pageSize
-          description: Quantity itens by page
+          description: Limite de itens retornados
           schema:
-            type: number
-            example: 10
+            type: string
+            example: "10"
         - in: query
-          name: orderByDescending
-          description: OrderBy Descending
+          name: page
+          description: Numero da pagina
           schema:
-            type: boolean
-            example: false
+            type: string
+            example: "1"
         - in: query
           name: filterBy
-          description: Filter itens
+          description: Filtro de pesquisa "Property" "Condition" "Value"
           schema:
             type: array
             items:
-              example: 'name eq ismael'
-              
+              type: string
+              example: name eq ismael
       responses:
         200: # status code
           $ref: "#/components/responses/category"
-
-    post:
-      tags:
-        - Category
-      summary: Created category.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/category"
-      responses:
-        201: # status code
-          description: Created by success.
-        400: # status code
-          $ref: "#/components/responses/badRequest"
-        500: # status code
-          $ref: "#/components/responses/internal"
 
   /v1/category/{id}:
     get:
       tags:
         - Category
-      summary: Return category by ID.
+      summary: Retorna uma categoria por ID.
       parameters:
         - in: path
           required: true
           name: id
-          description: ID do category
+          description: ID da categoria
           schema:
             type: string
             example: "1"
       responses:
         200: # status code
-          description: Category.
+          description: Categoria.
           content:
             application/json:
               schema:
@@ -342,9 +141,6 @@ paths:
                   name:
                     type: string
                     example: "Raquel"
-                  imageUrl:
-                    type: string
-                    example: "https://github.com/ismaelalvesgit"
                   createdAt:
                     type: string
                     example: "2021-03-31 22:34:36.476"
@@ -353,18 +149,123 @@ paths:
                     example: "2021-03-31 22:34:36.476"
         400: # status code
           $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+  
+  # Broker
+  /v1/broker:
+    get:
+      tags:
+        - Broker
+      summary: Retorna a lista de brokers.
+      parameters:
+        - in: query
+          name: sortBy
+          description: Atributo de ordenação
+          schema:
+            type: string
+            example: "name"
+        - in: query
+          name: orderByDescending
+          description: Tipo de ordenação (asc | desc)
+          schema:
+            type: boolean
+            example: true
+        - in: query
+          name: pageSize
+          description: Limite de itens retornados
+          schema:
+            type: string
+            example: "10"
+        - in: query
+          name: page
+          description: Numero da pagina
+          schema:
+            type: string
+            example: "1"
+        - in: query
+          name: filterBy
+          description: Filtro de pesquisa "Property" "Condition" "Value" "Property" "Condition" "Value"
+          schema:
+            type: string
+            example: name eq ismael
+      responses:
+        200: # status code
+          $ref: "#/components/responses/broker"
+
+    post:
+      tags:
+        - Broker
+      summary: Criação de brokers.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/broker"
+      responses:
+        200: # status code
+          description: Cadastro de brokers.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Broker criado com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /v1/broker/{id}:
+    get:
+      tags:
+        - Broker
+      summary: Retorna um broker por ID.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do broker
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          description: Broker.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: "Raquel"
+                  createdAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  updatedAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
         500: # status code
           $ref: "#/components/responses/internal"
 
     put:
       tags:
-        - Category
-      summary: Updated one category.
+        - Broker
+      summary: Atualiza um broker.
       parameters:
         - in: path
           required: true
           name: id
-          description: ID category
+          description: ID do broker
           schema:
             type: string
             example: "1"
@@ -372,75 +273,1411 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/category"
+              $ref: "#/components/schemas/broker"
       responses:
-        202: # status code
-          description: Success
+        200: # status code
+          description: Retorna status.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Broker atualizado com sucesso!!!"
         400: # status code
           $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
         500: # status code
           $ref: "#/components/responses/internal"
 
     delete:
       tags:
-        - Category
-      summary: Delete one category.
+        - Broker
+      summary: Deleta um broker.
       parameters:
         - in: path
           required: true
           name: id
-          description: ID category
+          description: ID do broker
           schema:
             type: string
             example: "1"
       responses:
         204: # status code
-          description: Success
+          description: Broker deletado com sucesso.
         400: # status code
           $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+  
+  # Currency
+  /v1/currency/last:
+    get:
+      tags:
+        - Currency
+      summary: Retorna a lista de acompanhamento selecionada.
+      responses:
+        200: # status code
+          $ref: "#/components/responses/currencyLast"
+          
+  /v1/currency/available:
+    get:
+      tags:
+        - Currency
+      summary: Retorna a lista completa de combinações.
+      responses:
+        200: # status code
+          $ref: "#/components/responses/currencyCode"
+          
+  /v1/currency/code:
+    get:
+      tags:
+        - Currency
+      summary: Retorna a lista de nome das moedas.
+      responses:
+        200: # status code
+          $ref: "#/components/responses/currencyCode"
+          
+  /v1/currency:
+    get:
+      tags:
+        - Currency
+      summary: Retorna a lista de currency salvos.
+      responses:
+        200: # status code
+          $ref: "#/components/responses/currency"
+
+    post:
+      tags:
+        - Currency
+      summary: Criação de brokers.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/currency"
+      responses:
+        200: # status code
+          description: Cadastro de currency.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Currency criado com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /v1/currency/{id}:
+    delete:
+      tags:
+        - Currency
+      summary: Deleta um currency.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do currency
+          schema:
+            type: string
+            example: "1"
+      responses:
+        204: # status code
+          description: currency deletado com sucesso.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  # Transaction
+  /v1/transaction:
+    get:
+      tags:
+        - Transaction
+      summary: Retorna a lista de transações.
+      parameters:
+        - in: query
+          name: sortBy
+          description: Atributo de ordenação
+          schema:
+            type: string
+            example: "name"
+        - in: query
+          name: orderByDescending
+          description: Tipo de ordenação (asc | desc)
+          schema:
+            type: boolean
+            example: true
+        - in: query
+          name: pageSize
+          description: Limite de itens retornados
+          schema:
+            type: string
+            example: "10"
+        - in: query
+          name: page
+          description: Numero da pagina
+          schema:
+            type: string
+            example: "1"
+        - in: query
+          name: filterBy
+          description: Filtro de pesquisa "Property" "Condition" "Value"
+          schema:
+            type: array
+            items:
+              type: string
+              example: name eq ismael
+      responses:
+        200: # status code
+          $ref: "#/components/responses/transaction"
+
+    post:
+      tags:
+        - Transaction
+      summary: Criação de transação.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/transaction"
+      responses:
+        200: # status code
+          description: Cadastro de transação.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Transação criada com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+  
+  /v1/transaction/event:
+    put:
+      tags:
+        - Transaction
+      summary: Realiza um agrupamento ou split de Transações.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                investmentId:
+                  type: number
+                  example: 1
+                direction:
+                  type:
+                  $ref: '#/components/schemas/TransactionEventDirectionEnum'
+                quantity:
+                  type: number
+                  description: Quantidade do agrupamento ou splite 2:1
+                  example: 2
+                  
+      responses:
+        200: # status code
+          description: Retorna status.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Agrupamento de Transações realizada com sucesso !!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /v1/transaction/{id}:
+    get:
+      tags:
+        - Transaction
+      summary: Retorna uma transação por ID.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID da transação
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          description: Transação.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  investment:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                  broker:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                  category:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                  type:
+                    $ref: '#/components/schemas/TransactionTypeEnum'
+                  negotiationDate:
+                    type: string
+                    example: "2022-01-15T18:33:31.550Z"
+                  dueDate:
+                    type: string
+                    description: Campo passa ser obrigátorio se "type" for igual a "RENT"
+                    example: "2022-01-15T18:33:31.550Z"
+                  qnt:
+                    type: number
+                    example: 1
+                  price:
+                    type: number
+                    description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+                    example: 10.00
+                  total:
+                    type: number
+                    description: "Formatação de valores Ex: R$ 20,00 === 2000"
+                    example: 2000
+                  createdAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  updatedAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+          
+    put:
+      tags:
+        - Transaction
+      summary: Atualiza uma Transação.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID da Transação
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/transaction"
+      responses:
+        200: # status code
+          description: Retorna status.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Transação atualizada com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    delete:
+      tags:
+        - Transaction
+      summary: Deleta ua Transação.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do Dividendo
+          schema:
+            type: string
+            example: "1"
+      responses:
+        204: # status code
+          description: Transação deletado com sucesso.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+          
+  # Dividends
+  /v1/dividends:
+    get:
+      tags:
+        - Dividends
+      summary: Retorna a lista de dividendos.
+      parameters:
+        - in: query
+          name: sortBy
+          description: Atributo de ordenação
+          schema:
+            type: string
+            example: "name"
+        - in: query
+          name: orderByDescending
+          description: Tipo de ordenação (asc | desc)
+          schema:
+            type: boolean
+            example: true
+        - in: query
+          name: pageSize
+          description: Limite de itens retornados
+          schema:
+            type: string
+            example: "10"
+        - in: query
+          name: page
+          description: Numero da pagina
+          schema:
+            type: string
+            example: "1"
+        - in: query
+          name: filterBy
+          description: Filtro de pesquisa "Property" "Condition" "Value"
+          schema:
+            type: array
+            items:
+              type: string
+              example: name eq ismael
+      responses:
+        200: # status code
+          $ref: "#/components/responses/dividends"
+
+    post:
+      tags:
+        - Dividends
+      summary: Criação de dividendos.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dividends"
+      responses:
+        200: # status code
+          description: Cadastro de dividendos.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Dividendo criado com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /v1/dividends/{id}:
+    get:
+      tags:
+        - Dividends
+      summary: Retorna um dividendo por ID.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do dividendo
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          description: Dividendos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  investment:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                  broker:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                  type:
+                    $ref: '#/components/schemas/DividendsTypeEnum'
+                  dateBasis:
+                    type: string
+                    example: "2022-01-15T18:33:31.550Z"
+                  dueDate:
+                    type: string
+                    example: "2022-01-15T18:33:31.550Z"
+                  qnt:
+                    type: number
+                    example: 1
+                  price:
+                    type: number
+                    description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+                    example: 10.00
+                  total:
+                    type: number
+                    description: "Formatação de valores Ex: R$ 20,00 === 2000"
+                    example: 2000
+                  fees:
+                    type: number
+                    description: "Formatação de valores Ex: R$ 00,10 === 10"
+                    example: 10
+                  currency:
+                    type: string
+                    example: USD
+                    description: "Moeda utilizada no ativo"
+                  createdAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  updatedAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    put:
+      tags:
+        - Dividends
+      summary: Atualiza um Dividendo.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do Dividendos
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/dividends"
+      responses:
+        200: # status code
+          description: Retorna status.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Dividendo atualizado com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    delete:
+      tags:
+        - Dividends
+      summary: Deleta um Dividendo.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do Dividendo
+          schema:
+            type: string
+            example: "1"
+      responses:
+        204: # status code
+          description: Dividendo deletado com sucesso.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+  
+  # News
+  /v1/news:
+    get:
+      tags:
+        - News
+      summary: Retorna a lista de noticias.
+      parameters:
+        - in: query
+          name: keywords
+          description: Pesquise uma noticia chave
+          schema:
+            type: string
+            example: "fiis"
+        - in: query
+          name: languages
+          description: Linguagem da noticia
+          schema:
+            type: string
+            description: |
+              Valores: 
+                ar, de, en, es, fr, he, it, nl, no, pt, ru, se, zh
+            example: pt
+        - in: query
+          name: countries
+          description: Pais da noticia
+          schema:
+            type: string
+            description: |
+              Valores: 
+                ar, au, at, be, br, bg, ca, cn, co, cz, eg, fr, de, gr, hk, hu, in, 
+                id, ie, il, it, jp, lv, lt, my, mx, ma, nl, nz, ng, no, ph, pl, pt, 
+                ro, sa, rs, sg, sk, si, za, kr, se, ch, tw, th, tr, ae, ua, gb, us, 
+                ve
+            example: br
+        - in: query
+          name: source
+          description: Origem da publicação
+          schema:
+            type: string
+            example: InfoMoney
+      responses:
+        200: # status code
+          $ref: "#/components/responses/news"
+  
+  # Bcb
+  /v1/bcb/selic:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna historio da taxa selic
+      parameters:
+        - in: query
+          name: dateStart
+          description: Data inicial de filtro
+          schema:
+            type: string
+            example: "2021-03-31 22:34:36.476"
+        - in: query
+          name: dateEnd
+          description: Data final de filtro
+          schema:
+            type: string
+            example: "2021-03-31 22:34:36.476"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/selic"
+          
+  /v1/bcb/inflaction:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna historicos da taxa de inflação
+      parameters:
+        - in: query
+          name: dateStart
+          description: Data inicial de filtro
+          schema:
+            type: string
+            example: "2021-03-31 22:34:36.476"
+        - in: query
+          name: dateEnd
+          description: Data final de filtro
+          schema:
+            type: string
+            example: "2022-03-31 22:34:36.476"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/selic"
+  
+  /v1/bcb/inflactionIndicator:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dado macros da taxa de inflção
+      responses:
+        200: # status code
+          $ref: "#/components/responses/inflactionIndicator"
+  
+  /v1/bcb/ibovespa:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice ibovespa
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: -1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice"
+          
+  /v1/bcb/ifix:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice ifix
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: -1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice"
+  
+  /v1/bcb/bdrx:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice bdrx
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: -1=1D, 0=5D, 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice"
+  
+  /v1/bcb/sp500:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice S&P500
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice"
+  
+  /v1/bcb/boundList:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna lista de bound
+      responses:
+        200: # status code
+          $ref: "#/components/responses/boundList"
+
+  /v1/bcb/bound/{code}:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do tesouro brasileiro
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: 1=30D, 2=60D, 3=1A, 4=5A
+          schema:
+            type: string
+            example: "1"
+        - in: path
+          name: code
+          required: true
+          schema:
+            type: string
+            example: 'tesouro-ipca-com-juros-semestrais-2026'
+      responses:
+        200: # status code
+          $ref: "#/components/responses/bound"
+          
+  /v1/bcb/ipca:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice ipca
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: 0=2022/2021, 1=5A, 2=10A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice2"
+          
+  /v1/bcb/cdi:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna dados historicos do indice cdi
+      parameters:
+        - in: query
+          name: type
+          description: | 
+            Quantidade de dados retornados: 
+            ex: 0=2022/2021, 1=5A, 2=10A
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          $ref: "#/components/responses/indice2"
+          
+  /v1/bcb/news:
+    get:
+      tags:
+        - Bcb
+      summary: Retorna ultimas noticias do BACEM
+      responses:
+        200: # status code
+          $ref: "#/components/responses/bcbNews"
+          
+  # Events
+  /v1/events:
+    get:
+      tags:
+        - Events
+      summary: Retorna a lista de eventos corporativos.
+      parameters:
+        - in: query
+          name: sortBy
+          description: Atributo de ordenação
+          schema:
+            type: string
+            example: "name"
+        - in: query
+          name: orderByDescending
+          description: Tipo de ordenação (asc | desc)
+          schema:
+            type: boolean
+            example: true
+        - in: query
+          name: pageSize
+          description: Limite de itens retornados
+          schema:
+            type: string
+            example: "10"
+        - in: query
+          name: page
+          description: Numero da pagina
+          schema:
+            type: string
+            example: "1"
+        - in: query
+          name: filterBy
+          description: Filtro de pesquisa "Property" "Condition" "Value"
+          schema:
+            type: array
+            items:
+              type: string
+              example: name eq ismael
+      responses:
+        200: # status code
+          $ref: "#/components/responses/events"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /v1/events/{id}:
+    get:
+      tags:
+        - Events
+      summary: Retorna um evento corporativo por ID.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do evento
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          description: evento corporativo.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  investment:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                  dateReference:
+                    type: string
+                    example: "2022-01-31"
+                  dateDelivery:
+                    type: string
+                    example: "2022-01-31"
+                  assetMainId:
+                    type: number
+                    example: 1
+                  link:
+                    type: string
+                    description: "url de documento"
+                    example: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=263283&cvm=true'
+                  description:
+                    type: string
+                    description: "descrição do documento"
+                    example: 'Relatórios, Relatório Gerencial'
+                  createdAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  updatedAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+
+  # Investment
+  /v1/investment/available:
+    get:
+      tags:
+        - Investment
+      summary: Retorna a lista de investimentos existentes.
+      parameters:
+        - in: query
+          name: category
+          description: categoria de ativos
+          schema:
+            type: string
+            example: "CRIPTOMOEDA"
+        - in: query
+          name: filterBy
+          description: Filtro de pesquisa "Property" "Condition" "Value"
+          schema:
+            type: string
+            example: ETH
+      responses:
+        200: # status code
+          description: pesquia de investimentos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example: "ETH"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+  
+  /v1/investment/batch:
+    put:
+      tags:
+        - Investment
+      summary: Atualizar varios investimentos
+      parameters:
+        - in: query
+          name: notify
+          description: Notificar por meio de web socket
+          schema:
+            type: boolean
+            example: true
+      responses:
+        200: # status code
+          description: pesquia de investimentos.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  required: 
+                    - id
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: VISC11
+                      description: "Nome da cota"
+                    longName:
+                      type: string
+                      example: Vinci Corporate Fundo De Investimento Imobiliario
+                      description: "Nome completo do ativo"
+                    logoUrl:
+                      type: string
+                      example: https://s3-symbol-logo.tradingview.com/vinci--big.svg
+                      description: "logo"
+                    sector:
+                      type: string
+                      example: SHOPPINGS
+                      description: "Setor de atuação do ativo"
+                    balance:
+                      type: number
+                      example: 1
+                      description: "Valor investido no ativo"
+                    currency:
+                      type: string
+                      example: USD
+                      description: "Moeda utilizada no ativo"
+                    priceDay:
+                      type: number
+                      example: 4965
+                      description: "Preço do dia"
+                    priceDayHigh:
+                      type: number
+                      example: 4988
+                      description: "Preço mais alto do dia"
+                    priceDayLow:
+                      type: number
+                      example: 4930
+                      description: "Preço mais baixo do dia"
+                    changePercentDay:
+                      type: number
+                      example: -0.48
+                      description: "Variação em porcentagem do dia"
+                    variationDay:
+                      type: number
+                      description: "Variação de preço do dia"
+                      example: -1170
+                    variationDayTotal:
+                      type: number
+                      description: "Variação de preço do dia vezes numero de ações"
+                      example: -1170
+                    changePercentTotal:
+                      type: number
+                      description: "Variação do preço da ação total em porcentage"
+                      example: -0.70
+                    variationTotal:
+                      type: number
+                      description: "Variação do preço da ação total"
+                      example: -1170
+                    volumeDay:
+                      type: number
+                      example: 3447100
+                      description: "Volume movimentado no dia"
+                    previousClosePrice:
+                      type: number
+                      example: 4930
+                      description: "Preço do dia anterior"
+                    
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+          
+  /v1/investment:
+    get:
+      tags:
+        - Investment
+      summary: Retorna a lista de investimentos.
+      parameters:
+        - in: query
+          name: sortBy
+          description: Atributo de ordenação
+          schema:
+            type: string
+            example: "name"
+        - in: query
+          name: orderByDescending
+          description: Tipo de ordenação (asc | desc)
+          schema:
+            type: boolean
+            example: true
+        - in: query
+          name: pageSize
+          description: Limite de itens retornados
+          schema:
+            type: string
+            example: "10"
+        - in: query
+          name: page
+          description: Numero da pagina
+          schema:
+            type: string
+            example: "1"
+        - in: query
+          name: filterBy
+          description: Filtro de pesquisa "Property" "Condition" "Value"
+          schema:
+            type: array
+            items:
+              type: string
+              example: name eq ismael
+      responses:
+        200: # status code
+          $ref: "#/components/responses/investment"
+
+    post:
+      tags:
+        - Investment
+      summary: Criação de investimentos.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/investment"
+      responses:
+        200: # status code
+          description: Cadastro de investimentos.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Dividendo criado com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+  /v1/investment/{id}:
+    get:
+      tags:
+        - Investment
+      summary: Retorna um investmento por ID.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do investmento
+          schema:
+            type: string
+            example: "1"
+      responses:
+        200: # status code
+          description: investmento.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  category:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: "Ismael Alves"
+                      createdAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                      updatedAt:
+                        type: string
+                        example: "2021-03-31 22:34:36.476"
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: VINO11
+                    description: "Nome da cota"
+                  longName:
+                    type: string
+                    example: Vinci Corporate Fundo De Investimento Imobiliario
+                    description: "Nome completo do ativo"
+                  logoUrl:
+                    type: string
+                    example: https://s3-symbol-logo.tradingview.com/vinci--big.svg
+                    description: "logo"
+                  balance:
+                    type: number
+                    example: 1
+                    description: "Valor investido no ativo"
+                  qnt:
+                    type: number
+                    example: 1
+                    description: "Quantidade de cotas"
+                  currency:
+                    type: string
+                    example: USD
+                    description: "Moeda utilizada no ativo"
+                  sector:
+                    type: string
+                    example: LAJE
+                    description: "Setor de atuação do ativo"
+                  volumeDay:
+                    type: number
+                    example: 3447100
+                    description: "Volume movimentado no dia"
+                  previousClosePrice:
+                    type: number
+                    example: 4930
+                    description: "Preço do dia anterior"
+                  changePercentDay:
+                    type: number
+                    example: -0.48
+                    description: "Variação em porcentagem do dia"
+                  variationDay:
+                    type: number
+                    description: "Variação de preço do dia"
+                    example: -1170
+                  variationDayTotal:
+                    type: number
+                    description: "Variação de preço do dia vezes numero de ações"
+                    example: -1170
+                  priceDay:
+                    type: number
+                    example: 4965
+                    description: "Preço do dia"
+                  priceDayHigh:
+                    type: number
+                    example: 4988
+                    description: "Preço mais alto do dia"
+                  priceDayLow:
+                    type: number
+                    example: 4930
+                    description: "Preço mais baixo do dia"
+                  priceAverage:
+                    type: number
+                    example: 1
+                    description: "Preço medio de COMPRA"
+                  percent:
+                    type: number
+                    description: "Porcentage do ativo na carteira"
+                    example: 10.00
+                  percentCategory:
+                    type: number
+                    description: "Porcentage do ativo na carteira por categoria"
+                    example: 10.00
+                  changePercentTotal:
+                    type: number
+                    description: "Variação do preço da ação total em porcentage"
+                    example: -0.70
+                  variationTotal:
+                    type: number
+                    description: "Variação do preço da ação total"
+                    example: -1170
+                  tradingAmount:
+                    type: number
+                    description: "Valor total de operações de VENDAS(GANHOS & PERDAS)"
+                    example: 10.00
+                  createdAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+                  updatedAt:
+                    type: string
+                    example: "2021-03-31 22:34:36.476"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    put:
+      tags:
+        - Investment
+      summary: Atualiza um investmento.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do investmento
+          schema:
+            type: string
+            example: "1"
+      requestBody:
+        description: Obrigatátorio possui pelo menos um dos atributos do objeto na request
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                longName:
+                  type: string
+                  example: "Ismael Alves"
+                sector:
+                  type: string
+                  example: "Ismael Alves"
+                currency:
+                  type: string
+                  example: USD
+                  description: "Moeda utilizada no ativo"
+      responses:
+        200: # status code
+          description: Retorna status.
+          content:
+            application/json:
+              schema:
+                type: string
+                example: "Dividendo atualizado com sucesso!!!"
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
+        500: # status code
+          $ref: "#/components/responses/internal"
+
+    delete:
+      tags:
+        - Investment
+      summary: Deleta um investmento.
+      parameters:
+        - in: path
+          required: true
+          name: id
+          description: ID do investmento
+          schema:
+            type: string
+            example: "1"
+      responses:
+        204: # status code
+          description: Investmento deletado com sucesso.
+        400: # status code
+          $ref: "#/components/responses/badRequest"
+        404: # status code
+          $ref: "#/components/responses/notFound"
         500: # status code
           $ref: "#/components/responses/internal"
 
 components:
   responses:
     badRequest:
-      description: Failed on request.
+      description: Falha na request.
       content:
         application/json:
           schema:
             type: array
             items:
               type: object
+              required: 
+                - message
               properties:
                 message:
                   type: string
 
     notFound:
-      description: Value not found
+      description: valor não encontrado.
       content:
         application/json:
           schema:
             type: array
             items:
               type: object
+              required: 
+                - message
               properties:
                 message:
                   type: string
 
     internal:
-      description: Internal error.
+      description: erro interno.
       content:
         application/json:
           schema:
             type: array
             items:
               type: object
+              required: 
+                - message
               properties:
                 message:
                   type: string
 
     category:
-      description: List of category
+      description: lista de categorias.
       content:
         application/json:
           schema:
@@ -448,44 +1685,89 @@ components:
             items:
               type: object
               properties:
-                currentPage:
+                id:
                   type: number
                   example: 1
-                totalPages:
+                name:
+                  type: string
+                  example: "Ismael Alves"
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+
+    currencyLast:
+      description: lista de currency.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: USDBRL
+                code:
+                  type: string
+                  example: "USD"
+                codein:
+                  type: string
+                  example: "BRL"
+                name:
+                  type: string
+                  example: "Dólar Americano/Real Brasileiro"
+                high:
+                  type: string
+                  example: "5.1147"
+                low:
+                  type: string
+                  example: "5.029"
+                varBid:
+                  type: string
+                  example: "0.0499"
+                pctChange:
+                  type: string
+                  example: "0.99"
+                bid:
+                  type: string
+                  example: "5.1115"
+                ask:
+                  type: string
+                  example: "5.1124"
+                timestamp:
+                  type: string
+                  example: "1646688600"
+                createDate:
+                  type: string
+                  example: "2022-03-07 18:30:00"
+                  
+    currency:
+      description: lista de currency.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
                   type: number
                   example: 1
-                totalCount:
-                  type: number
-                  example: 1
-                nextPage:
-                  type: number
-                  example: 0
-                previousPage:
-                  type: number
-                  example: 0
-                items:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: number
-                        example: 1
-                      name:
-                        type: string
-                        example: "Ismael Alves"
-                      imageUrl:
-                        type: string
-                        example: "https://github.com/ismaelalvesgit"
-                      createdAt:
-                        type: string
-                        example: "2021-03-31 22:34:36.476"
-                      updatedAt:
-                        type: string
-                        example: "2021-03-31 22:34:36.476"
+                code:
+                  type: string
+                  example: "USD-BRL"
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
     
-    product:
-      description: List of product
+    currencyCode:
+      description: ''
       content:
         application/json:
           schema:
@@ -493,71 +1775,627 @@ components:
             items:
               type: object
               properties:
-                currentPage:
+                id:
                   type: number
                   example: 1
-                totalPages:
+                code:
+                  type: string
+                  example: "string"
+                  
+    broker:
+      description: lista de brokers.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
                   type: number
                   example: 1
-                totalCount:
+                name:
+                  type: string
+                  example: "Ismael Alves"
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+
+    transaction:
+      description: lista de transações.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
                   type: number
                   example: 1
-                nextPage:
+                investment:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: "Ismael Alves"
+                    createdAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                    updatedAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                broker:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: "Ismael Alves"
+                    createdAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                    updatedAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                category:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: "Ismael Alves"
+                    createdAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                    updatedAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                type:
+                  $ref: '#/components/schemas/TransactionTypeEnum'
+                negotiationDate:
+                  type: string
+                  example: "2022-01-15T18:33:31.550Z"
+                dueDate:
+                  type: string
+                  description: Campo passa ser obrigátorio se "type" for igual a "RENT"
+                  example: "2022-01-15T18:33:31.550Z"
+                qnt:
                   type: number
-                  example: 0
-                previousPage:
+                  example: 1
+                price:
                   type: number
-                  example: 0
+                  description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+                  example: 10.00
+                total:
+                  type: number
+                  description: "Formatação de valores Ex: R$ 20,00 === 2000"
+                  example: 2000
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                  
+    dividends:
+      description: lista de dividendos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 1
+                investment:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: "Ismael Alves"
+                    createdAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                    updatedAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                broker:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: "Ismael Alves"
+                    createdAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                    updatedAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                status:
+                  $ref: '#/components/schemas/DividendsStatusEnum'
+                type:
+                  $ref: '#/components/schemas/DividendsTypeEnum'
+                dueDate:
+                  type: string
+                  example: "2022-01-15T18:33:31.550Z"
+                dateBasis:
+                  type: string
+                  example: "2022-01-15T18:33:31.550Z"
+                qnt:
+                  type: number
+                  example: 1
+                price:
+                  type: number
+                  description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+                  example: 10.00
+                total:
+                  type: number
+                  description: "Formatação de valores Ex: R$ 20,00 === 2000"
+                  example: 2000
+                fees:
+                  type: number
+                  description: "Formatação de valores Ex: R$ 00,10 === 10"
+                  example: 10
+                currency:
+                  type: string
+                  example: USD
+                  description: "Moeda utilizada no ativo"
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+   
+    events:
+      description: lista de eventos corporativos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 1
+                investment:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: "Ismael Alves"
+                    createdAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                    updatedAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                dateReference:
+                  type: string
+                  example: "2022-01-31"
+                dateDelivery:
+                  type: string
+                  example: "2022-01-31"
+                assetMainId:
+                  type: number
+                  example: 1
+                link:
+                  type: string
+                  description: "url de documento"
+                  example: 'https://fnet.bmfbovespa.com.br/fnet/publico/exibirDocumento?id=263283&cvm=true'
+                description:
+                  type: string
+                  description: "descrição do documento"
+                  example: 'Relatórios, Relatório Gerencial'
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+    
+    news:
+      description: lista de noticias.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              pagination:
+                type: object
+                properties:
+                  limit:
+                    type: number
+                    description: limite de paginação
+                  offset:
+                    type: number
+                    description: deslocamento de paginação
+                  count:
+                    type: number
+                    description: contagem de resultados na página atual.
+                  total:
+                    type: number
+                    description: contagem total de resultados disponíveis.
+              data:
+                type: array
                 items:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: number
-                        example: 1
-                      name:
-                        type: string
-                        example: "Ismael Alves"
-                      imageUrl:
-                        type: string
-                        example: "https://github.com/ismaelalvesgit"
-                      description:
-                        type: string
-                        example: "Example"
-                      price:
-                        type: number
-                        example: 10
-                      quantity:
-                        type: number
-                        example: 10
-                      createdAt:
-                        type: string
-                        example: "2021-03-31 22:34:36.476"
-                      updatedAt:
-                        type: string
-                        example: "2021-03-31 22:34:36.476"
-                      category:
-                        type: object
-                        properties:
-                          id:
-                            type: number
-                            example: 1
-                          name:
-                            type: string
-                            example: "Ismael Alves"
-                          imageUrl:
-                            type: string
-                            example: "https://github.com/ismaelalvesgit"
-                          createdAt:
-                            type: string
-                            example: "2021-03-31 22:34:36.476"
-                          updatedAt:
-                            type: string
-                            example: "2021-03-31 22:34:36.476"
+                  type: object
+                  properties:
+                    author:
+                      type: string
+                      description: nome do autor do artigo fornecido.
+                      example: "Mitchel Diniz"
+                    title:
+                      type: string
+                      description: texto do título do artigo fornecido.
+                      example: "Índice de ADRs Brazil"
+                    description:
+                      type: string
+                      description: texto de descrição do artigo fornecido.
+                      example: Com a B3 fechada, ADR's de empresas brasileiras negociadas no exterior...
+                    url:
+                      type: number
+                      description: URL que leva ao artigo fornecido.
+                      example: "https://www.infomoney.com.br/mercados/indice-de-adrs-brazil-titans-se-recupera-e-fecha-em-alta-de-032-com-vale-entre-maiores-altas-e-aereas-em-baixa/"
+                    source:
+                      type: string
+                      description: "descrição do documento"
+                      example: 'InfoMoney'
+                    image:
+                      type: string
+                      description: URL de imagem associado ao artigo fornecido.
+                      example: null
+                    category:
+                      type: string
+                      description: categoria associada ao artigo fornecido.
+                      example: "business"
+                    language:
+                      type: string
+                      description: idioma em que o artigo fornecido está.
+                      example: "pt"
+                    country:
+                      type: string
+                      description: código do país associado ao artigo fornecido.
+                      example: "br"
+                    published_at:
+                      type: string
+                      description: carimbo de hora exato em que o artigo foi publicado.
+                      example: "2021-03-31 22:34:36.476"
+    
+    selic:
+      description: lista de dados historicos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                data:
+                  type: string
+                  description: Data da taxa
+                  example: "17/03/2022"
+                value:
+                  type: string
+                  description: valor do indice
+                  example: "11.75"
+    
+    inflactionIndicator:
+      description: lista de dados historicos.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                description: indice
+                example: "INDICADOR_INFLACAO"
+              yearGoal:
+                type: string
+                description: ano do indice
+                example: 2022
+              targetRate:
+                type: string
+                description: Meta
+                example: 3.5
+              marginError:
+                type: string
+                description: Margem de erro
+                example: 1.5
+              rateInflation:
+                type: string
+                description: valor do indice
+                example: 10.54
+              accumulated:
+                type: string
+                description: Acumulado
+                example: 3.59
+    
+    bound:
+      description: lista de dados historicos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                data:
+                  type: string
+                  description: Data da taxa
+                  example: "17/03/2022"
+                sellprice:
+                  type: string
+                  description: valor de venda do tesouro
+                  example: "111719.24"
+                buyprice:
+                  type: string
+                  description: valor de compra do tesouro
+                  example: "111719.24"
+    
+    boundList:
+      description: lista de dados.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 1
+                code:
+                  type: string
+                  example: "tesouro-ipca-com-juros-semestrais-2026"
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+    
+    indice:
+      description: lista de dados historicos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                data:
+                  type: string
+                  description: Data da taxa
+                  example: "17/03/2022"
+                price:
+                  type: string
+                  description: valor do indice
+                  example: "111719.24"
+   
+    indice2:
+      description: lista de dados historicos.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              monthly:
+                type: array
+                items:
+                  properties:
+                    value:
+                      type: string
+                      example: 0.25
+                    date:
+                      type: string
+                      example: "01/21"
+                    year:
+                      type: string
+                      example: 2021
+                    month:
+                      type: string
+                      example: 1
+              yearly:
+                type: array
+                items:
+                  properties:
+                    value:
+                      type: string
+                      example: 0.25
+                    date:
+                      type: string
+                      example: "01/21"
+                    year:
+                      type: string
+                      example: 2021
+                    month:
+                      type: string
+                      example: 1
+                  
+    bcbNews:
+      description: 'destaques no momento'
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: titulo da publicação
+                  example: "Copom eleva a taxa Selic para 11,75% a.a."
+                body:
+                  type: string
+                  description: corpo da publicação
+                  example: "Em sua 245ª reunião, o Comitê de Política Monetária (Copom) decidiu, por unanimidade, elevar a taxa Selic para 11,75% a.a."
+                urlImg:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                      description: url da imagem
+                      example: "https://www.bcb.gov.br/content/home/PublishingImages/manchetes/IBC-BR_mar_2022_MANCHETE_PORT.png"
+                    description:
+                      type: string
+                      description: descrição da publicação
+                      example: "Copom - taxa Selic"
+                link:
+                  type: string
+                  description: link da publicação
+                  example: "https://www.bcb.gov.br/detalhenoticia/17637/nota"
+    
+    investment:
+      description: lista de investimentos.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                category:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: "Ismael Alves"
+                    createdAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                    updatedAt:
+                      type: string
+                      example: "2021-03-31 22:34:36.476"
+                id:
+                  type: number
+                  example: 1
+                name:
+                  type: string
+                  example: VINO11
+                  description: "Nome da cota"
+                longName:
+                  type: string
+                  example: Vinci Corporate Fundo De Investimento Imobiliario
+                  description: "Nome completo do ativo"
+                currency:
+                  type: string
+                  example: USD
+                  description: "Moeda utilizada no ativo"
+                balance:
+                  type: number
+                  example: 1
+                  description: "Valor investido no ativo"
+                qnt:
+                  type: number
+                  example: 1
+                  description: "Quantidade de cotas"
+                sector:
+                  type: string
+                  example: LAJE
+                  description: "Setor de atuação do ativo"
+                volumeDay:
+                  type: number
+                  example: 3447100
+                  description: "Volume movimentado no dia"
+                previousClosePrice:
+                  type: number
+                  example: 4930
+                  description: "Preço do dia anterior"
+                changePercentDay:
+                  type: number
+                  example: -0.48
+                  description: "Variação em porcentagem do dia"
+                variationDay:
+                  type: number
+                  description: "Variação de preço do dia"
+                  example: -11.70
+                variationDayTotal:
+                  type: number
+                  description: "Variação de preço do dia vezes numero de ações"
+                  example: -11.11
+                priceDay:
+                  type: number
+                  example: 4965
+                  description: "Preço do dia"
+                priceDayHigh:
+                  type: number
+                  example: 4988
+                  description: "Preço mais alto do dia"
+                priceDayLow:
+                  type: number
+                  example: 4930
+                  description: "Preço mais baixo do dia"
+                priceAverage:
+                  type: number
+                  example: 1
+                  description: "Preço medio de COMPRA"
+                percent:
+                  type: number
+                  description: "Porcentage do ativo na carteira"
+                  example: 10.00
+                percentCategory:
+                  type: number
+                  description: "Porcentage do ativo na carteira por categoria"
+                  example: 10.00
+                changePercentTotal:
+                  type: number
+                  description: "Variação do preço da ação total em porcentage"
+                  example: -0.70
+                variationTotal:
+                  type: number
+                  description: "Variação do preço da ação total"
+                  example: -1170
+                tradingAmount:
+                  type: number
+                  description: "Valor total de operações de VENDAS(GANHOS & PERDAS)"
+                  example: 10.00
+                createdAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
+                updatedAt:
+                  type: string
+                  example: "2021-03-31 22:34:36.476"
 
   schemas:
-    category:
+    categoryTypeEnum:
+      type: string
+      example: BUY
+      enum:
+        - FUNDOS IMOBILIÁRIOS
+        - AÇÕES
+        - ETF
+        - EQUITY
+        - ETF INTERNACIONAL
+        
+    broker:
       type: object
       required:
         - name
@@ -565,33 +2403,146 @@ components:
         name:
           type: string
           example: "Ismael Alves"
-        imageUrl:
-          type: string
-          example: "https://github.com/ismaelalvesgit"
-   
-    product:
+    
+    currency:
       type: object
       required:
-        - name
-        - categoryId
+        - code
+      properties:
+        name:
+          type: string
+          example: "USD-BRL"
+    
+    TransactionTypeEnum:
+      type: string
+      example: BUY
+      enum:
+        - BUY
+        - SELL
+        - RENT
+    
+    TransactionEventDirectionEnum:
+      type: string
+      example: SPLIT
+      enum:
+        - SPLIT
+        - GROUPING
+    
+    transaction:
+      type: object
+      required:
+        - investment
+        - broker
+        - category
+        - type
+        - negotiationDate
+        - qnt
         - price
-        - quantity
       properties:
-        name:
+        investment:
           type: string
-          example: "Ismael Alves"
-        imageUrl:
+          example: "VISC11"
+        broker:
           type: string
-          example: "https://github.com/ismaelalvesgit"
+          example: "RICO INVESTIMENTOS"
+        category:
+          $ref: '#/components/schemas/categoryTypeEnum'
+        type:
+          $ref: '#/components/schemas/TransactionTypeEnum'
+        negotiationDate:
+          type: string
+          example: "2022-01-15T18:33:31.550Z"
+        dueDate:
+          type: string
+          description: Campo passa ser obrigátorio se "type" for igual a "RENT"
+          example: "2022-01-15T18:33:31.550Z"
+        qnt:
+          type: number
+          example: 1
+        price:
+          type: number
+          description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+          example: 10.00
+          
+    DividendsTypeEnum:
+      type: string
+      example: DIVIDEND
+      enum:
+        - DIVIDEND
+        - JCP
+        - YIELD
+        
+    DividendsStatusEnum:
+      type: string
+      example: PROVISIONED
+      enum:
+        - PROVISIONED
+        - PAID
+    
+    dividends:
+      type: object
+      required:
+        - investmentId
+        - brokerId
+        - status
+        - type
+        - dueDate
+        - dateBasis
+        - qnt
+        - price
+      properties:
+        investmentId:
+          type: number
+          example: 10
+        brokerId:
+          type: number
+          example: 10
+        status:
+          $ref: '#/components/schemas/DividendsStatusEnum'
+        type:
+          $ref: '#/components/schemas/DividendsTypeEnum'
+        dateBasis:
+          type: string
+          example: "2022-01-15T18:33:31.550Z"
+        dueDate:
+          type: string
+          example: "2022-01-15T18:33:31.550Z"
+        qnt:
+          type: number
+          example: 1
+        price:
+          type: number
+          description: "Formatação de valores Ex: R$ 10,00 === 10.00"
+          example: 10.00
+        fees:
+          type: number
+          description: "Formatação de valores Ex: R$ 00,10 === 10"
+          example: 10
+        currency:
+          type: string
+          example: USD
+          description: "Moeda utilizada no ativo"
+    
+    investment:
+      type: object
+      required:
+        - categoryId
+        - name
+        - sector
+      properties:
         categoryId:
           type: number
           example: 10
-        description:
+        name:
+            type: string
+            example: "Ismael Alves"
+        longName:
           type: string
-          example: "Example"
-        price:
-          type: number
-          example: 10
-        quantity:
-          type: number
-          example: 10
+          example: "Ismael Alves"
+        sector:
+          type: string
+          example: "Ismael Alves"
+        currency:
+          type: string
+          example: USD
+          description: "Moeda utilizada no ativo"
