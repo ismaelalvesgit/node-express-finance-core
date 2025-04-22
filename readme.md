@@ -69,6 +69,9 @@ O projeto possui suporte a múltiplos idiomas através da integração com o pac
 - Idioma definido por Accept-Language no header da requisição
 - Mensagens padronizadas para erros, logs e respostas da API
 - Fácil de estender para novos idiomas
+- 💡 Idiomas suportados atualmente:
+  - 🇧🇷 Português (pt-BR) `default`
+  - 🇺🇸 Inglês (en-US)
 
 # 🛠️ Uso
 
