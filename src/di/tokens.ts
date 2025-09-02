@@ -4,7 +4,6 @@ export const tokens = {
     RepositoryBase: Symbol("RepositoryBase"),
     RedisClient: Symbol("RedisClient"),
     ApmClient: Symbol("ApmClient"),
-    KafkaClient: Symbol("KafkaClient"),
     SystemRouter: Symbol("SystemRouter"),
     HealthcheckController: Symbol("HealthcheckController"),
     SystemService: Symbol("SystemService"),

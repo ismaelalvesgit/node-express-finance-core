@@ -24,25 +24,16 @@ export interface Configuration {
         timeout: number
         prefix: string
     }
-    email: {
-        notificator: string
-        apiUrl: string
-        apiKey: string
-        secret: string
-    }
     apm: {
         serverUrl: string
         apiKey?: string
         secretToken?: string
         cloudProvider?: string
     }
-    kafka: {
-        brokers: string[]
-        connectionTimeout: number
-    }
     backend: {
         invest: string
         bcb: string
+        news: string
     }
     system: {
         fees: {

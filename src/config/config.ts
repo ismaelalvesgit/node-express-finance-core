@@ -19,10 +19,8 @@ export class Config {
             docs: this.getDocsConfig(),
             db: this.getDbConfig(),
             redis: this.getRedisConfig(),
-            email: this.getEmailConfig(),
             apm: this.getApmConfig(),
             backend: this.getBackendConfig(),
-            kafka: this.getKafkaConfig(),
             system: this.getSystemConfig(),
         };
     }
@@ -84,27 +82,12 @@ export class Config {
             cloudProvider: process.env["APM_CLOUND_PROVIDER"] || "none"
         };
     }
-  
-    private getEmailConfig() {
-        return {
-            notificator: process.env["EMAIL_USER"] || "",
-            apiUrl: process.env["EMAIL_API_URL"] || "https://api.mailjet.com",
-            apiKey: process.env["EMAIL_API_KEY"] || "",
-            secret: process.env["EMAIL_SECRET"] || ""
-        };
-    }
-
-    private getKafkaConfig() {
-        return {
-            brokers: (process.env["KAFKA_BROKER"] || "").split(";"),
-            connectionTimeout:  parseInt(process.env["KAFKA_TIMEOUT"] || "30000"),
-        };
-    }
 
     private getBackendConfig() {
         return {
             invest: process.env["INVEST_URL"] || "",
             bcb: process.env["BCB_URL"] || "",
+            news: process.env["NEWS_KEY"] || "",
         };
     }
 }

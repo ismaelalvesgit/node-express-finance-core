@@ -21,7 +21,6 @@ import SystemService from "@domain/system/services/systemService";
 import HealthcheckController from "@presentation/http/controllers/system/healthcheckController";
 import SystemRepository from "@domain/system/infrastructure/systemRepository";
 import ApmClient from "@infrastructure/apm/apm";
-import KafkaClient from "@infrastructure/kafka/kafka";
 import EventsService from "@domain/events/services/eventsService";
 import EventsRepository from "@domain/events/infrastructure/eventsRepository";
 import BatchCreateEventsController from "@presentation/http/controllers/events/batchCreateEventsController";
@@ -71,7 +70,6 @@ import IndexerBcbController from "@presentation/http/controllers/bcb/IndexerBcbC
 const childContainer = container.createChildContainer();
 
 childContainer.registerSingleton(tokens.Config, Config);
-childContainer.registerSingleton(tokens.KafkaClient, KafkaClient);
 childContainer.registerSingleton(tokens.RedisClient, RedisClient);
 childContainer.registerSingleton(tokens.ApmClient, ApmClient);
 childContainer.registerSingleton(tokens.Routes, Routes);
