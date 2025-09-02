@@ -16,6 +16,8 @@ utilizando [Node.js](https://nodejs.org/en) e [Express.js](https://expressjs.com
 - 📁 Base em Mysql com [knex.js](https://knexjs.org/)
 - 🧪 Testes com Jest
 - 🚀 Pronto para deploy com Docker
+- 🌐 Suporte Multilíngue (i18n)
+- 📈 Monitoramento & Observabilidade
 
 
 # 🚀 Como rodar o projeto
@@ -49,6 +51,28 @@ docker-compose up -d
 npm run dev
 ```
 
+# 📈 Monitoramento & Observabilidade
+Para garantir a confiabilidade e performance da aplicação, é recomendada a integração com ferramentas de APM (Application Performance Monitoring). Isso permite acompanhar o desempenho dos endpois da API, identificar gargalos e receber alertas sobre falhas em tempo real.
+
+Benefícios:
+- ⏱️ Análise de tempo de processamento por chamadas de API
+- ⚠️ Detecção de falhas silenciosas e exceções não tratadas
+- 📊 Métricas de throughput e latência
+- 🔍 Tracing distribuído (ideal para arquiteturas baseadas em eventos e micro-serviços)
+- 🔔 Alertas proativos com base em métricas personalizadas
+
+# 🌐 Suporte Multilíngue (i18n)
+O projeto possui suporte a múltiplos idiomas através da integração com o pacote i18n, possibilitando respostas mais amigáveis e localizadas, dependendo do idioma requisitado pelo cliente.
+
+✅ Características:
+- Traduções organizadas em arquivos separados por idioma (locales/)
+- Idioma definido por Accept-Language no header da requisição
+- Mensagens padronizadas para erros, logs e respostas da API
+- Fácil de estender para novos idiomas
+- 💡 Idiomas suportados atualmente:
+  - 🇧🇷 Português (pt-BR) `default`
+  - 🇺🇸 Inglês (en-US)
+
 # 🛠️ Uso
 
 ### 1. QueryData
@@ -75,6 +99,7 @@ In                 | "In" or "in" or "IN" | name in Ismael,Raquel
 Like               | "lk" or "Lk" or "LK" | name lk ismael (only string columns)
 
 # 🚀 Tipos de deploys pre-configurados
+
 # 🐳 Docker
 ```bash
 docker build -t finance-core .
