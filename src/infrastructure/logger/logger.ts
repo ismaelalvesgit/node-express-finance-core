@@ -8,8 +8,7 @@ export const {
   AxiosLogger,
   ExpressLogger,
   Logger,
-  Redact,
-  RequestLogger
+  Redact
 } = init({
   PROJECT_NAME: config.get().serviceName,
   LOG_LEVEL: config.get().environment === EnvironmentType.Test ? "fatal" : "debug",
@@ -23,4 +22,3 @@ export const {
     "/v1/docs/",
   ]
 });
-

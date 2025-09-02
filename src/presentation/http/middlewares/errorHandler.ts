@@ -111,7 +111,7 @@ const _loadErrorMessage = (req: Request, err: any) =>{
   return err;
 };
 
-/* eslint-disable no-unused-vars*/
+ 
 export const errorHandler = (
   err: Error,
   req: Request,

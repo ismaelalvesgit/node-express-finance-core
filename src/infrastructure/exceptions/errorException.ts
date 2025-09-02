@@ -1,5 +1,5 @@
-/* eslint-disable max-classes-per-file  */
-/* eslint-disable @typescript-eslint/no-explicit-any  */
+ 
+ 
 class CustomError extends Error {
     private _: string;
     public i18n: string | null | undefined;

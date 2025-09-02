@@ -12,4 +12,4 @@ export interface IInvestmentService {
     batchUpdate(data: IInvestment[]): Promise<IInvestment[]>
     updateBalance(id: number, trx?: Knex.Transaction): Promise<void>
     syncBalance(trx?: Knex.Transaction): Promise<void>
- }
+}

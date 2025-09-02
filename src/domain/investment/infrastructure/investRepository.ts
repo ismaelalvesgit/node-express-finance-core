@@ -8,6 +8,7 @@ import { EIndexType, IIndex, IIndexerParams, IIndexerResponse, IIndexParams, ITi
 import { v4 as uuidv4 } from "uuid";
 import { Logger } from "@infrastructure/logger/logger";
 import FormData from "form-data";
+import { AxiosHeaders  } from "axios";
 
 @injectable()
 export default class InvestRepository implements IInvestRepository {
@@ -20,15 +21,14 @@ export default class InvestRepository implements IInvestRepository {
     ) {
         this.http = new HttpClient({
             baseURL: this.config.get().backend.invest,
-            headers: {
+            headers: new AxiosHeaders({
                 "User-Agent": uuidv4()
-            }
+            })
         });
     }
     
     async indexer(params: IIndexerParams): Promise<IIndexerResponse> {
         try {
-   
             const { data } = await this.http.send<IIndexerResponse>({
                 url: "/indexer/getvalue",
                 method: "GET",

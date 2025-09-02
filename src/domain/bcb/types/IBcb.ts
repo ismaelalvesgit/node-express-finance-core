@@ -1,4 +1,3 @@
-
 export interface IBcbIndexResponse {
     data: string
     valor: number
@@ -81,5 +80,3 @@ export enum EBcbIndexType {
     SELIC = 432,
     INFLACTION = 13522,
 }
-
-
