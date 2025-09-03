@@ -5,7 +5,7 @@ import { ETransactionEventDirection, ETransactionType, ITransaction, ITransactio
 import { tokens } from "@di/tokens";
 import { ITransactionRepository } from "../types/ITransactionRepository";
 import { BrokerSelect } from "@domain/broker/types/IBroker";
-import { InvestmentSelect } from "@domain/investment/types/IInvestiment";
+import { IInvestment, InvestmentSelect } from "@domain/investment/types/IInvestiment";
 import { IInvestmentRepository } from "@domain/investment/types/IInvestmentRepository";
 import { IBrokerRepository } from "@domain/broker/types/IBrokerRepository";
 import { BadRequest, NotFound } from "@infrastructure/exceptions/errorException";
@@ -154,9 +154,12 @@ export default class TransactionService implements ITransactionService {
             let investment = investmentDb;
 
             if(!investment){
-                // Created Investment
-                const category = await this.categoryRepository.findOne({name: data.category}, undefined, trx);
-                await this.investmentRepository.create({ name: data.investment.name, categoryId: category.id }, trx);
+                await this.investmentService.create({ 
+                    name: data.investment.name, 
+                    category: {
+                        name: data.category
+                    }
+                } as IInvestment, trx);
                 investment = await this.investmentViewRepository.findOne({name: data.investment.name}, undefined, trx);
             }
 

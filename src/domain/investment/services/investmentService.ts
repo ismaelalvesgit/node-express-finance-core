@@ -13,6 +13,9 @@ import { ITransactionRepository } from "@domain/transaction/types/ITransactionRe
 import { Logger } from "@infrastructure/logger/logger";
 import { IInvestmentViewRepository } from "../types/IInvestmentViewRepository";
 import { IInvestRepository } from "../types/IInvestRepository";
+import { IRedisAdapter } from "@infrastructure/types/IRedisAdapter";
+import { ICategoryService } from "@domain/category/types/ICategoryService";
+import * as R from "ramda";
 
 @injectable()
 export default class InvestmentService implements IInvestmentService {
@@ -36,11 +39,17 @@ export default class InvestmentService implements IInvestmentService {
         @inject(tokens.CategoryRepository)
         private categoryRepository: ICategoryRepository,
 
+        @inject(tokens.CategoryService)
+        private categoryService: ICategoryService,
+
         @inject(tokens.TransactionRepository)
         private transactionRepository: ITransactionRepository,
 
         @inject(tokens.InvestRepository)
         private investRepository: IInvestRepository,
+
+        @inject(tokens.RedisClient)
+        private redis: IRedisAdapter,
     ) { }
 
     async syncBalance(trx?: Knex.Transaction<any, any[]> | undefined): Promise<void> {
@@ -63,9 +72,15 @@ export default class InvestmentService implements IInvestmentService {
         }, trx);
     }
 
-    async searchSymbol(symbol: string): Promise<boolean> {
+    async symbolExist(symbol: string): Promise<boolean> {
+        const key = `investment:search_${symbol}`;
+        const cache = await this.redis.get(key);
+        if(cache) return true;
+
         const symbols = await this.investRepository.searchSymbol(symbol);
-        if(symbols.length === 0) throw new NotFound(`Symbol not found ${symbol}`);
+        if(symbols.length === 0 || symbols.filter((sym)=> sym.code === symbol).length === 0) throw new NotFound(`Symbol not found ${symbol}`);
+       
+        await this.redis.setNoExp(key, symbol);
         return true;
     }
 
@@ -81,14 +96,21 @@ export default class InvestmentService implements IInvestmentService {
 
     async create(data: IInvestment, trx?: Knex.Transaction): Promise<void> {
         const investment = await this.investmentRepository.findOne({name: data.name}, undefined, trx);
-        if(investment) throw new BadRequest({message: data.name});
+        if(investment) throw new BadRequest({message: data.name});   
 
-        const category = await this.categoryRepository.findById(data.categoryId, undefined, trx);
+        const category = await this.categoryService.findByIdOrName({
+            id: data.categoryId ?? data.category.id,
+            name: data.category.name
+        }, trx);
+
         if(!category) throw new NotFound("Category");
 
-        await this.searchSymbol(data.name); // Check is symbol exist
+        await this.symbolExist(data.name); // Check is symbol exist
 
-        return this.investmentRepository.create(data, trx);
+        return this.investmentRepository.create(R.omit(["category"], {
+            ...data,
+            categoryId: category.id
+        }), trx);
     }
 
     async update(id: string | number, data: IInvestment, trx?: Knex.Transaction): Promise<void> {        
@@ -100,7 +122,7 @@ export default class InvestmentService implements IInvestmentService {
         if(data.name){
             const investment = await this.investmentRepository.findById(id, this.defaultJoin, trx);
             if(data.name !== investment.name){
-                await this.searchSymbol(data.name); // Check is symbol exist
+                await this.symbolExist(data.name); // Check is symbol exist
             }
         }
 

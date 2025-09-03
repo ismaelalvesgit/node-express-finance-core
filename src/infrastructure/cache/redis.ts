@@ -53,7 +53,7 @@ export default class RedisClient implements IRedisAdapter {
         }
     }
 
-    async set(key: string, value: string, exp?: number): Promise<number | undefined> {
+    async set(key: string, value: string, exp?: number | null): Promise<number | undefined> {
         try {
             if(this.closed) {
                 return undefined;
@@ -61,6 +61,19 @@ export default class RedisClient implements IRedisAdapter {
             const path = `${this.config.get().redis.prefix}:${key}`;
             await this.client?.set.bind(this.client)(path, value);
             return this.expire(key, exp ?? this.timeDay);
+        } catch (error) {
+            Logger.error(`Redis: ${error}`);
+            return undefined;
+        }
+    }
+
+    async setNoExp(key: string, value: string): Promise<void> {
+        try {
+            if(this.closed) {
+                return undefined;
+            }
+            const path = `${this.config.get().redis.prefix}:${key}`;
+            await this.client?.set.bind(this.client)(path, value);
         } catch (error) {
             Logger.error(`Redis: ${error}`);
             return undefined;

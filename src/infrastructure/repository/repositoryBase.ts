@@ -39,6 +39,10 @@ export default abstract class RepositoryBase<IEntity> implements IReposioryBase<
         return database(this.tableName);
     }
 
+    query(trx?: Knex.Transaction) {
+        return Common.transacting(this.context, trx);
+    }
+
     async batchCreate(data: IEntity[]): Promise<void> {
         this.isReadonly();
         await knex.transaction((trx) => {

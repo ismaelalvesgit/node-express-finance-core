@@ -3,7 +3,7 @@ import { IInvestment } from "./IInvestiment";
 import { Knex } from "knex";
 
 export interface IInvestmentService {
-    searchSymbol(symbol: string): Promise<boolean>
+    symbolExist(symbol: string): Promise<boolean>
     find(params: Partial<IQueryData>): Promise<IPagination<IInvestment>>
     findById(id: number | string): Promise<IInvestment>
     create(data: IInvestment, trx?: Knex.Transaction): Promise<void>

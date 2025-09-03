@@ -12,6 +12,7 @@ export interface IReposioryBaseOptions {
 export interface IReposioryBase <IEntity> {
     get tbName(): string
     get context(): Knex.QueryBuilder
+    query(trx?: Knex.Transaction): Knex.QueryBuilder   
     find(params: Partial<IQueryData>, trx?: Knex.Transaction): Promise<IPagination<IEntity>>
     findOne(filter: Partial<IEntity>, join?: IInnerJoinData[], trx?: Knex.Transaction): Promise<IEntity>
     findById(id: number | string, join?: IInnerJoinData[], trx?: Knex.Transaction): Promise<IEntity>
